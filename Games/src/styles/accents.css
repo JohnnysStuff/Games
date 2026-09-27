@@ -1,0 +1,22 @@
+/* ============================================================
+   ACCENTS — one variable drives every tinted surface in the
+   app, so an unlocked colour is a single custom property and
+   not a second copy of the stylesheet.
+   ============================================================ */
+html[data-accent="blue"]  {--accent:#3b6ef5;--accent-soft:rgba(59,110,245,.10)}
+html[data-accent="violet"]{--accent:#7c5cff;--accent-soft:rgba(124,92,255,.12)}
+html[data-accent="rose"]  {--accent:#f0437a;--accent-soft:rgba(240,67,122,.12)}
+html[data-accent="amber"] {--accent:#e08706;--accent-soft:rgba(224,135,6,.13)}
+html[data-accent="mint"]  {--accent:#0ea472;--accent-soft:rgba(14,164,114,.13)}
+html[data-accent="cyan"]  {--accent:#0d94b8;--accent-soft:rgba(13,148,184,.13)}
+html[data-accent="crimson"]{--accent:#d92b3f;--accent-soft:rgba(217,43,63,.12)}
+html[data-accent="slate"] {--accent:#5a6b85;--accent-soft:rgba(90,107,133,.14)}
+html[data-theme="dark"][data-accent="blue"]  {--accent:#5b8cff;--accent-soft:rgba(91,140,255,.14)}
+html[data-theme="dark"][data-accent="violet"]{--accent:#9b7dff;--accent-soft:rgba(155,125,255,.16)}
+html[data-theme="dark"][data-accent="rose"]  {--accent:#ff6d9c;--accent-soft:rgba(255,109,156,.16)}
+html[data-theme="dark"][data-accent="amber"] {--accent:#f5a623;--accent-soft:rgba(245,166,35,.16)}
+html[data-theme="dark"][data-accent="mint"]  {--accent:#34d399;--accent-soft:rgba(52,211,153,.15)}
+html[data-theme="dark"][data-accent="cyan"]  {--accent:#22c3e6;--accent-soft:rgba(34,195,230,.15)}
+html[data-theme="dark"][data-accent="crimson"]{--accent:#ff5a6e;--accent-soft:rgba(255,90,110,.15)}
+html[data-theme="dark"][data-accent="slate"] {--accent:#93a4c0;--accent-soft:rgba(147,164,192,.16)}
+

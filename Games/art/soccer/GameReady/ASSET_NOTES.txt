@@ -1,0 +1,72 @@
+ARCADE SOCCER ASSETS
+
+All 14 PNG assets are in this folder.
+
+player_short.png   984 x 1599  Short hair, image-tool cleanup pass.
+player_spiky.png   984 x 1599  Spiky hair, image-tool cleanup pass.
+player_afro.png    984 x 1599  Afro, image-tool cleanup pass.
+player_long.png    984 x 1599  Tied-back long hair, image-tool cleanup pass.
+keeper.png        1024 x 1536 Keeper, image-tool cleanup pass.
+ball.png          40 x 10     Four rolling frames.
+shadows.png        24 x 6      Player and ball shadows.
+dust.png           80 x 16     Five puff frames.
+spark.png          48 x 16     Three burst frames.
+markers.png        32 x 16     Red 1P and blue 2P tags.
+grass.png          64 x 16     Light/dark stripe tiles and textured variants.
+goal_back.png      48 x 128    Back net, back frame and far post.
+goal_front.png     48 x 128    Crossbar and near post; aligned with goal_back.
+corner_flag.png    32 x 24     Four waving frames.
+
+LATEST DELIVERY CHOICE
+All five character sheets have received an additional built-in image-tool
+cleanup pass. The unwanted rock-like blob above the lying player's torso
+was removed from the short, spiky and afro sheets. The long-hair and keeper
+sheets received outline and stray-mark cleanup passes as well.
+Fine coloured edge fringes are still visible in places. These results are
+improved, but are not certified as fully artifact-free or pixel-perfect.
+No scripted image processing was used for this cleanup.
+
+Cleanup prompt: Remove the grey/brown torso blob from zero-based row 7,
+frame 3; remove detached shapes, smudges, loose pixels, shadow remnants and
+coloured outline fringes throughout; preserve legitimate hair, faces, limbs,
+kit, held balls, poses, positions, rows, canvas size and transparency. Replace
+noisy contours with clean dark pixel outlines. For the keeper, also request
+removal of background haze while preserving gloves and held balls.
+
+The full-resolution generated player and keeper images replace the earlier
+script-processed character exports. The three new hair sheets were regenerated
+with the built-in image tool, using player_short.png as the edit target.
+No scripted image processing was applied to those regenerated hair sheets.
+The nine small/pitch PNGs are the native-resolution assets made before the
+request to stop scripted image editing; they have been retained.
+
+DIFFERENCES FROM THE FIRST BRIEF
+The generated character sheets are not strict 48 x 48 grids, native 1x pixel
+art, or exact 8x enlargements. They contain colours outside the fixed palette
+and partially transparent edge pixels. Generated edits may vary pixels beyond
+the hair; identical poses at the pixel level are not guaranteed.
+The keeper source has nine sprites in its run row instead of eight.
+The game_ready folder name does not imply compatibility with the original
+automatic sprite loader. These character sheets need atlas preparation for it.
+PNG images contain no animation timing metadata.
+
+IMAGE GENERATION PROMPT SET
+Built-in image tool, transparent_background=true.
+Reference/edit target: original full-size player_short.png.
+
+Keeper: Same original chibi character, face, short brown hair, yellow jersey
+with green trim, blue shorts, red socks and dark boots; add white gloves.
+Twelve rows: ready 4; shuffle 6; run 8; dive 6; low dive 5; high catch 5;
+chest catch 3; hold 2; throw 5; punt 6; celebrate 4; knocked down 5.
+Preserve the player's rendering and proportions, face right, transparent
+background, no labels, shadows or grid lines. (Output deviations noted above.)
+
+Hair edits: Change only the haircut in every occupied sprite. Preserve the
+faces, expressions, skin, eyes, bodies, kits, limbs, boots, held balls, poses,
+positions, frame count, row order, size, pixel scale, full 984 x 1599 canvas,
+all thirteen rows and all empty cells. Transparent background. No shadows,
+text, labels, grid or extra objects. Match the original pixel-art rendering.
+Spiky: distinctly short, chunky angular dark-brown spikes.
+Afro: rounded dark-brown afro silhouette made from chunky pixel clusters.
+Long: sweep the crown back and add a visible chunky ponytail behind the head,
+following the tilted and lying head poses, retaining the face and front hairline.

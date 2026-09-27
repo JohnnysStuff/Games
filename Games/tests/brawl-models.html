@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ball Brawl Models</title>
+<style>
+  html, body { margin: 0; background: #0b0e1d; color: #e8ecf4; font: 12px/1.4 ui-monospace, monospace; }
+  canvas { display: block; width: 100%; max-width: 1440px; aspect-ratio: 16/10; background: #000; }
+  #bar { padding: 6px 8px; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1440" height="900"></canvas>
+<div id="bar">G grid · F one ball · A arena · ←/→ which ball · ↑/↓ camera pitch · Q/E camera turn · Space pause · +/- size</div>
+<!-- the game's own files, as the arcade builds them in -->
+<script src="../src/js/core/util.js"></script>
+<script src="../src/js/core/hud.js"></script>
+<script src="../src/js/core/gfx3d.js"></script>
+<script src="../src/js/games/brawl/core.js"></script>
+<script src="../src/js/games/brawl/sim.js"></script>
+<script src="../src/js/games/brawl/matchups.js"></script>
+<script src="../src/js/games/brawl/cpu.js"></script>
+<script src="../src/js/games/brawl/models.js"></script>
+<script src="../src/js/games/brawl/view.js"></script>
+<script>
+/* Every ball in the roster drawn by the game's own view (games/brawl/
+   view.js), to look at the models closely: a grid of the lot (G), one at a
+   time filling the screen (F), or two in the arena as a fight would show
+   them (A). The preview camera can be tipped and turned to see a model
+   from any side. view(mode, id) and cam(pitch, yaw) do the same from the
+   console; shots are for checking the models after changing them. */
+window.cv = document.createElement('canvas');
+window.Stage = { scale: 1.5, dpr: 1 };
+const cx = document.getElementById('c').getContext('2d');
+const V = bbView();
+const S = { mode: 'grid', i: 0, pitch: .6, yaw: 0, paused: false, t0: performance.now() / 1000, frozen: 0, size: 1 };
+function cam(p, y) { if (p !== undefined) S.pitch = p; if (y !== undefined) S.yaw = y; V.pcam.orbit(0, 0, 0, 5000, S.pitch, S.yaw); }
+function view(mode, id, other) { S.mode = mode || S.mode; if (id) S.i = BB_BY[id].idx; S.j = other ? BB_BY[other].idx : null; }
+cam();
+addEventListener('keydown', e => {
+  const n = BB_BALLS.length;
+  if (e.code === 'KeyG') S.mode = 'grid';
+  else if (e.code === 'KeyF') S.mode = 'one';
+  else if (e.code === 'KeyA') S.mode = 'arena';
+  else if (e.code === 'ArrowRight') S.i = (S.i + 1) % n;
+  else if (e.code === 'ArrowLeft') S.i = (S.i + n - 1) % n;
+  else if (e.code === 'ArrowUp') cam(Math.min(1.5, S.pitch + .1));
+  else if (e.code === 'ArrowDown') cam(Math.max(.05, S.pitch - .1));
+  else if (e.code === 'KeyQ') cam(undefined, S.yaw - .3);
+  else if (e.code === 'KeyE') cam(undefined, S.yaw + .3);
+  else if (e.code === 'Space') { S.paused = !S.paused; S.frozen = now(); }
+  else if (e.code === 'Equal') S.size *= 1.15;
+  else if (e.code === 'Minus') S.size /= 1.15;
+  else return;
+  e.preventDefault();
+});
+const now = () => S.paused ? S.frozen : performance.now() / 1000 - S.t0;
+let arenaS = null, arenaKey = '';
+function frame(t) {
+  cx.setTransform(1.5, 0, 0, 1.5, 0, 0);
+  Gfx3D.get().size(960, 600);
+  const g = cx.createLinearGradient(0, 0, 0, 600);
+  g.addColorStop(0, '#1a2250'); g.addColorStop(1, '#070916');
+  cx.fillStyle = g; cx.fillRect(0, 0, 960, 600);
+  const n = BB_BALLS.length;
+  if (S.mode === 'arena') {
+    const a = BB_BALLS[S.i].id, b = BB_BALLS[S.j !== null && S.j !== undefined ? S.j : (S.i + 1) % n].id, key = a + b;
+    if (key !== arenaKey || arenaS.over) { arenaKey = key; arenaS = BBSim.create({ seed: S.seed || 3, balls: [a, b], aims: [40, 330] }); V.cut('fight'); V.reset(); }
+    for (let k = 0; k < 2; k++) if (!S.paused) { BBSim.step(arenaS); for (const e of arenaS.ev) V.fx(e, arenaS); arenaS.ev.length = 0; }
+    V.frame(S.paused ? 0 : 1 / 60, t);
+    V.arena(cx, { S: arenaS, a: 1, t, dt: S.paused ? 0 : 1 / 60 });
+    label(BB_BY[a].name + ' vs ' + BB_BY[b].name, 480, 24, 16);
+    return;
+  }
+  V.frame(1 / 60, t);
+  const items = [];
+  if (S.mode === 'one') {
+    const def = BB_BALLS[S.i];
+    items.push({ id: def.id, x: 480, y: 290, size: 520 * S.size, turn: -Math.PI / 2 + t * .8, roll: t * .3 });
+    label(def.name + '  (' + (S.i + 1) + '/' + n + ')', 480, 560, 22);
+  } else {
+    const cols = 6, rows = Math.ceil(n / cols), w = 960 / cols, h = 600 / rows;
+    BB_BALLS.forEach((def, i) => {
+      const x = (i % cols) * w + w / 2, y = ((i / cols) | 0) * h + h / 2 - 8;
+      items.push({ id: def.id, x, y, size: 160 * S.size, fit: 64 * S.size, turn: -Math.PI / 2 + t * .8 + i, roll: t * .3 + i });
+      label(def.name, x, y + h / 2 - 6, 12);
+    });
+  }
+  V.preview(cx, items, t);
+}
+function label(s, x, y, size) {
+  cx.font = '700 ' + size + 'px system-ui'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+  cx.fillStyle = 'rgba(0,0,0,.6)'; cx.fillText(s, x, y + 1.5); cx.fillStyle = '#e8ecf4'; cx.fillText(s, x, y);
+}
+function loop() { frame(now()); requestAnimationFrame(loop); }
+requestAnimationFrame(loop);
+/* one frame on demand, for a hidden tab where rAF does not run */
+window.shot = (mode, id, t) => { if (mode) view(mode, id); frame(t === undefined ? now() : t); return 'ok'; };
+</script>
+</body>
+</html>

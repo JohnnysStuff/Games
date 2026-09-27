@@ -1,0 +1,191 @@
+{
+ "cell": [
+  43,
+  41
+ ],
+ "anchor": [
+  20,
+  35
+ ],
+ "cols": 9,
+ "anims": {
+  "ready": {
+   "row": 0,
+   "frames": 2,
+   "t": 0.5,
+   "loop": true
+  },
+  "shuffle": {
+   "row": 1,
+   "frames": 6,
+   "t": 0.1,
+   "loop": true
+  },
+  "run": {
+   "row": 2,
+   "frames": 9,
+   "t": 0.08,
+   "loop": true
+  },
+  "dive": {
+   "row": 3,
+   "frames": 6,
+   "t": 0.07,
+   "loop": false
+  },
+  "lowdive": {
+   "row": 4,
+   "frames": 5,
+   "t": 0.07,
+   "loop": false
+  },
+  "highcatch": {
+   "row": 5,
+   "frames": 5,
+   "t": 0.08,
+   "loop": false
+  },
+  "chestcatch": {
+   "row": 6,
+   "frames": 3,
+   "t": 0.1,
+   "loop": false
+  },
+  "hold": {
+   "row": 7,
+   "frames": 2,
+   "t": 0.5,
+   "loop": true
+  },
+  "throw": {
+   "row": 8,
+   "frames": 5,
+   "t": 0.08,
+   "loop": false
+  },
+  "punt": {
+   "row": 9,
+   "frames": 6,
+   "t": 0.07,
+   "loop": false
+  },
+  "celebrate": {
+   "row": 10,
+   "frames": 4,
+   "t": 0.12,
+   "loop": true
+  },
+  "knocked": {
+   "row": 11,
+   "frames": 5,
+   "t": 0.1,
+   "loop": false
+  },
+  "divefar": {
+   "row": 12,
+   "frames": 8,
+   "t": 0.06,
+   "loop": false,
+   "hands": [
+    [
+     1,
+     -8
+    ],
+    [
+     11,
+     -14
+    ],
+    [
+     11,
+     -25
+    ],
+    [
+     10,
+     -25
+    ],
+    [
+     14,
+     -11
+    ],
+    [
+     13,
+     -6
+    ],
+    [
+     8,
+     -9
+    ],
+    [
+     8,
+     -10
+    ]
+   ]
+  },
+  "divenear": {
+   "row": 13,
+   "frames": 8,
+   "t": 0.06,
+   "loop": false,
+   "hands": [
+    [
+     1,
+     -8
+    ],
+    [
+     3,
+     -12
+    ],
+    [
+     13,
+     -6
+    ],
+    [
+     12,
+     -4
+    ],
+    [
+     12,
+     0
+    ],
+    [
+     15,
+     1
+    ],
+    [
+     10,
+     -3
+    ],
+    [
+     7,
+     -9
+    ]
+   ]
+  },
+  "cel_roar": {
+   "row": 14,
+   "frames": 6,
+   "t": 0.1,
+   "loop": true
+  },
+  "cel_kneeslide": {
+   "row": 15,
+   "frames": 6,
+   "t": 0.09,
+   "loop": false,
+   "tail": 2
+  },
+  "sad_post": {
+   "row": 16,
+   "frames": 4,
+   "t": 0.25,
+   "loop": false,
+   "tail": 2
+  },
+  "sad_punch": {
+   "row": 17,
+   "frames": 6,
+   "t": 0.1,
+   "loop": true
+  }
+ }
+}

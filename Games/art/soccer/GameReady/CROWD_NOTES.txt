@@ -1,0 +1,95 @@
+REFEREE, CROWD AND STANDS — RAW IMAGE-TOOL OUTPUTS
+
+Files:
+referee.png    1254 x 1254
+fans.png       1254 x 1254
+fans_long.png  1254 x 1254
+fans_cap.png   1254 x 1254
+stands.png     1536 x 1024
+
+Generated sequentially using the built-in image tool, with
+transparent_background=true. The fan variants use the selected fans sheet as
+their edit target. The stands use that fan sheet as the scale/style reference.
+The referee and base fan use player_short.png as the style reference.
+
+All delivered PNGs are copied unchanged from their selected image-tool outputs.
+No resizing, cropping, recolouring, alpha cleanup, formatting or scripted image
+editing was applied. Header checks confirmed the dimensions above and transparent
+corner pixels in all five files.
+
+Visual checks:
+Referee: 8 rows, counts 1/1/8/4/3/6/6/3 (32 sprites).
+Fans and variants: 8 rows, counts 1/2/2/4/4/4/2/2 (21 sprites).
+Fans face the viewer. Ponytail and yellow-cap/green-peak versions are edits.
+Stands: three separate pieces, four navy bench tiers each, front railing,
+central stairs in the middle piece, and a concrete left end in the bottom piece.
+A revision removed the tapered ends from the two full-width stands sections.
+
+Raw-output limitations:
+The first four files are 1254 square, not the requested 1024 square. Exact
+128-pixel cells, 117-pixel baselines, reference sprite scale, 60-pixel fan height,
+strict hard-pixel edges/palette and exact head-only pixel identity are not
+guaranteed. The fan size correction reduced the fan but did not fully reach the
+requested 60-pixel height. Some coloured edge fringe remains. The stands'
+left-end module is wider than the requested quarter canvas, and seamless pixel
+matching of the stand modules is not verified. Original image-tool output was
+retained as expressly requested.
+
+EXACT PROMPTS
+
+REFEREE
+Create referee.png, requested1024x1024 transparent PNG. Attached player_short.png is STYLE/SCALE REFERENCE ONLY: use same chibi big head/short limbs, dark outline, flat colours and hard square art-pixel blocks. New ORIGINAL older stern soccer REFEREE, same approximately100-image-pixel standing height as reference player, not enlarged. Short dark hair GREY AT SIDES, neat dark moustache, serious eyebrows. Pure black pupils with small pure white highlights, identical eye design across frames. Very dark CHARCOAL short-sleeve shirt slightly lighter than outline so silhouette shows, WHITE collar and white cuff stripes, charcoal shorts, dark socks with white tops, black boots. Small silver whistle on BLACK neck cord. No badge/number/logo. Every frame faces RIGHT.
+LAYOUT: invisible8column x8row grid,128x128cells, rows start at leftmost cell, unused cells fully empty. Ground baseline localy117, at least10px clear transparent space around each sprite and between neighbours/rows. Don't crop raised cards or hands. Same scale/head/face/clothes/outline across frames, change only animated parts. EXACT row counts1,1,8,4,3,6,6,3 =32sprites, no extras.
+ROW1 STANDING: ONE ordinary standing frame, arms relaxed sides. Seven empty cells.
+ROW2 WATCHING: ONE standing frame hands clasped BEHIND back watching play. Seven empty cells.
+ROW3 RUN: EIGHT sequential frames of rightward running loop, arms pump opposite legs, short strides, cord swings.
+ROW4 WHISTLE: FOURframes:1lift silver whistle to mouth;2blow cheeks puffed OTHER arm raised straight UP;3same cheeks a little puffier;4lower both arms.
+ROW5 POINT: THREEframes:1arm rising;2arm fully extended pointing RIGHT and slightly DOWN;3same pose held.
+ROW6 YELLOW CARD: SIXframes:1hand to breast pocket;2pull out SMALL bright yellow rectangular card;3arm rising with card;4arm straight UP, card high ABOVE HEAD, OTHER hand pointing forward, stern face;5same held card tiny shake;6lower card. Card roughly face-height, flat bright yellow with thin dark outline, no writing.
+ROW7 RED CARD: SAME SIXposes as row6, but SMALL bright RED card and sterner eyebrows. Preserve pose sequence and card location. Thin dark outline, no writing.
+ROW8 PLAY ON: THREEframes BOTH arms sweep forward and OUT toward pitch, palms UP, wave play on.
+Transparent background fully empty: no shadows, ground, grass, ball, motionlines, text, labels, numbers, visiblegrid, no blur/gradient/soft edges/antialiasing/coloured fringe, no random smears or disconnected pixels. Entire8rows,8columns1024x1024 intended sheet.
+
+FANS
+Create fans.png: one small FRONT-FACING soccer fan, requested1024x1024 transparent sprite sheet,8rows. Attached player_short.png is STYLE/PALETTE/PIXEL-BLOCK reference only, not the fan pose. Same chibi big-head look, dark outline, hard square pixel blocks, skin and brown hair shades; the fan is only about60 IMAGE PIXELS TALL standing, a little over half the player's height. Keep the SAME SIZE ART PIXEL BLOCKS as the player, draw fewer blocks/less detail; no finer-resolution mini painting. SMALL FAN with generous surrounding empty space, never enlarge to fill cells.
+Character: short brown hair like reference, yellow shirt with GREEN collar/cuff trim, dark BLUE long trousers, dark shoes. SAME skin and hair colours as player, same yellow/green shirt for game recolouring. All frames face DIRECTLY TOWARD US/THE VIEWER, symmetrical frontal face with both eyes visible. Solid black pupils with small white highlights. No side-facing fan. Fan sits in far-side stands looking at pitch/camera.
+Invisible128x128cells,8columns,8rows, each row starts left; local baseliney117 for feet or seat. At least10px transparent clearance around every pose, no overlaps. Same head/hair/face/clothes/outline across frames, change only moving parts. EXACT counts1,2,2,4,4,4,2,2 (21sprites):
+ROW1 STANDING: ONE small front-view standing pose arms down, size-reference frame.
+ROW2 SITTING: TWO seated front-view frames, hands resting on knees.2is1with head/shoulders ONE ART PIXEL LOWER (breathing). Legs and hands same.
+ROW3 CLAPPING: TWO seated front-view poses,1hands APART in front of chest,2hands TOGETHER.
+ROW4 CHEERING: FOURposes:1seated;2springing up;3standing BOTH arms straight UP mouth wide OPEN;4standing arms V mouth OPEN.
+ROW5 SCARF: FOUR standing front-view poses, hold team scarf STRETCHED HORIZONTALLY OVER HEAD with both hands; sway LEFT,MIDDLE,RIGHT,MIDDLE. Yellow scarf with GREEN STRIPES, no writing. Keep face visible underneath.
+ROW6 FLAG: FOUR standing front-view poses holding short stick with SMALL yellow flag with ONE GREEN STRIPE. Wave flag LEFT,UP,RIGHT,UP. Fan still faces US in all four; only arm/flag move.
+ROW7 GROAN: TWO seated front-view poses, BOTH hands on top of head, mouth OPEN dismay.2slumps head/shoulders one art pixel lower.
+ROW8 STANDING CLAP: TWO standing front-view poses, clap at chest:1hands APART,2TOGETHER.
+Absolutely no seats/chairs/benches in any frame: nothing drawn to sit on. Props ONLY scarf in row5, flag/stick in row6. No ball, shadow, ground, grass, motionlines, text, labels, numbers or grid. True transparent background, hard square pixels, no gradients/blur/antialiasing/soft or coloured fringe. Keep all unused cells fully transparent,8rows complete, requested1024square canvas.
+
+FAN SIZE CORRECTION
+Correct this crowd-fan sheet: the fan is MUCH TOO LARGE. Generate a version where EVERY fan is only HALF its current image height and width, standing about60–70 actual image pixels tall. Keep the same size square art-pixel blocks (roughly4px blocks), so draw the fan with FEWER BLOCKS and LESS DETAIL, not finer/smaller pixels and not a blurred downscale. Approximately16 art blocks tall standing, with a big8-block head and short body. The player in the game is about100px tall; fans must clearly be little crowd sprites. The empty transparent space around them will become much larger; that is required.
+Preserve all8rows,21sprites with counts1,2,2,4,4,4,2,2, same actions and hairstyles/expressions/clothing and prop types. Keep each sprite at the same left-to-right cell center and row baseline. All front-facing, yellow/green shirts, darkblue trousers, darkshoes, brown hair, blackpupil/whitehighlight eyes. Scale scarf/flag size down with fan, but keep same coarse art-block scale. No benches/seats, no objects except existing scarves/flags. Maintain true transparent background, no shadows, ground, text or lines. Request1024x1024canvas,8x8 invisible128cells, unusedcells empty.
+
+FANS_LONG
+Create fans_long.png as a HEAD-AND-HAIR-ONLY edit of IMAGE1, the small crowd fan sprite sheet. IMAGE2 (player_long.png) is a PONYTAIL STYLE REFERENCE ONLY, do not copy its poses or body.
+In EVERY fan sprite, change only the head/hair to long dark-brown hair swept back and tied into a chunky ponytail like image2. Keep fan faces directed straight TOWARD THE VIEWER, same small front-view facial proportions/eyes/expressions. Ponytail can be visible at the side/back of the head. Same brown hair and skin colours.
+Everything below the head must remain IDENTICAL to image1: exact bodies, clothing, poses, hands/arms/legs, scarves, flags/sticks, colours, pixel-block scale and sprite size. Preserve every sprite position, complete canvas size, all8rows and empty cells. Row counts1,2,2,4,4,4,2,2,21sprites total. No moving or redrawing the poses, no extra sprites. Same clear transparent space. Preserve transparent background, no shadows/seat/ground/grass/ball/labels/text/grid/motionlines. Hard square pixel art with dark outline, no blur/soft fringes. Hair-only variant of the existing fan sheet.
+
+FANS_CAP
+Create fans_cap.png as a HEAD-ONLY edit of this small FRONT-FACING crowd-fan sheet. In EVERY one of the21sprites, put a baseball cap on the fan's head: bright YELLOW crown and GREEN PEAK/visor, same exact yellow/green tones as shirt/collar so the game can recolour them together. Keep existing face, eyes and expressions. All fans face directly toward VIEWER; cap visor points toward viewer, visible as a short green horizontal brim above forehead. No cap logo, number or writing.
+Everything else remains IDENTICAL: same small body size and coarse pixel-block scale, same body/arm/leg/hand poses, skin colours, trousers/shoes/shirt, scarves and flags/sticks, frame positions, all8rows, counts1,2,2,4,4,4,2,2, entire canvas dimensions and empty space. Do not move or redraw sprites, no extra frames. Change only heads by adding caps.
+Preserve true transparent background. Hard square pixels and dark outline. No shadow, seat, ground, grass, ball, motionlines, label, text, visiblegrid or numbers. No blur/gradients/soft edges/extra colored fringing.
+
+STANDS
+Create stands.png, requested1536x1024 transparent PNG, pixel-art modular EMPTY soccer-stadium bleachers. Attached small crowd-fan sprite sheet is a SCALE/PIXEL-STYLE REFERENCE ONLY: do NOT include any fans/people in output. Each seat tier must fit one seated fan at that art scale. Same coarse hard square pixel blocks and dark outline, flat colours, no antialiasing, blur, gradient, glow or coloured fringes.
+CAMERA: seen from halfway line on the pitch, looking FRONT-ON and a little DOWN at the far-side stands. We see the FRONT of every bench row, with tiers rising AWAY from us in stair steps. All long horizontal lines remain exactly HORIZONTAL, no diagonal perspective or isometric side view. Four seating tiers, no more or fewer, each a long DARK NAVY BENCH on a GREY CONCRETE step with enough seat depth for one fan. Behind TOP tier a VERY DARK BACK WALL with thin lighter top edge. In FRONT of LOWEST tier a LIGHT GREY METAL RAILING with regularly spaced vertical posts.
+THREE SEPARATE MODULAR PIECES STACKED TOP TO BOTTOM, at least30 transparent pixels vertically BETWEEN them. Suggested bands y16–292,y364–640,y712–988. Every piece has exactly the SAME four-tier heights, bench depth, step profiles, back-wall height, railing geometry and art scale.
+PIECE1 TOP: a long STRAIGHT section occupying FULL CANVAS WIDTH x0..1535. All FOUR benches and steps extend cleanly through left AND right image edges at IDENTICAL y coordinates. Must tile seamlessly horizontally. No end wall/cap or angled ends on this piece. Continuous rails meet at matching heights, post spacing repeats across seam.
+PIECE2 MIDDLE: identical full-width section, with one NARROW CENTRAL STAIRWAY running up THROUGH all4tiers from lowest front to back. Stairway is exposed light-grey concrete steps with a slender metal handrail. Benches stop at either side of stairway. Away from the middle stairway, EVERY tier and side edge matches piece1 exactly so this module tiles BETWEEN straight sections. No endwalls.
+PIECE3 BOTTOM: only LEFT END module, about384pixels wide (one quarter canvas) at x0..383; REST of this band fully TRANSPARENT. Four tiers terminate at a GREY CONCRETE SIDE WALL ON LEFT. Its right edge exposes the SAME four continuous tier profiles and y coordinates, relative to its band, as pieces1/2 so it joins their left edge. The game mirrors this module to form right end. No second end piece.
+Empty stadium geometry only. No people, fan sprites, adverts, logos, letters/numbers/text/labels, sky, floodlights, roof, grass/pitch, ground outside stand footprints, ball, background, shadows or motionlines. True transparent empty space around and between3pieces. Limit colours to greys for concrete/rails, dark navy benches, verydark back wall, dark outline. Crisp tidy production pixel-art architectural modules.
+
+STANDS EDGE CORRECTION
+Edit this stands atlas to fix MODULAR TILE GEOMETRY. Keep1536x1024canvas and three separate stacked pieces, all empty/no people, same four navy bench tiers/grey concrete/light railing/darkbackwall.
+TOP AND MIDDLE PIECES: remove ALL tapered/stair-step silhouettes at LEFT and RIGHT ends. EVERY horizontal component, including BACK WALL and ALL FOUR BENCHES and each concrete riser/tread and front rail, must continue straight past BOTH image edges x0 andx1535, as if cut out of an infinitely long stand. No side walls, endcaps, inset benches, transparent side margins or visible end faces on these2pieces. At x0 andx1535, exactly the same pixel colours at each corresponding y, so copies can join seamlessly. Top and middle piece must have identical vertical tier profiles and overall height. Keep central stairs/handrail ONLY in middle piece, never reaching the outer edges. Do not add extra tiers.
+BOTTOM PIECE: left END CAP module only384pxwide (one quarter canvas), positioned flushLEFT x0..383. Reduce current oversized width to384 WITHOUT changing the height/tier spacing. Keep its left stepped concrete SIDE WALL. The right edge atx383 is an open cut that joins to straight sections: identical tier profiles, not an enclosed end. Keep the rest of bottom band transparent.
+Also render as coarse clean PIXEL ART matching chunky soccer sprites: clearly visible square pixel blocks, hard stepped edges, small flat grey/navy palette, no smooth vector shading, no gradients, photographic texture, haze or glow. No shadows/background ground. Genuine full transparency in all space between and around pieces; at least30pxvertical gap between pieces. Full-width modular top2 must reach the image edges. No text/labels/grid/people/adverts/logos/sky/roof/floodlights.
+

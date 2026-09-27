@@ -1,0 +1,89 @@
+/* ============================================================ the ledger ==
+   The end-of-round card, and the first screen in the house style the rest of
+   the UI is moving to. Three rules hold it together:
+
+     the scene stays visible   — this is a scrim over the game, not a page;
+     rules, never boxes        — hierarchy comes from size and space, and a
+                                 panel inside a panel is what made the old
+                                 screens read as busy;
+     two type sizes            — one big number, one small label. The middle
+                                 size is what makes a screen look cluttered.
+
+   Four colours and no gradients: ink, one amber hairline, warm off-white
+   text, warm grey for everything secondary. Everything moves from JS so a
+   single click can finish every tween at once — see Tween below. */
+.lg{ --lg-line:#c9a24a; --lg-tx:#f2ece2; --lg-mu:#8a8177; --lg-alert:#c4402f;
+  color:var(--lg-tx);padding:2px 10px 0;
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.lg .num{ font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums }
+.lg-cap{ font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--lg-mu) }
+
+/* The ledger takes the panel's chrome off: this is the one screen that is
+   deliberately not a card. #play in front, so it outranks every game's own
+   dressing of `.panel` (only horizon's golf and pool ledger ranks higher). */
+#play .ov.lg-ov{
+  background:color-mix(in srgb, #05080a 72%, transparent);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  align-items:center;
+}
+#play .ov.lg-ov .panel{
+  background:none;border:0;box-shadow:none;border-radius:0;padding:0;
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+  width:min(540px,100%);animation:none;text-align:left;overflow:visible;
+}
+#play .ov.lg-ov .panel::before{ display:none }
+
+.lg-head{ display:flex;align-items:flex-start;justify-content:space-between;gap:20px }
+.lg-verdict{ font-size:29px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;line-height:1.12;opacity:0 }
+.lg-where{ margin-top:9px;opacity:0 }
+.lg-purse{ opacity:0;text-align:right;white-space:nowrap }
+.lg-purse b{ display:block;font-size:20px;font-weight:600;color:var(--lg-line);margin-top:2px }
+
+.lg-tag{ display:inline-block;margin-top:13px;padding:4px 10px;font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;border:1px solid var(--lg-line);color:var(--lg-line);opacity:0 }
+.lg-tag.bad{ border-color:var(--lg-alert);color:var(--lg-alert) }
+
+.lg-rule{ height:1px;background:var(--lg-line);opacity:.3;margin:19px 0;transform:scaleX(0);transform-origin:0 50% }
+
+.lg-stats{ display:flex;flex-wrap:wrap;gap:12px 30px }
+.lg-stat{ opacity:0 }
+.lg-stat b{ display:block;font-size:21px;font-weight:600;line-height:1 }
+.lg-stat span{ display:block;margin-top:6px }
+
+.lg-row{ display:flex;align-items:baseline;gap:10px;padding:4.5px 0;opacity:0 }
+.lg-row .lbl{ font-size:13.5px;white-space:nowrap }
+.lg-row .note{ font-size:11px;color:var(--lg-mu);white-space:nowrap }
+.lg-row .led{ flex:1;height:0;border-bottom:1px dotted rgba(242,236,226,.16);transform:translateY(-4px);min-width:16px }
+.lg-row .amt{ font-size:14px;color:var(--lg-line);white-space:nowrap }
+
+.lg-total{ display:flex;align-items:baseline;gap:10px;margin-top:11px;padding-top:12px;
+  border-top:1px solid rgba(201,162,74,.3) }
+.lg-total .lbl{ font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--lg-mu) }
+.lg-total .led{ flex:1 }
+.lg-total .amt{ font-size:27px;font-weight:600;color:var(--lg-line);line-height:1 }
+
+.lg-xp{ margin-top:20px;opacity:0 }
+.lg-xpbar{ height:3px;background:rgba(242,236,226,.12);overflow:hidden }
+.lg-xpbar i{ display:block;height:100%;width:0;background:var(--lg-line) }
+.lg-xplab{ display:flex;justify-content:space-between;margin-top:8px }
+
+.lg-note{ margin-top:14px;opacity:0;color:var(--lg-line) }
+
+.lg-bar{ display:flex;align-items:center;justify-content:space-between;gap:18px;
+  margin-top:24px;padding-top:15px;border-top:1px solid rgba(242,236,226,.1);opacity:0 }
+.lg-acts{ display:flex;gap:22px }
+.lg-act{ background:none;border:0;padding:4px 0;cursor:pointer;color:var(--lg-mu);
+  font:inherit;font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  transition:color .16s var(--ease) }
+.lg-act:hover,.lg-act:focus-visible{ color:var(--lg-tx);outline:none }
+.lg-act.prim{ color:var(--lg-tx);display:flex;align-items:center;gap:10px }
+.lg-act.prim:hover{ color:var(--lg-line) }
+.lg-act kbd{ font:inherit;font-size:9.5px;letter-spacing:.14em;padding:3px 8px;
+  border:1px solid rgba(242,236,226,.24);color:var(--lg-mu) }
+
+@media (max-width:560px){
+  .lg-verdict{ font-size:23px }
+  .lg-stats{ gap:10px 20px }
+  .lg-total .amt{ font-size:23px }
+}

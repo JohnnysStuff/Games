@@ -1,0 +1,128 @@
+/* ============================================================
+   UPDATES — the What's new button in the header, and the sheet
+   that says what changed or offers a newer copy. Drawn in the
+   hub's own terms (hub-v4 tokens, the condensed display face,
+   tracked caps), so it comes after hub-v4 and only styles its
+   own parts. Changes are read by game: each game gets a card
+   under its own picture, and every line says what kind of
+   change it is in one word.
+   ============================================================ */
+.verbtn{position:relative;display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 5px 0 10px;margin-left:2px;border-radius:999px;flex:none;
+  font-size:12.5px;font-weight:700;color:var(--h-tx2);background:var(--h-card);border:1px solid var(--h-line);white-space:nowrap;cursor:pointer;
+  transition:transform .45s var(--h-spring),color .25s,border-color .25s,box-shadow .3s}
+.verbtn:hover{color:var(--h-tx);border-color:var(--h-line2);transform:translateY(-1px)}
+.verbtn:active{transform:scale(.95)}
+.verbtn svg{width:15px;height:15px;flex:none}
+.verbtn .vb-new{color:var(--h-brand)}
+.verbtn .vb-upd{display:none}
+.verbtn em{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:999px;font-style:normal;
+  font-size:10.5px;font-weight:800;letter-spacing:.02em;font-variant-numeric:tabular-nums;color:var(--h-mu);background:var(--h-card3)}
+.verbtn em:empty{display:none}
+/* something unread: a dot on the corner, like a notification */
+.verbtn i{display:none;position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;
+  background:var(--h-brand);box-shadow:0 0 0 2px var(--h-bg)}
+.verbtn.new i{display:block}
+.verbtn.new i::after{content:'';position:absolute;inset:0;border-radius:50%;background:var(--h-brand);animation:hPing 2.2s var(--h-ease) infinite}
+.verbtn.upd{color:#fff;background:var(--h-grad);border-color:transparent;
+  box-shadow:0 10px 22px -10px var(--h-glow),inset 0 1px 0 rgba(255,255,255,.3);animation:updNudge 2.8s var(--h-ease) 1.2s 2 both}
+.verbtn.upd .vb-new{display:none}
+.verbtn.upd .vb-upd{display:block}
+.verbtn.upd em{color:#fff;background:rgba(255,255,255,.22)}
+@keyframes updNudge{0%,100%{transform:none}8%{transform:translateY(-3px)}16%{transform:none}24%{transform:translateY(-2px)}32%{transform:none}}
+body.in-game .verbtn{display:none}
+@media (max-width:1100px){ .verbtn:not(.upd) #verTx{display:none} .verbtn:not(.upd){padding-left:8px} }
+@media (max-width:760px){ .verbtn:not(.upd){display:none} }
+
+/* ---- the sheet ---- */
+#updOv{z-index:250;align-items:center;padding:24px 18px}
+#updOv .sheet{width:min(680px,100%);padding:0;overflow:hidden;display:flex;flex-direction:column;max-height:min(840px,calc(100vh - 48px))}
+.upd-hd{padding:22px 24px 18px;border-bottom:1px solid var(--h-line);flex:none;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--h-brand) 14%,transparent),transparent 62%)}
+.upd-hd h2{font-size:30px}
+.upd-body{padding:4px 22px 18px;overflow-y:auto;flex:1;min-height:0;overscroll-behavior:contain}
+.upd-ft{display:flex;align-items:center;gap:10px;padding:16px 24px 20px;border-top:1px solid var(--h-line);background:var(--h-card2);flex:none}
+.upd-ft .sp{flex:1}
+.upd-small{font-size:12px;font-weight:600;color:var(--h-mu)}
+
+/* ---- a version: its name and date, what kinds of change, which games ---- */
+.upd-v{display:block;margin-top:18px}
+.upd-v + .upd-v{padding-top:18px;border-top:1px solid var(--h-line)}
+.upd-vh{display:flex;align-items:center;gap:14px}
+.upd-vt{flex:1;min-width:0}
+.upd-vt .h-cap{display:block}
+.upd-vt b{display:block;margin-top:5px;font:italic 800 27px/1.02 var(--h-disp);text-transform:uppercase;letter-spacing:.01em;color:var(--h-tx)}
+.upd-count{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.upd-count span{display:inline-flex;align-items:center;height:23px;padding:0 10px;border-radius:999px;font-size:11.5px;font-weight:750}
+.upd-stack{display:flex;flex:none;padding-right:2px}
+.upd-stack .upd-art{width:48px;height:32px;border-radius:10px;margin-left:-14px;box-shadow:0 0 0 2.5px var(--h-card),0 6px 14px -6px rgba(0,0,0,.5)}
+.upd-stack .upd-art:first-child{margin-left:0}
+
+/* the pictures: a game's own card art, cropped; the arcade's mark on its gradient */
+.upd-art{display:block;flex:none;width:68px;height:42px;border-radius:12px;overflow:hidden;background:var(--h-card3);border:1px solid var(--h-line)}
+.upd-art svg{display:block;width:100%;height:100%}
+.upd-arcade{display:grid;place-items:center;background:var(--h-grad);border-color:transparent}
+.upd-arcade svg{width:62%;height:62%}
+
+/* ---- a game's card: its picture and name, then one line per change ---- */
+.upd-cards{display:grid;gap:10px;margin-top:15px}
+.upd-game{border-radius:18px;background:var(--h-card2);border:1px solid var(--h-line);overflow:hidden}
+.upd-game header{display:flex;align-items:center;gap:13px;padding:11px 16px 11px 11px;border-bottom:1px solid var(--h-line);
+  background:color-mix(in srgb,var(--h-card3) 45%,transparent)}
+.upd-game header b{flex:1;min-width:0;font:italic 800 21px/1 var(--h-disp);text-transform:uppercase;letter-spacing:.02em;color:var(--h-tx)}
+.upd-game header span{flex:none;font-size:11.5px;font-weight:700;color:var(--h-mu)}
+.upd-game ul{list-style:none;margin:0;padding:4px 16px 8px}
+.upd-game li{display:grid;grid-template-columns:82px minmax(0,1fr);gap:12px;align-items:start;padding:10px 0}
+.upd-game li + li{border-top:1px solid var(--h-line)}
+.upd-k{display:inline-flex;align-items:center;justify-content:center;height:23px;margin-top:-1px;border-radius:8px;
+  font-size:10.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+.upd-t{font-size:14.5px;font-weight:550;line-height:1.5;color:var(--h-tx2);text-wrap:pretty}
+
+/* the four kinds, in the same colours wherever they appear */
+.upd-k.add,.upd-count .add{color:var(--h-good);background:color-mix(in srgb,var(--h-good) 15%,transparent)}
+.upd-k.chg,.upd-count .chg{color:var(--h-brand2);background:color-mix(in srgb,var(--h-brand2) 15%,transparent)}
+.upd-k.rem,.upd-count .rem{color:var(--h-bad);background:color-mix(in srgb,var(--h-bad) 15%,transparent)}
+.upd-k.fix,.upd-count .fix{color:var(--h-gold);background:color-mix(in srgb,var(--h-gold) 16%,transparent)}
+
+/* an older version, folded to its one line until it is opened */
+details.upd-v summary{display:block;list-style:none;cursor:pointer;margin:0 -12px;padding:12px;border-radius:16px;transition:background .2s}
+details.upd-v summary::-webkit-details-marker{display:none}
+details.upd-v summary:hover{background:var(--h-card2)}
+details.upd-v summary:focus-visible{outline:2px solid color-mix(in srgb,var(--h-brand) 60%,transparent);outline-offset:2px}
+details.upd-v summary .upd-vt b{font-size:22px}
+details.upd-v summary .upd-vh::after{content:'';flex:none;width:9px;height:9px;margin:0 6px 5px 2px;
+  border-right:2.2px solid var(--h-mu);border-bottom:2.2px solid var(--h-mu);transform:rotate(45deg);transition:transform .35s var(--h-ease)}
+details.upd-v[open] summary .upd-vh::after{transform:rotate(225deg);margin-bottom:-3px}
+details.upd-v .upd-cards{margin-top:6px}
+
+/* ---- the download: progress, then what to do with it ---- */
+.upd-note{margin:16px 0 2px;font-size:14px;font-weight:550;line-height:1.55;color:var(--h-tx2)}
+.upd-note b{color:var(--h-tx);font-weight:750}
+.upd-bar{height:9px;margin:14px 0 4px;border-radius:99px;background:var(--h-card3);overflow:hidden}
+.upd-bar i{display:block;height:100%;border-radius:99px;background:var(--h-grad);transition:width .2s var(--h-ease)}
+.upd-ok{display:flex;align-items:center;gap:13px;margin-top:18px;padding:14px 16px;border-radius:16px;
+  background:color-mix(in srgb,var(--h-good) 10%,var(--h-card2));border:1px solid color-mix(in srgb,var(--h-good) 30%,transparent)}
+.upd-ok svg{width:22px;height:22px;flex:none;color:var(--h-good)}
+.upd-ok b{display:block;font-size:14.5px;font-weight:750;color:var(--h-tx)}
+.upd-ok span{display:block;margin-top:1px;font-size:12px;font-weight:600;color:var(--h-mu)}
+
+.upd-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 18px;border-radius:13px;
+  font-size:13.5px;font-weight:700;color:var(--h-tx);background:var(--h-card);border:1px solid var(--h-line2);white-space:nowrap;
+  transition:transform .45s var(--h-spring),box-shadow .3s,background .25s}
+.upd-btn:hover{transform:translateY(-2px);background:var(--h-card3)}
+.upd-btn:active{transform:scale(.96)}
+.upd-btn svg{width:16px;height:16px;flex:none}
+.upd-btn.pri{color:#fff;background:var(--h-grad);border-color:transparent;
+  box-shadow:0 14px 28px -14px var(--h-glow),inset 0 1px 0 rgba(255,255,255,.3)}
+.upd-btn.pri:hover{background:var(--h-grad);box-shadow:0 18px 32px -14px var(--h-glow),inset 0 1px 0 rgba(255,255,255,.3)}
+.upd-btn[disabled]{opacity:.6;pointer-events:none}
+
+@media (max-width:560px){
+  .upd-hd,.upd-ft{padding-left:18px;padding-right:18px}
+  .upd-body{padding-left:14px;padding-right:14px}
+  .upd-stack{display:none}
+  .upd-game li{grid-template-columns:1fr;gap:6px}
+  .upd-k{justify-self:start;padding:0 9px}
+  .upd-ft{flex-wrap:wrap}
+  .upd-ft .upd-btn{flex:1}
+  .upd-ft .sp{display:none}
+}

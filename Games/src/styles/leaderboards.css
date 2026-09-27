@@ -1,0 +1,19 @@
+/* ============================================================
+   LEADERBOARDS — their own overlay, a tab beside sound and party
+   ============================================================ */
+#lbOv{
+  position:fixed;inset:0;z-index:134;display:none;
+  align-items:flex-start;justify-content:center;padding:70px 20px 20px;
+  background:var(--scrim);
+  -webkit-backdrop-filter:blur(20px) saturate(130%) brightness(.6);
+  backdrop-filter:blur(20px) saturate(130%) brightness(.6);
+  overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none;
+}
+#lbOv::-webkit-scrollbar{width:0;height:0;display:none}
+#lbOv.on{display:flex}
+#lbOv.on .lb-panel{animation:glassIn .3s var(--spring) both}
+/* Laid out rather than stacked: the old panel put every game in one
+   horizontally-scrolling strip of chips, which meant hunting sideways for the
+   one you wanted. A filterable column beside the board makes the whole set
+   visible at once and leaves room to say where *you* placed. */
+.lb-panel{width:min(720px,100%)}

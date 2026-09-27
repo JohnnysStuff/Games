@@ -1,0 +1,10 @@
+{ "version": "0.0.1", "configurations": [
+  { "name": "hub", "runtimeExecutable": "powershell.exe",
+    "runtimeArgs": ["-NoProfile","-ExecutionPolicy","Bypass","-File",".claude/serve.ps1","C:/Users/johnt/Documents/Terriara","8801"],
+    "port": 8801, "url": "http://localhost:8801" },
+  { "name": "games", "runtimeExecutable": "powershell.exe",
+    "runtimeArgs": ["-NoProfile","-ExecutionPolicy","Bypass","-File",".claude/serve.ps1","C:/Users/johnt/Documents/Games","8802"],
+    "port": 8802, "url": "http://localhost:8802" },
+  { "name": "games-alt", "runtimeExecutable": "powershell.exe",
+    "runtimeArgs": ["-NoProfile","-ExecutionPolicy","Bypass","-File",".claude/serve.ps1","C:/Users/johnt/Documents/Games","8803"],
+    "port": 8803, "url": "http://localhost:8803" } ] }

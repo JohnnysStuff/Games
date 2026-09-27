@@ -1,0 +1,46 @@
+NEW ANIMATION SHEETS - GENERATED DRAFTS
+
+keeper_moves.png: 1536 x 1024 RGBA.
+Four rows, 2 / 2 / 8 / 8 sprites: ready, hold, far-post dive, near-post dive.
+player_idle.png: 1254 x 1254 RGBA (requested 1024 x 1024).
+Four rows, two sprites per row: short, spiky, afro, tied-back long hair.
+
+Both were generated using the built-in image tool with transparent_background
+enabled and the existing character sheets as references. No scripted image
+processing was used. The selected versions were visually checked for counts,
+row order, hair styles, clear separation, and broad action direction.
+
+OUTSTANDING LIMITATIONS
+The image tool did not honor the requested 1024 x 1024 idle export size despite
+correction requests. It also redrew details within breathing pairs rather than
+producing exact pixel duplicates with a one-art-pixel upper-body translation.
+Hair, eyes, silhouette, colour, and pose consistency are not pixel-exact.
+Character scale and dive angles are approximate. The far-post full-stretch
+poses obscure the face rather than showing eyes tracking the gloves clearly.
+The images retain softened/fringed edges and are not validated against a
+strict pixel palette. They are drafts, not verified flicker-free game exports.
+
+PROMPT SET SUMMARY
+Keeper: Match the existing short-haired keeper, white gloves, yellow shirt
+with green trim, blue shorts, red socks, dark boots, right-facing. 1536 x 1024,
+four rows with 2/2/8/8 frames. Ready and hold breathing pairs must duplicate
+the first frame and translate only upper-body pixels down one art pixel.
+Far-post dive: crouch, spring, flight, full stretch, fall, side landing, kneel,
+ready; gloves at 1 o'clock and boots at 7 o'clock. Near-post dive: corresponding
+eight beats with gloves at 5 o'clock and boots at 11 o'clock, chest/face toward
+viewer, front landing. Head between outstretched arms, eyes tracking gloves.
+Black pupils and white highlights only; invariant faces/hair/kit. Same original
+100-110-image-pixel standing size. No shadows, ground, lines, labels or grid.
+Revision: reduce oversized characters to roughly two-thirds their first
+generated size, keep the layout, refine dive angles and duplicate paired frames.
+
+Idle: Match the four existing player haircuts, same relaxed right-facing body
+and pose, four rows of two frames. Requested 1024 x 1024, around 100-image-pixel
+standing height, x centers 256/768 and sole baselines 200/456/712/968. Duplicate
+each first frame and move only above-waist pixels down one art pixel; legs and
+boots unchanged. Identical black pupils/white highlights. Transparent background,
+hard square pixels, no shadows, props, labels or ground. Revisions requested
+smaller sprite scale, exact 1024-square output and literal frame duplication.
+The final extra resize attempt enlarged the characters instead, so the preceding
+version was selected. The original generated attempts remain in Codex's generated
+image storage.

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soccer Test Page</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0c0a16; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<!-- the arcade's own pixel face, and the game itself: the same files the
+     arcade builds in (src/js/games/soccer/), so what is tried here ships -->
+<script src="../src/js/core/hud.js"></script>
+<script src="../src/js/games/soccer/art-data.js"></script>
+<script src="../src/js/games/soccer/art.js"></script>
+<script src="../src/js/games/soccer/sound.js"></script>
+<script src="../src/js/games/soccer/ball.js"></script>
+<script src="../src/js/games/soccer/player.js"></script>
+<script src="../src/js/games/soccer/ai.js"></script>
+<script src="../src/js/games/soccer/ref.js"></script>
+<script src="../src/js/games/soccer/crowd.js"></script>
+<script src="../src/js/games/soccer/ui.js"></script>
+<script src="../src/js/games/soccer/view.js"></script>
+<script src="../src/js/games/soccer/match.js"></script>
+<script src="soccer-debug.js"></script>
+<script>
+/* A stand-in for the arcade shell: the stage fitted to the window, a fixed
+   1/120 s step, and keys and the pointer read the way api.input reads them
+   (pointer in stage units, clicks taken one at a time). Escape pauses; M on
+   the pause card goes back to the game's menu. ?debug exposes window.soc
+   for stepping by hand. */
+const Q = new URLSearchParams(location.search);
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d', { alpha: false });
+const keys = new Set();
+let pend = new Set(), now = new Set(), paused = false, game = null;
+const pointer = { x: -1, y: -1, inside: false }, clicks = [];
+let view = { s: 1, ox: 0, oy: 0, dpr: 1 };
+addEventListener('keydown', e => {
+  if (e.code === 'Escape' || e.code === 'KeyP') { if (game && game.world.phase !== 'menu') paused = !paused; return; }
+  if (paused && e.code === 'KeyM') { paused = false; game.toMenu(); return; }
+  if (!e.repeat) pend.add(e.code);
+  keys.add(e.code);
+  if (e.code.startsWith('Arrow') || e.code === 'Space') e.preventDefault();
+});
+addEventListener('keyup', e => keys.delete(e.code));
+addEventListener('blur', () => keys.clear());
+const stagePt = e => {
+  const r = cv.getBoundingClientRect(), d = view.dpr;
+  return { x: ((e.clientX - r.left) * d - view.ox) / view.s, y: ((e.clientY - r.top) * d - view.oy) / view.s };
+};
+cv.addEventListener('pointermove', e => { const p = stagePt(e); pointer.x = p.x; pointer.y = p.y; pointer.inside = p.x >= 0 && p.x <= 960 && p.y >= 0 && p.y <= 600; });
+cv.addEventListener('pointerleave', () => { pointer.inside = false; });
+cv.addEventListener('pointerdown', e => { const p = stagePt(e); clicks.push({ x: p.x, y: p.y, btn: e.button }); if (clicks.length > 8) clicks.shift(); });
+const api = {
+  W: 960, H: 600,
+  input: { down: c => keys.has(c), pressed: c => now.has(c), pointer, takeClick: () => clicks.shift() || null },
+  sound: SocSound,
+  cursor: c => { if (cv.style.cursor !== c) cv.style.cursor = c; }
+};
+function fit() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  cv.width = Math.max(1, Math.round(innerWidth * dpr)); cv.height = Math.max(1, Math.round(innerHeight * dpr));
+}
+addEventListener('resize', fit);
+function draw() {
+  /* the window can change size without a resize event (device emulation) */
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  if (cv.width !== Math.max(1, Math.round(innerWidth * dpr)) || cv.height !== Math.max(1, Math.round(innerHeight * dpr))) fit();
+  const s = Math.min(cv.width / 960, cv.height / 600), ox = (cv.width - 960 * s) / 2, oy = (cv.height - 600 * s) / 2;
+  view = { s, ox, oy, dpr };
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#0c0a16'; ctx.fillRect(0, 0, cv.width, cv.height);
+  ctx.setTransform(s, 0, 0, s, ox, oy);
+  game.render(ctx);
+  if (window.soc && soc.zoomS) {
+    /* debug: the 1x world buffer, blown up to fill the window */
+    const p = game.pix, z = soc.zoomS, w = Math.min(p.width, cv.width / z), h = Math.min(p.height, cv.height / z);
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.drawImage(p, (p.width - w) / 2 + (soc.zoomX || 0), (p.height - h) / 2 + (soc.zoomY || 0), w, h, 0, 0, w * z, h * z);
+    return;
+  }
+  if (paused) {
+    const U = SocUI;
+    U.rect(ctx, 0, 0, 960, 600, 'rgba(12,10,22,.6)');
+    U.box(ctx, 330, 200, 300, 170, { shine: '#34344e', base: U.C.deep });
+    U.block(ctx, 'PAUSED', 480, 250, 5, U.C.yel, U.C.ochre, 3);
+    U.text(ctx, 'ESC  RESUME', 480, 314, 2, U.C.rim);
+    U.text(ctx, 'M  BACK TO MENU', 480, 340, 2, U.C.mist);
+  }
+}
+function step() { now = pend; pend = new Set(); game.update(1 / 120); }
+let acc = 0, last = performance.now();
+function loop(t) {
+  const dt = Math.min(.1, (t - last) / 1000); last = t;
+  if (!paused && !(window.soc && soc.freeze)) { acc += dt; while (acc >= 1 / 120) { step(); acc -= 1 / 120; } }
+  draw();
+  requestAnimationFrame(loop);
+}
+(async () => {
+  await SocArt.load('');
+  try { await document.fonts.ready; } catch (e) {}
+  game = socMount(api);
+  fit();
+  if (Q.has('debug')) {
+    /* drive it by hand: soc.run(seconds, {hold: ['ArrowRight'], press: ['KeyX']}) */
+    window.soc = {
+      game, W: game.world, dbg: SocDebug, api,
+      run(sec, o = {}) {
+        for (const k of o.hold || []) keys.add(k);
+        for (const k of o.press || []) pend.add(k);
+        for (let i = 0; i < Math.round(sec * 120); i++) step();
+        for (const k of o.hold || []) keys.delete(k);
+        draw();
+        return this.state();
+      },
+      state() {
+        const W = game.world, b = W.ball;
+        return { phase: W.phase, clock: +W.clock.toFixed(1), score: W.score.join('-'), ball: [b.x, b.y, b.z].map(v => +v.toFixed(1)), owner: b.owner ? `${b.owner.team.i}:${b.owner.i}` : null,
+          players: W.players.map(p => `${p.team.i}:${p.i}${p.human ? '*' : ''} ${p.form.role} ${p.st}/${p.an} ${p.x.toFixed(0)},${p.y.toFixed(0)}`) };
+      },
+      draw
+    };
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

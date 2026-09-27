@@ -1,0 +1,40 @@
+/* ============================================================
+   OVERLAY READABILITY + OPTION WRAPPING
+   ============================================================ */
+/* The results screen behind this is bright and busy, so the scrim has to do
+   real work — a light blur left the panel fighting the canvas for attention. */
+.ov{
+  background:color-mix(in srgb, var(--void) 84%, transparent);
+  -webkit-backdrop-filter:blur(22px) saturate(120%) brightness(.55);
+  backdrop-filter:blur(22px) saturate(120%) brightness(.55);
+}
+.panel{
+  background:color-mix(in srgb, var(--surface) 96%, transparent);
+  -webkit-backdrop-filter:saturate(180%) blur(26px);
+  backdrop-filter:saturate(180%) blur(26px);
+  border:1px solid var(--border-2);
+  box-shadow:inset 0 1px 0 var(--glass-hi), 0 24px 70px -20px rgba(0,0,0,.85);
+}
+
+/* Options wrapped out of their box whenever a mode had five choices or a
+   label ran long. The row now wraps instead of overflowing, and buttons size
+   to their text rather than being forced to equal widths. */
+/* A grid rather than a flex row: with five choices the last one used to wrap
+   alone and stretch across the whole width. Equal columns wrap tidily instead. */
+.seg{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(82px,1fr));
+  gap:5px;padding:5px;
+}
+.seg button{
+  width:100%;min-width:0;padding:0 8px;height:34px;
+  font-size:12.5px;white-space:nowrap;line-height:1;
+  overflow:hidden;text-overflow:ellipsis;
+}
+@media (max-width:520px){
+  .seg button{font-size:11.5px;padding:0 7px;height:32px}
+}
+
+/* live standings rows shouldn't jump around as scores tick */
+.mp-row b{font-variant-numeric:tabular-nums}
+.waitnote{min-height:20px}
+

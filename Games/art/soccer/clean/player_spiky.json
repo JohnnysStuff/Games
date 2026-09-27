@@ -1,0 +1,161 @@
+{
+ "cell": [
+  45,
+  41
+ ],
+ "anchor": [
+  22,
+  38
+ ],
+ "cols": 8,
+ "anims": {
+  "idle": {
+   "row": 0,
+   "frames": 2,
+   "t": 0.5,
+   "loop": true
+  },
+  "run": {
+   "row": 1,
+   "frames": 8,
+   "t": 0.08,
+   "loop": true
+  },
+  "dribble": {
+   "row": 2,
+   "frames": 8,
+   "t": 0.08,
+   "loop": true
+  },
+  "shoot": {
+   "row": 3,
+   "frames": 6,
+   "t": 0.07,
+   "loop": false
+  },
+  "pass": {
+   "row": 4,
+   "frames": 4,
+   "t": 0.07,
+   "loop": false
+  },
+  "slide": {
+   "row": 5,
+   "frames": 5,
+   "t": 0.09,
+   "loop": false
+  },
+  "header": {
+   "row": 6,
+   "frames": 6,
+   "t": 0.08,
+   "loop": false
+  },
+  "knocked": {
+   "row": 7,
+   "frames": 5,
+   "t": 0.1,
+   "loop": false
+  },
+  "getup": {
+   "row": 8,
+   "frames": 4,
+   "t": 0.1,
+   "loop": false
+  },
+  "celebrate": {
+   "row": 9,
+   "frames": 6,
+   "t": 0.1,
+   "loop": true
+  },
+  "throwin": {
+   "row": 10,
+   "frames": 5,
+   "t": 0.1,
+   "loop": false
+  },
+  "chest": {
+   "row": 11,
+   "frames": 3,
+   "t": 0.1,
+   "loop": false
+  },
+  "dejected": {
+   "row": 12,
+   "frames": 2,
+   "t": 0.4,
+   "loop": true
+  },
+  "cel_floss": {
+   "row": 13,
+   "frames": 8,
+   "t": 0.08,
+   "loop": true
+  },
+  "cel_kneeslide": {
+   "row": 14,
+   "frames": 6,
+   "t": 0.09,
+   "loop": false,
+   "tail": 2
+  },
+  "cel_backflip": {
+   "row": 15,
+   "frames": 8,
+   "t": 0.07,
+   "loop": false,
+   "tail": 2
+  },
+  "cel_airplane": {
+   "row": 16,
+   "frames": 8,
+   "t": 0.08,
+   "loop": true
+  },
+  "cel_robot": {
+   "row": 17,
+   "frames": 6,
+   "t": 0.13,
+   "loop": true
+  },
+  "cel_flex": {
+   "row": 18,
+   "frames": 4,
+   "t": 0.16,
+   "loop": true
+  },
+  "sad_knees": {
+   "row": 19,
+   "frames": 6,
+   "t": 0.12,
+   "loop": false,
+   "tail": 2
+  },
+  "sad_flat": {
+   "row": 20,
+   "frames": 4,
+   "t": 0.2,
+   "loop": false,
+   "tail": 2
+  },
+  "sad_headhands": {
+   "row": 21,
+   "frames": 4,
+   "t": 0.22,
+   "loop": true
+  },
+  "sad_stomp": {
+   "row": 22,
+   "frames": 6,
+   "t": 0.1,
+   "loop": true
+  },
+  "sad_cry": {
+   "row": 23,
+   "frames": 4,
+   "t": 0.16,
+   "loop": true
+  }
+ }
+}

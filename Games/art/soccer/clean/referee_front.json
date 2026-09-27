@@ -1,0 +1,61 @@
+{
+ "cell": [
+  35,
+  33
+ ],
+ "anchor": [
+  14,
+  31
+ ],
+ "cols": 8,
+ "anims": {
+  "stand": {
+   "row": 0,
+   "frames": 1,
+   "t": 1,
+   "loop": true
+  },
+  "watch": {
+   "row": 1,
+   "frames": 2,
+   "t": 0.5,
+   "loop": true
+  },
+  "sidestep": {
+   "row": 2,
+   "frames": 8,
+   "t": 0.065,
+   "loop": true
+  },
+  "whistle": {
+   "row": 3,
+   "frames": 4,
+   "t": 0.12,
+   "loop": false
+  },
+  "point": {
+   "row": 4,
+   "frames": 3,
+   "t": 0.1,
+   "loop": false
+  },
+  "yellow": {
+   "row": 5,
+   "frames": 6,
+   "t": 0.1,
+   "loop": false
+  },
+  "red": {
+   "row": 6,
+   "frames": 6,
+   "t": 0.1,
+   "loop": false
+  },
+  "playon": {
+   "row": 7,
+   "frames": 3,
+   "t": 0.12,
+   "loop": false
+  }
+ }
+}

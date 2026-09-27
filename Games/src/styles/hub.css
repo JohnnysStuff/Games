@@ -1,0 +1,96 @@
+/* ============================================================
+   HUB
+   ============================================================ */
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+/* The headline and its paragraph said nothing a returning player needed to
+   read again, so the hub now opens on the numbers and the games. */
+.hero{padding:24px 0 22px}
+
+.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:22px}
+/* wider than it used to be: with the tag pills gone this is the only way to
+   narrow the grid, and it was sharing the row with twenty-four buttons */
+.search{position:relative;flex:1;min-width:210px;max-width:460px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted);pointer-events:none}
+.search input{
+  width:100%;height:40px;padding:0 14px 0 36px;border-radius:11px;
+  border:1px solid var(--border);background:var(--surface);
+  transition:border-color .16s,box-shadow .16s;
+}
+.search input::placeholder{color:var(--muted)}
+.search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+/* ---- hub sections ----------------------------------------------------
+   Everything above the grid is a registered section rather than a block of
+   markup baked into one render function, so a new strip is an object in a
+   list and the order is a number. */
+.hsec{margin-bottom:16px}
+
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));
+  gap:18px;padding-bottom:60px;
+}
+/* a card says what it is, what you have done with it, and how to start it */
+.tag{
+  font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;
+  padding:3px 7px;border-radius:6px;background:var(--surface-2);color:var(--muted);
+}
+.badge-last{
+  position:absolute;top:10px;right:10px;z-index:2;
+  font-size:10.5px;font-weight:650;letter-spacing:.04em;text-transform:uppercase;
+  padding:4px 8px;border-radius:999px;
+  background:color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--border);color:var(--text-2);
+}
+/* A card you cannot start with the people you have. Dimming the art and the
+   body rather than the whole card keeps the reason badge readable. */
+/* the "Online" pill sits in this same corner, and on a card the party cannot
+   start it is telling you the wrong thing - the reason takes its place */
+.badge-need{
+  position:absolute;top:10px;left:10px;z-index:2;
+  font-size:10.5px;font-weight:650;letter-spacing:.04em;text-transform:uppercase;
+  padding:4px 8px;border-radius:999px;
+  background:color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--border);color:var(--muted);
+}
+.party-note{
+  display:flex;align-items:center;gap:8px;margin:0 0 16px;
+  font-size:12.8px;color:var(--muted);
+}
+.party-note b{color:var(--text-2);font-weight:650}
+.empty{padding:60px 0;text-align:center;color:var(--muted)}
+
+/* hero stat strip */
+.hero-stats{display:flex;gap:26px;flex-wrap:wrap;margin-top:0}
+/* toolbar extras */
+.sortsel{
+  height:40px;padding:0 34px 0 13px;border-radius:11px;border:1px solid var(--border);
+  background:var(--surface) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7484' stroke-width='3' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>") no-repeat right 12px center;
+  -webkit-appearance:none;appearance:none;font-size:13.5px;font-weight:550;color:var(--text-2);cursor:pointer;
+}
+.sortsel:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.randbtn{height:40px;padding:0 15px;border-radius:11px;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-2);font-size:13.5px;font-weight:550;display:inline-flex;align-items:center;gap:7px;
+  transition:background .16s var(--ease),color .16s,border-color .16s,transform .1s}
+.randbtn:hover{background:var(--surface-2);color:var(--text);border-color:var(--border-2)}
+.randbtn:active{transform:translateY(1px)}
+.randbtn svg{width:15px;height:15px}
+/* favourite star */
+.fav{
+  position:absolute;top:8px;right:8px;z-index:3;width:30px;height:30px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;color:var(--muted);
+  background:color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--border);opacity:0;transition:opacity .16s,color .16s,transform .1s;
+}
+.fav.on{opacity:1}
+.fav.on{color:#eab308}
+.fav:hover{transform:scale(1.08)}
+.fav svg{width:15px;height:15px;display:block}
+
+/* two bought layouts, one variable each — the grid does the rest */
+html[data-cards="compact"] .grid{grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:13px}
+html[data-cards="poster"] .grid{grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:22px}
+
+.badge-last{right:44px}
+

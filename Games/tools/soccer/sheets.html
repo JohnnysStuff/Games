@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soccer · Sprite Sheets</title>
+<style>
+  :root{color-scheme:dark}
+  body{margin:0;background:#0d1016;color:#e8ecf4;font:600 13px/1.4 system-ui,sans-serif}
+  canvas{image-rendering:pixelated;display:block}
+  .wrap{padding:14px 16px}
+  h1{margin:0 0 4px;font:italic 800 28px/1 "Barlow Condensed",system-ui,sans-serif;text-transform:uppercase;letter-spacing:.02em}
+  .sub{color:#8a93a6;margin:0 0 12px}
+  .grid{display:flex;flex-wrap:wrap;gap:8px}
+  .cell{background:#3f8f2f;border-radius:8px;overflow:hidden}
+  .cell b{display:block;padding:5px 8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,0,0,.25)}
+  h2{margin:18px 0 8px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#8a93a6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Soccer · Sprite Sheets</h1>
+  <p class="sub">Every animation from the cleaned sheets, playing at game speed. · <a href="../../tests/soccer.html" style="color:#ffd23f">Play a match →</a></p>
+  <div id="out"></div>
+</div>
+<script>
+/* Loads art/soccer/clean/<sheet>.png and its .json (see tools/soccer/clean.mjs) and plays
+   every animation in it. ?s= sets the zoom (default 3). */
+const Q = new URLSearchParams(location.search), Z = +(Q.get('s') || 3);
+const SHEETS = (Q.get('sheets') || 'player_short,player_spiky,player_afro,player_long,keeper,referee_front,fans,fans_long,fans_cap').split(',');
+const players = [];
+async function load(name) {
+  const meta = await (await fetch('../../art/soccer/clean/' + name + '.json?t=' + Date.now())).json();
+  const img = new Image();
+  await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = '../../art/soccer/clean/' + name + '.png?t=' + Date.now(); });
+  return { name, meta, img };
+}
+function frameAt(a, t) {
+  const n = a.frames, total = n * a.t;
+  if (a.loop) return Math.floor((t % total) / a.t);
+  return Math.min(n - 1, Math.floor((t % (total + .8)) / a.t));      // once, then a pause, then again
+}
+/* ?sheet=player_short — the whole cleaned sheet, every frame, over its cell grid */
+async function showSheet(name) {
+  const sh = await load(name), [CW, CH] = sh.meta.cell, [AX, AY] = sh.meta.anchor;
+  const cv = document.createElement('canvas'); cv.width = sh.img.width * Z; cv.height = sh.img.height * Z;
+  const g = cv.getContext('2d'); g.imageSmoothingEnabled = false;
+  g.fillStyle = '#3f8f2f'; g.fillRect(0, 0, cv.width, cv.height);
+  g.drawImage(sh.img, 0, 0, cv.width, cv.height);
+  g.strokeStyle = 'rgba(0,0,0,.35)';
+  for (let x = 0; x <= sh.img.width; x += CW) { g.beginPath(); g.moveTo(x * Z + .5, 0); g.lineTo(x * Z + .5, cv.height); g.stroke(); }
+  for (let y = 0; y <= sh.img.height; y += CH) { g.beginPath(); g.moveTo(0, y * Z + .5); g.lineTo(cv.width, y * Z + .5); g.stroke(); }
+  /* the anchor of every cell: where the feet go */
+  g.fillStyle = '#ff3b8d';
+  for (let y = 0; y < sh.img.height; y += CH) for (let x = 0; x < sh.img.width; x += CW) g.fillRect((x + AX) * Z - 1, (y + AY) * Z - 1, 3, 3);
+  document.getElementById('out').append(cv);
+}
+/* ?props — the small pieces from art/soccer/GameReady, big, and a strip of pitch
+   made from them with a player on it */
+async function showProps() {
+  const load1 = f => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = '../../art/soccer/GameReady/' + f + '.png?t=' + Date.now(); });
+  const names = ['ball', 'shadows', 'dust', 'spark', 'markers', 'grass', 'corner_flag', 'goal_back', 'goal_front'];
+  const im = {};
+  for (const n of names) { try { im[n] = await load1(n); } catch (e) {} }
+  const out = document.getElementById('out'), Zp = 6;
+  const h2 = document.createElement('h2'); h2.textContent = 'the pieces, at 6x'; out.append(h2);
+  const grid = document.createElement('div'); grid.className = 'grid'; out.append(grid);
+  for (const n of names) {
+    if (!im[n]) continue;
+    const cell = document.createElement('div'); cell.className = 'cell'; cell.style.background = '#2a2f3a';
+    const cv = document.createElement('canvas'); cv.width = im[n].width * Zp; cv.height = im[n].height * Zp;
+    const g = cv.getContext('2d'); g.imageSmoothingEnabled = false; g.drawImage(im[n], 0, 0, cv.width, cv.height);
+    const lab = document.createElement('b'); lab.textContent = n + ' ' + im[n].width + 'x' + im[n].height;
+    cell.append(cv, lab); grid.append(cell);
+  }
+  /* a strip of pitch: grass stripes, the goal, a flag, a player, the ball */
+  const h3 = document.createElement('h2'); h3.textContent = 'together, at 3x'; out.append(h3);
+  const Zs = 3, PW = 240, PH = 140;
+  const cv = document.createElement('canvas'); cv.width = PW * Zs; cv.height = PH * Zs; out.append(cv);
+  const g = cv.getContext('2d'); g.imageSmoothingEnabled = false; g.scale(Zs, Zs);
+  if (im.grass) for (let y = 0; y < PH; y += 16) for (let x = 0; x < PW; x += 16) {
+    const band = Math.floor(x / 32) & 1, variant = ((x * 7 + y * 13) >> 4) % 5 === 0 ? 2 : 0;
+    g.drawImage(im.grass, (band + variant) * 16, 0, 16, 16, x, y, 16, 16);
+  }
+  g.fillStyle = '#f4f4f4'; g.fillRect(40, 0, 2, PH);                  // the goal line, as the game would draw it
+  if (im.goal_back) g.drawImage(im.goal_back, 0, 4);
+  const sh = await load('player_short'), [CW, CH] = sh.meta.cell, [AX, AY] = sh.meta.anchor, a = sh.meta.anims.idle;
+  if (im.shadows) { g.globalAlpha = .3; g.drawImage(im.shadows, 0, 0, 16, 5, 90 - 8, 100 - 3, 16, 5); g.drawImage(im.shadows, 16, 0, 8, 3, 118 - 4, 101 - 1, 8, 3); g.globalAlpha = 1; }
+  g.drawImage(sh.img, 0, a.row * CH, CW, CH, 90 - AX, 100 - AY, CW, CH);
+  if (im.goal_front) g.drawImage(im.goal_front, 0, 4);
+  if (im.ball) g.drawImage(im.ball, 0, 0, 10, 10, 113, 91, 10, 10);
+  if (im.markers) g.drawImage(im.markers, 0, 0, 16, 16, 90 - 8, 100 - AY - 12, 16, 16);
+  if (im.dust) g.drawImage(im.dust, 32, 0, 16, 16, 150, 86, 16, 16);
+  if (im.corner_flag) g.drawImage(im.corner_flag, 0, 0, 8, 24, 220, 10, 8, 24);
+}
+(async () => {
+  if (Q.has('props')) { await showProps(); return; }
+  if (Q.get('sheet')) { await showSheet(Q.get('sheet')); return; }
+  const out = document.getElementById('out');
+  for (const name of SHEETS) {
+    let sh;
+    try { sh = await load(name); } catch (e) { continue; }
+    const h2 = document.createElement('h2'); h2.textContent = name.replace('_', ' ');
+    const grid = document.createElement('div'); grid.className = 'grid';
+    out.append(h2, grid);
+    const [CW, CH] = sh.meta.cell;
+    for (const [an, a] of Object.entries(sh.meta.anims)) {
+      const cell = document.createElement('div'); cell.className = 'cell';
+      const cv = document.createElement('canvas'); cv.width = CW * Z; cv.height = CH * Z;
+      const lab = document.createElement('b'); lab.textContent = an + ' · ' + a.frames;
+      cell.append(cv, lab); grid.append(cell);
+      players.push({ sh, a, g: cv.getContext('2d'), CW, CH });
+    }
+  }
+  const t0 = performance.now();
+  (function tick() {
+    const t = (performance.now() - t0) / 1000;
+    for (const p of players) {
+      const i = frameAt(p.a, t);
+      p.g.imageSmoothingEnabled = false;
+      p.g.clearRect(0, 0, p.CW * Z, p.CH * Z);
+      /* the shadow the game will draw, under the anchor */
+      const [ax, ay] = p.sh.meta.anchor;
+      p.g.fillStyle = 'rgba(0,0,0,.25)';
+      p.g.beginPath(); p.g.ellipse(ax * Z, (ay - .5) * Z, 7 * Z, 2 * Z, 0, 0, Math.PI * 2); p.g.fill();
+      p.g.drawImage(p.sh.img, i * p.CW, p.a.row * p.CH, p.CW, p.CH, 0, 0, p.CW * Z, p.CH * Z);
+    }
+    requestAnimationFrame(tick);
+  })();
+})();
+</script>
+</body>
+</html>

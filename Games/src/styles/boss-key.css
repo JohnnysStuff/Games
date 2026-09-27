@@ -1,0 +1,29 @@
+/* ============================================================
+   BOSS KEY — a full-bleed decoy. It has to be convincing at a
+   glance from three feet away, which is the only distance that
+   matters, and it must paint before anything else can.
+   ============================================================ */
+#boss{
+  position:fixed;inset:0;z-index:9999;display:none;background:#fff;color:#3c4043;
+  font-family:"Google Sans",Roboto,Arial,sans-serif;
+}
+#boss.on{display:block}
+.boss-bar{display:flex;align-items:center;gap:16px;height:64px;padding:0 24px;border-bottom:1px solid #dadce0}
+.boss-bar .bb-logo{display:flex;align-items:center;gap:11px;font-size:22px;color:#5f6368}
+.boss-bar .bb-logo svg{width:26px;height:26px}
+.boss-bar .bb-sp{flex:1}
+.boss-bar .bb-dot{width:32px;height:32px;border-radius:50%;background:#1a73e8;color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
+.boss-body{padding:28px 24px;max-width:1100px;margin:0 auto}
+.boss-body h1{margin:0 0 20px;font-size:22px;font-weight:400;color:#3c4043}
+.boss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.boss-card{border:1px solid #dadce0;border-radius:8px;overflow:hidden;background:#fff}
+.boss-card .bc-top{height:96px;padding:14px 16px;color:#fff}
+.boss-card .bc-top b{display:block;font-size:19px;font-weight:400}
+.boss-card .bc-top span{display:block;font-size:13px;opacity:.85;margin-top:3px}
+.boss-card .bc-mid{height:74px;border-bottom:1px solid #dadce0;padding:10px 16px;font-size:13px;color:#5f6368}
+.boss-card .bc-bot{display:flex;justify-content:flex-end;gap:18px;padding:9px 16px;color:#5f6368}
+.boss-card .bc-bot svg{width:19px;height:19px}
+.boss-hint{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);font-size:11px;color:#bdc1c6}
+
+

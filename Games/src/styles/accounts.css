@@ -1,0 +1,122 @@
+/* ============================================================
+   ACCOUNTS
+   ============================================================ */
+/* ---- sign-in gate -------------------------------------------------------
+   Signed out, the app is not merely unplayable — it is not there. Every
+   surface is display:none behind the lock screen, so no tile, score, party
+   or name is readable before there is an account. `locked` is in the markup
+   rather than added by script, so it also holds while the page is parsing:
+   the hub never flashes before the session is checked. */
+body.locked .hdr,
+body.locked #hub,
+body.locked #play,
+body.locked #chatDock,
+body.locked #lbOv,
+body.locked #pfOv,
+body.locked #keysOv,
+body.locked #cmdOv,
+body.locked #toasts,
+body.locked .lvlbtn,
+body.locked #mpov,
+body.locked #mpToast{ display:none !important; }
+body.locked{ overflow:hidden }
+/* The panel is centred with an auto margin rather than align-items:center, so
+   one taller than a short screen overflows downward and stays scrollable
+   instead of having its top cut off above the scroll origin. */
+body.locked #acctOv{ display:flex !important; padding:20px }
+body.locked #acctOv .acct-panel{ margin-block:auto }
+/* the gate has no exit: the ✕ is gone, and close() ignores the scrim and Escape */
+body.locked #acctOv .acct-x{ display:none }
+
+#gateScreen{
+  position:fixed;inset:0;z-index:130;display:none;
+  align-items:center;justify-content:center;flex-direction:column;gap:14px;
+  background:
+    radial-gradient(900px 520px at 50% -12%, var(--accent-soft), transparent 70%),
+    var(--bg);
+  color:var(--text);text-align:center;padding:24px;
+}
+body.locked #gateScreen{ display:flex }
+.gate-mark{display:flex;align-items:center;gap:10px;font-size:26px;font-weight:660;letter-spacing:-.03em}
+.gate-mark svg{width:30px;height:30px;color:var(--accent)}
+.gate-sub{margin:0;font-size:13.5px;color:var(--muted);max-width:34ch;line-height:1.5}
+/* while the stored session is being checked the panel would flash the sign-in
+   form and then vanish, so hold the form back and show the check instead */
+body.booting #acctOv .acct-panel{ display:none }
+.gate-check{display:none;align-items:center;gap:9px;font-size:13px;color:var(--muted)}
+body.booting .gate-check{ display:inline-flex }
+
+#acctOv{
+  position:fixed;inset:0;z-index:135;display:none;
+  align-items:flex-start;justify-content:center;padding:70px 20px 20px;
+  background:var(--scrim);
+  -webkit-backdrop-filter:blur(20px) saturate(130%) brightness(.6);
+  backdrop-filter:blur(20px) saturate(130%) brightness(.6);
+  overflow-y:auto;
+}
+#acctOv{scrollbar-width:none;-ms-overflow-style:none}
+#acctOv::-webkit-scrollbar{width:0;height:0;display:none}
+#acctOv.on{display:flex}
+.acct-panel{
+  width:min(420px,100%);border-radius:var(--r-xl);padding:24px;position:relative;
+  background:color-mix(in srgb,var(--surface) 96%,transparent);
+  border:1px solid var(--border-2);
+  -webkit-backdrop-filter:saturate(180%) blur(26px);backdrop-filter:saturate(180%) blur(26px);
+  box-shadow:inset 0 1px 0 var(--glass-hi), 0 24px 70px -20px rgba(0,0,0,.85);
+}
+#acctOv.on .acct-panel{animation:glassIn .3s var(--spring) both}
+.acct-head{display:flex;align-items:center;gap:11px;margin-bottom:16px}
+.acct-head h2{margin:0;font-size:19px;font-weight:640;letter-spacing:-.02em}
+.acct-head .sp{flex:1}
+.acct-x{width:30px;height:30px;border-radius:8px;color:var(--muted);font-size:15px;display:flex;align-items:center;justify-content:center}
+.acct-x:hover{background:var(--surface-2);color:var(--text)}
+.acct-field{margin-bottom:11px}
+.acct-field label{display:block;font-size:9.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.acct-in{
+  width:100%;height:42px;padding:0 13px;border-radius:var(--r);font-size:14.5px;
+  background:var(--glass-thin);color:var(--text);border:1px solid var(--glass-brd);
+  transition:border-color .15s, box-shadow .15s;
+}
+.acct-in:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.acct-in.bad{border-color:#f87171}
+/* shown when the gate turned someone away, so the box explains why it appeared */
+.acct-gate{
+  font-size:12.5px;line-height:1.45;margin:0 0 13px;padding:9px 11px;border-radius:var(--r-sm);
+  color:var(--text);background:var(--accent-soft);
+  border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);
+}
+.acct-hint{font-size:11px;color:var(--muted);margin-top:5px;min-height:14px}
+.acct-hint.err{color:#f87171}
+.acct-hint.ok{color:#4ade80}
+.acct-go{
+  width:100%;height:44px;border-radius:var(--r);font-size:14.5px;font-weight:620;margin-top:6px;
+  background:var(--accent);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),var(--shadow-sm);
+  transition:transform .15s var(--spring),filter .15s;
+}
+.acct-go:hover{transform:translateY(-1.5px);filter:brightness(1.06)}
+.acct-go:disabled{opacity:.5;pointer-events:none;transform:none}
+.acct-alt{margin-top:12px;text-align:center;font-size:12.5px;color:var(--muted)}
+.acct-alt button{color:var(--accent);font-weight:600;font-size:12.5px}
+.acct-alt button:hover{text-decoration:underline}
+.acct-note{margin-top:14px;font-size:11px;line-height:1.5;color:var(--muted)}
+
+/* signed-in view */
+.acct-rows{display:flex;flex-direction:column;gap:5px;max-height:230px;overflow-y:auto;
+  scrollbar-width:none;-ms-overflow-style:none}
+.acct-rows::-webkit-scrollbar{width:0;height:0;display:none}
+.acct-row{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:var(--r-sm);
+  background:var(--glass-thin);font-size:12.5px}
+.acct-row .g{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acct-row b{font-variant-numeric:tabular-nums;font-weight:640}
+.acct-danger{width:100%;height:38px;border-radius:var(--r);font-size:12.5px;font-weight:580;margin-top:12px;
+  background:transparent;color:#f87171;border:1px solid color-mix(in srgb,#f87171 35%,transparent)}
+.acct-danger:hover{background:color-mix(in srgb,#f87171 12%,transparent)}
+
+/* header button shows who you are */
+#acctBtn.signed{color:var(--accent);border-color:var(--accent)}
+#acctName{font-size:11.5px;font-weight:600;margin-left:5px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* leaderboard on the game start panel */
+.lb-h{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.lb-empty{font-size:11.5px;color:var(--muted);padding:6px 2px}
+

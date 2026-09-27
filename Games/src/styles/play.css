@@ -1,0 +1,48 @@
+/* ============================================================
+   PLAY VIEW
+   ============================================================ */
+#play{position:fixed;inset:0;z-index:80;display:none;flex-direction:column;background:var(--bg)}
+#play.on{display:flex}
+.stagewrap{position:relative;flex:1;min-height:0;background:var(--void);overflow:hidden}
+#cv{display:block;width:100%;height:100%;touch-action:none}
+
+/* ---- embedded builds (Unity WebGL and friends) --------------------------
+   An embedded game owns the whole stage instead of the canvas: it renders
+   itself, runs its own loop, and talks to the shell over postMessage. The
+   canvas stays in the DOM but is hidden, so Stage/FX/Input keep their
+   invariants and nothing downstream has to special-case a missing canvas. */
+body.embed-mode #cv{ display:none }
+#embedWrap{ position:absolute; inset:0; display:none; background:#000; z-index:1 }
+body.embed-mode #embedWrap{ display:block }
+#embedFrame{ display:block; width:100%; height:100%; border:0; background:#000 }
+#embedLoad{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;
+  background:var(--void);color:var(--muted);font-size:13px;text-align:center;padding:24px;
+}
+#embedLoad.gone{ display:none }
+#embedLoad b{ color:var(--text);font-size:15px;font-weight:620 }
+#embedLoad .hint{ max-width:46ch;line-height:1.55;font-size:12px }
+
+/* Overlays */
+.ov{
+  position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  padding:20px;background:color-mix(in srgb, var(--void) 62%, transparent);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:5;
+}
+.ov.on{display:flex;animation:ovIn .2s var(--ease)}
+@keyframes ovIn{from{opacity:0}to{opacity:1}}
+.panel{
+  width:min(430px,100%);background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);box-shadow:var(--shadow-lg);padding:26px;text-align:center;
+  animation:panelIn .26s var(--ease);
+  /* On short screens (landscape phones, small laptops) a tall panel used to
+     overflow the centred flexbox above, which CLIPS instead of scrolling — the
+     Play button ended up off-screen with no way to reach it. Capping to the
+     overlay and scrolling inside means the action is always reachable. */
+  max-height:100%;overflow-y:auto;overscroll-behavior:contain;
+  scrollbar-width:none;-ms-overflow-style:none;
+  --pad-b:26px;
+}
+.panel::-webkit-scrollbar{width:0;height:0;display:none}
+

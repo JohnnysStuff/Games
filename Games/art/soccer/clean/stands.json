@@ -1,0 +1,49 @@
+{
+ "cell": [
+  281,
+  53
+ ],
+ "anchor": [
+  141,
+  51
+ ],
+ "cols": 1,
+ "anims": {
+  "straight": {
+   "row": 0,
+   "frames": 1,
+   "t": 1,
+   "loop": true,
+   "box": [
+    279,
+    47,
+    140,
+    0
+   ]
+  },
+  "aisle": {
+   "row": 1,
+   "frames": 1,
+   "t": 1,
+   "loop": true,
+   "box": [
+    279,
+    47,
+    140,
+    0
+   ]
+  },
+  "end": {
+   "row": 2,
+   "frames": 1,
+   "t": 1,
+   "loop": true,
+   "box": [
+    87,
+    50,
+    44,
+    0
+   ]
+  }
+ }
+}

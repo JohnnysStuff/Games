@@ -1,0 +1,116 @@
+/* ============================================================
+   GLASS — layered translucent chrome
+   Surfaces that float over something (overlays, docked panels,
+   the chat) are frosted. Surfaces that sit ON the page are not:
+   blurring a flat background buys nothing but paint cost.
+   ============================================================ */
+:root{
+  --glass:rgba(255,255,255,.66);
+  --glass-thin:rgba(255,255,255,.50);
+  --glass-brd:rgba(15,23,42,.10);
+  --glass-hi:rgba(255,255,255,.92);
+  --scrim:rgba(224,229,238,.52);
+  --blur:20px; --blur-lg:32px;
+  --spring:cubic-bezier(.2,.9,.3,1.12);
+  --sheen:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0) 42%);
+}
+html[data-theme="dark"]{
+  --glass:rgba(22,26,34,.66);
+  --glass-thin:rgba(20,24,31,.46);
+  --glass-brd:rgba(255,255,255,.09);
+  --glass-hi:rgba(255,255,255,.14);
+  --scrim:rgba(4,6,11,.56);
+  --sheen:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,0) 42%);
+}
+
+/* the frosted family ---------------------------------------- */
+.panel,.mp-panel,#chatBox,#mpToast .t-msg,#mpToast,#chatFab{
+  background:var(--glass);
+  -webkit-backdrop-filter:saturate(185%) blur(var(--blur));
+  backdrop-filter:saturate(185%) blur(var(--blur));
+  border:1px solid var(--glass-brd);
+}
+/* the specular top edge is what sells it as glass rather than
+   as a translucent rectangle */
+.panel,.mp-panel,#chatBox,#mpToast,#chatFab{
+  box-shadow:inset 0 1px 0 var(--glass-hi), var(--shadow-lg);
+  position:relative;
+}
+.panel::before,.mp-panel::before,#chatBox::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:var(--sheen);pointer-events:none;
+}
+.panel>*,.mp-panel>*,#chatBox>*{position:relative;z-index:1}
+
+.hdr{
+  background:color-mix(in srgb, var(--bg) 62%, transparent);
+  -webkit-backdrop-filter:saturate(185%) blur(var(--blur-lg));
+  backdrop-filter:saturate(185%) blur(var(--blur-lg));
+  border-bottom:1px solid var(--glass-brd);
+}
+
+/* scrims ----------------------------------------------------- */
+.ov,#mpov{
+  background:var(--scrim);
+  -webkit-backdrop-filter:blur(16px) saturate(130%);
+  backdrop-filter:blur(16px) saturate(130%);
+}
+.ov.on .panel{animation:glassIn .34s var(--spring) both}
+#mpov.on .mp-panel{animation:glassIn .3s var(--spring) both}
+@keyframes glassIn{
+  from{opacity:0;transform:translateY(14px) scale(.965)}
+  to{opacity:1;transform:none}
+}
+
+/* panels ----------------------------------------------------- */
+.panel{border-radius:var(--r-xl);padding:30px 30px 26px}
+.panel h2{letter-spacing:-.028em;font-weight:700}
+.panel .sub{color:var(--muted)}
+.mp-panel{border-radius:var(--r-xl)}
+
+/* buttons ---------------------------------------------------- */
+.btn,.mp-btn{
+  border-radius:12px;
+  transition:transform .16s var(--spring), box-shadow .16s var(--ease), background .16s var(--ease);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), var(--shadow-sm);
+}
+.btn:hover,.mp-btn:hover{transform:translateY(-1.5px)}
+.btn:active,.mp-btn:active{transform:translateY(0) scale(.985)}
+.btn.sec,.mp-btn.sec{
+  background:var(--glass-thin);
+  -webkit-backdrop-filter:blur(12px) saturate(160%);
+  backdrop-filter:blur(12px) saturate(160%);
+  border:1px solid var(--glass-brd);
+}
+
+/* search ----------------------------------------------------- */
+.search{
+  border-radius:999px;
+  background:var(--glass-thin);
+  -webkit-backdrop-filter:blur(12px) saturate(160%);
+  backdrop-filter:blur(12px) saturate(160%);
+  border:1px solid var(--glass-brd);
+}
+
+/* chat & docked controls ------------------------------------- */
+#chatBox{border-radius:var(--r-xl)}
+#chatFab{border-radius:16px}
+#chatFab:hover{transform:translateY(-2.5px)}
+
+/* toast ------------------------------------------------------ */
+#mpToast{border-radius:var(--r-lg);box-shadow:inset 0 1px 0 var(--glass-hi), var(--shadow-lg)}
+
+/* motion budget ---------------------------------------------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+/* blur is expensive on low-end GPUs and unsupported on a few
+   browsers — fall back to an opaque surface rather than a
+   washed-out unreadable one */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .panel,.mp-panel,#chatBox,#mpToast,#chatFab,.search{
+    background:var(--surface);
+  }
+  .ov,#mpov{background:color-mix(in srgb,var(--bg) 88%,transparent)}
+}
+

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soccer Net Bench</title>
+<style>
+  html, body { margin: 0; background: #0c0a16; color: #e8ecf4; font: 12px/1.4 ui-monospace, monospace; }
+  #views { display: flex; gap: 6px; padding: 6px; }
+  canvas { width: 49%; aspect-ratio: 16/10; image-rendering: pixelated; background: #000; }
+  pre { margin: 6px; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div id="views"><canvas id="hv" width="960" height="600"></canvas><canvas id="gv" width="960" height="600"></canvas></div>
+<pre id="out">loading…</pre>
+<!-- the game, from the same files the arcade builds in -->
+<script src="../src/js/core/util.js"></script>
+<script src="../src/js/core/net.js"></script>
+<script src="../src/js/core/hud.js"></script>
+<script src="../src/js/games/soccer/art-data.js"></script>
+<script src="../src/js/games/soccer/art.js"></script>
+<script src="../src/js/games/soccer/sound.js"></script>
+<script src="../src/js/games/soccer/ball.js"></script>
+<script src="../src/js/games/soccer/player.js"></script>
+<script src="../src/js/games/soccer/ai.js"></script>
+<script src="../src/js/games/soccer/ref.js"></script>
+<script src="../src/js/games/soccer/crowd.js"></script>
+<script src="../src/js/games/soccer/ui.js"></script>
+<script src="../src/js/games/soccer/view.js"></script>
+<script src="../src/js/games/soccer/net.js"></script>
+<script src="../src/js/games/soccer/lineup.js"></script>
+<script src="../src/js/games/soccer/match.js"></script>
+<script>
+/* A host and a guest in one page, joined by a pretend party whose messages
+   arrive late, unevenly and sometimes not at all, all on a simulated clock
+   so a whole match runs in moments and runs the same way twice.
+   bench({ lat, jit, loss, secs, mode, players }) → what the guest saw. */
+SocSound.play = () => {};
+let simNow = 0;
+const realNow = performance.now.bind(performance);
+performance.now = () => simNow;
+
+function pair(o) {
+  const ids = ['H', 'G', 'G2', 'G3', 'G4', 'G5'].slice(0, o.players || 2);
+  const players = ids.map((id, i) => ({ id, name: i ? 'Guest' + (i > 1 ? i : '') : 'Host' }));
+  /* quick: the lineup settles at once (everyone the first place left);
+     o.lineup plays it for real */
+  const cfg = { game: 'soccer', mode: String(o.mode || 2), min: String(o.min || 3), kit: '0', pos: 'fw', seed: 1, players, quick: o.lineup ? 0 : 1 };
+  /* one channel per direction and per guest; a websocket keeps order, so a
+     message never arrives before one sent ahead of it */
+  const q = [], chanAt = {};
+  let lost = 0, sent = 0;
+  const by = {};
+  /* A spike: now and then one message is held up (a Wi-Fi retry, a busy
+     server), and everything behind it on that channel waits for it. */
+  const deliver = (ch, fn) => {
+    sent++; by[ch] = (by[ch] || 0) + 1;
+    if (Math.random() < o.loss) { lost++; return; }
+    const spike = o.spike && Math.random() < o.spike ? o.spikeMs || 250 : 0;
+    const at = Math.max(chanAt[ch] || 0, simNow + o.lat + Math.random() * o.jit + spike);
+    chanAt[ch] = at; q.push({ at, fn });
+  };
+  const mk = (id, role) => ({
+    active: true, role, gid: 'soccer', cfg, seed: 1, me: id, players: players.slice(),
+    _cmdQ: [], _snap: null, _events: [], hostLeft: false, _lastQ: undefined, seq: 0
+  });
+  const H = mk('H', 'host'), G = ids.slice(1).map(id => mk(id, 'guest'));
+  H.send = function (ev, m) {
+    if (ev === 'snap') { m.q = ++this.seq; m.ts = Math.round(simNow); }
+    const txt = JSON.stringify(m);
+    for (const g of G) deliver('h>' + g.me, () => {
+      const p = JSON.parse(txt);
+      if (ev === 'snap') {
+        if (g._lastQ !== undefined && p.q <= g._lastQ) return;
+        g._lastQ = p.q; g._snap = p;
+        if (p.ev && p.ev.length) g._events.push.apply(g._events, p.ev);
+      } else if (ev === 'over') g._events.push(['o', p]);
+    });
+  };
+  H.cmd = () => {};
+  for (const g of G) {
+    g.cmd = m => { m.from = g.me; const txt = JSON.stringify(m); deliver(g.me + '>h', () => H._cmdQ.push(JSON.parse(txt))); };
+    g.send = () => {};
+  }
+  return { H, G, pump() { for (let i = q.length - 1; i >= 0; i--) if (q[i].at <= simNow) { q[i].fn(); q.splice(i, 1); } }, stats: () => ({ sent, lost, by }) };
+}
+
+/* a player's hands on the keys: chase the ball, run it at goal, shoot in
+   range, slide at whoever has it, pass now and then */
+function bot(W, me, rnd) {
+  const held = new Set(), pressed = new Set(), b = W.ball;
+  if (!me || (W.phase !== 'play' && W.phase !== 'kickoff')) return { held, pressed };
+  let tx, ty;
+  if (b.owner === me) {
+    tx = me.team.ox; ty = SOC.PD / 2 + (me.y < SOC.PD / 2 ? 24 : -24);
+    if (Math.abs(me.team.ox - me.x) < 120 && rnd() < .06) pressed.add('KeyX');
+    else if (rnd() < .012) pressed.add('KeyZ');
+  } else {
+    const a = socBallAt(b, .2); tx = a.x; ty = a.y;
+    if (b.owner && b.owner.team !== me.team && socDist(me.x, me.y, b.x, b.y) < 18 && rnd() < .05) pressed.add('KeyX');
+  }
+  const dx = tx - me.x, dy = ty - me.y;
+  if (dx > 3) held.add('ArrowRight'); if (dx < -3) held.add('ArrowLeft');
+  if (dy > 3) held.add('ArrowDown'); if (dy < -3) held.add('ArrowUp');
+  return { held, pressed };
+}
+function seeded(s) { return () => (s = (s * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff; }
+
+async function bench(o) {
+  o = Object.assign({ lat: 60, jit: 30, loss: 0, secs: 60, mode: 2, players: 2, render: false }, o);
+  await SocArt.load('');
+  simNow = 1000;
+  const net = pair(o);
+  const mount = (S, keys) => socMount({
+    input: { down: c => keys.held.has(c), pressed: c => keys.pressed.has(c), pointer: null, takeClick: () => null }, cursor: () => {}
+  }, { net: S, entry: 'play', end() {}, left() {}, saved: () => ({}), save() {} });
+  const hk = { held: new Set(), pressed: new Set() }, gks = net.G.map(() => ({ held: new Set(), pressed: new Set() }));
+  const host = mount(net.H, hk), guests = net.G.map((g, i) => mount(g, gks[i]));
+  const HW = host.world, GW = guests[0].world, rnd = seeded(7), rnd2 = seeded(11);
+  HW.netLog = [];                               // why the host turned a guest's kick or pickup down
+  /* what the first guest's screen does, frame by frame */
+  const M = { frames: 0, jumps: 0, maxStep: 0, ballJumps: 0, ballMax: 0, modes: {}, track: [], inputLag: [], toNet: 0, acts: 0 };
+  let prev = null, prevBall = null, lastMode = 'net', lastKey = null, keyAt = 0, keyPos = null;
+  const guestHist = [];                         // the guest's own player, for comparing with the host's copy
+  const ctxH = o.render && document.getElementById('hv').getContext('2d'), ctxG = o.render && document.getElementById('gv').getContext('2d');
+  /* leaveAt: seconds in, the last guest shuts their screen and leaves the party */
+  const leaver = o.leaveAt ? net.G[net.G.length - 1] : null;
+  let leftAt = null;
+  for (let f = 0; f < o.secs * 60; f++) {
+    simNow += 1000 / 60;
+    net.pump();
+    if (leaver && !leftAt && f >= o.leaveAt * 60) {
+      net.H.players = net.H.players.filter(p => p.id !== leaver.me);
+      const hp = HW.players.find(q => q.pid === leaver.me);
+      leftAt = { x: hp.x, y: hp.y };
+    }
+    for (let s = 0; s < 2; s++) {
+      Object.assign(hk, bot(HW, HW.me, rnd));
+      host.update(1 / 120);
+      guests.forEach((g, i) => { if (leftAt && net.G[i] === leaver) return; Object.assign(gks[i], bot(g.world, g.world.me, i ? seeded(20 + i) : rnd2)); g.update(1 / 120); });
+      hk.pressed = new Set(); gks.forEach(k => k.pressed = new Set());
+    }
+    if (o.render && f % 2 === 0) { host.render(ctxH); guests[0].render(ctxG); }
+    /* smoothness: how far each thing on the guest's screen moved this frame */
+    if (GW.phase === 'play') {
+      const now = GW.players.map(p => [p.x, p.y]);
+      if (prev) GW.players.forEach((p, i) => {
+        if (p === GW.me) return;
+        const d = Math.hypot(now[i][0] - prev[i][0], now[i][1] - prev[i][1]);
+        M.maxStep = Math.max(M.maxStep, d);
+        if (d > 6) M.jumps++;
+        /* standing still on this screen while running on the host's: the picture ran out */
+        if (d < .01 && Math.hypot(p.vx, p.vy) > 20) {
+          M.stalls = (M.stalls || 0) + 1;
+          if (o.trace && (M.stallInfo = M.stallInfo || []).length < 40) M.stallInfo.push({ i, st: p.st, an: p.an, x: +p.x.toFixed(1), y: +p.y.toFixed(1), vx: +p.vx.toFixed(0), vy: +p.vy.toFixed(0), host: [+HW.players[i].x.toFixed(1), +HW.players[i].y.toFixed(1), HW.players[i].st] });
+        }
+      });
+      /* a ball out of sight, or going into or out of a keeper's hands, is
+         drawn somewhere else on purpose: not a jump */
+      const gb = GW.ball, held = gb.hidden || (gb.owner && gb.owner.holding);
+      const bn = held ? null : [gb.x, gb.y - gb.z];
+      /* A jump is a spike: one step much longer than the steps either side
+         of it. A hard shot moves far every frame, evenly; a teleport moves
+         far once. */
+      if (prevBall && bn) {
+        const d = Math.hypot(bn[0] - prevBall[0], bn[1] - prevBall[1]);
+        M.ballMax = Math.max(M.ballMax, d);
+        const st = M.steps || (M.steps = []);
+        st.push(d); if (st.length > 3) st.shift();
+        /* the state of the frame the step ended on, kept for a frame so a jump found one frame late is described as it was */
+        const here = o.trace ? { d: +d.toFixed(1), mode: guests[0].net.mode, was: M.pmode, since: M.modeAge, own: gb.owner ? gb.owner.idx : -1, z: +gb.z.toFixed(1), from: M.pb,
+          to: [+gb.x.toFixed(1), +gb.y.toFixed(1), +gb.z.toFixed(1)], ph: GW.phase, bs: JSON.parse(JSON.stringify(guests[0].net.ballState)) } : null;
+        const hist = M.bh || (M.bh = []); hist.push(here); if (hist.length > 3) hist.shift();
+        if (st.length === 3 && st[1] > 6 && st[1] > 1.8 * Math.max(st[0], st[2])) {
+          M.ballJumps++;
+          if (o.trace && (M.ballInfo = M.ballInfo || []).length < 30) M.ballInfo.push({ before: hist[0], jump: hist[1], after: hist[2] });
+        }
+      }
+      if (!bn) M.steps = [];
+      M.pb = [+gb.x.toFixed(1), +gb.y.toFixed(1), +gb.z.toFixed(1)];
+      prev = now; prevBall = bn; M.frames++;
+    } else { prev = null; prevBall = null; M.steps = []; }
+    const mode = guests[0].net ? guests[0].net.mode : 'lineup';
+    M.modes[mode] = (M.modes[mode] || 0) + 1;
+    if (mode !== M.cmode) { M.pmode = M.cmode; M.cmode = mode; M.modeAge = 0; } else M.modeAge = (M.modeAge || 0) + 1;
+    if (lastMode !== 'net' && lastMode !== 'lineup' && mode === 'net') M.toNet++;
+    lastMode = mode;
+    /* the host's copy of the guest's player against where the guest had it
+       one trip ago (once the lineup has given the guest one) */
+    if (!GW.me) continue;
+    const gm = GW.me, hm = HW.players[gm.idx];
+    guestHist.push([simNow, gm.x, gm.y]);
+    while (guestHist.length > 120) guestHist.shift();
+    if (GW.phase === 'play' && gm.st === 'move' && hm.st === 'move') {
+      const back = guestHist.find(h => h[0] >= simNow - o.lat - o.jit / 2) || guestHist[0];
+      M.track.push(Math.hypot(hm.x - back[1], hm.y - back[2]));
+    }
+  }
+  const avg = a => a.length ? a.reduce((s, v) => s + v, 0) / a.length : 0, pct = (a, p) => a.length ? a.slice().sort((x, y) => x - y)[Math.floor(a.length * p)] : 0;
+  return {
+    net: `${o.lat}±${o.jit}ms, ${Math.round(o.loss * 100)}% lost (${net.stats().lost}/${net.stats().sent} messages)` + (o.spike ? `, ${o.spike * 100}% held ${o.spikeMs || 250}ms` : ''),
+    score: `host ${HW.score.join('-')} / guest shows ${GW.score.join('-')}`,
+    guestFramesInPlay: M.frames,
+    remoteMaxStepPx: +M.maxStep.toFixed(1), remoteJumpFrames: M.jumps, remoteStallFrames: M.stalls || 0,
+    ballMaxStepPx: +M.ballMax.toFixed(1), ballJumpFrames: M.ballJumps,
+    ballModes: Object.fromEntries(Object.entries(M.modes).map(([k, v]) => [k, Math.round(v / (o.secs * 60) * 100) + '%'])),
+    backToNet: M.toNet,
+    hostTracksGuest: `mean ${avg(M.track).toFixed(1)}px, 95% ${(+pct(M.track, .95)).toFixed(1)}px`,
+    rttMs: Math.round(guests[0].net.rtt * 1000),
+    /* how often the host overruled the guest: every one is a correction the player sees */
+    /* what it costs: messages a second, from the host (to each guest) and from a guest (to the host) */
+    perSecond: (() => { const b = net.stats().by, hs = Object.keys(b).filter(k => k.startsWith('h>')), gs = Object.keys(b).filter(k => k.endsWith('>h')); return `host ${(hs.reduce((t, k) => t + b[k], 0) / hs.length / o.secs).toFixed(1)} per guest, guest ${(gs.reduce((t, k) => t + b[k], 0) / gs.length / o.secs).toFixed(1)}`; })(),
+    overruled: (() => { const s = guests[0].net.stats; return `kicks ${s.kickFail}/${s.kicks}, pickups ${s.claimFail}/${s.claims}`; })(),
+    why: HW.netLog,
+    /* the player of whoever left, on the host: the computer's now, and playing */
+    leaver: leftAt ? (() => { const p = HW.players.find(q => q.pid === leaver.me); return { remote: !!p.remote, human: !!p.human, st: p.st, moved: +Math.hypot(p.x - leftAt.x, p.y - leftAt.y).toFixed(1) }; })() : null,
+    stallInfo: M.stallInfo, ballInfo: M.ballInfo
+  };
+}
+window.bench = bench;
+
+/* ---- scenes: one moment, played out on the same pretend network ----
+   await scene(name, { lat, jit, seed }) with name:
+     shot    a guest shoots from open space
+     tackle  a guest slides into the host's player as he dribbles past
+     pass    a guest passes to a teammate (3v3)
+     save    a guest in goal dives at a shot from another guest (3 players)
+     throw, punt  a guest in goal lets go of the ball in his hands
+   Each says what the guest's screen did with the ball, frame by frame
+   (steps: how far it moved), whether it ever jolted (worst: the smallest
+   ratio of one step to the one before, mid-flight; jumps: one-frame leaps),
+   how far it drifted from the host's ball (apart), and what the host made
+   of it. The same moment every time (a seeded Math.random). */
+async function rig(o) {
+  o = Object.assign({ lat: 70, jit: 20, loss: 0, mode: 2, players: 2, seed: 3 }, o);
+  await SocArt.load('');
+  simNow = 1000;
+  const real = Math.random;
+  let rs = o.seed; Math.random = () => (rs = (rs * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+  const net = pair(o);
+  const keys = [{ held: new Set(), pressed: new Set() }].concat(net.G.map(() => ({ held: new Set(), pressed: new Set() })));
+  const mount = (S, k) => socMount({ input: { down: c => k.held.has(c), pressed: c => k.pressed.has(c), pointer: null, takeClick: () => null }, cursor: () => {} },
+    { net: S, entry: 'play', end() {}, left() {}, saved: () => ({}), save() {} });
+  const games = [mount(net.H, keys[0])].concat(net.G.map((g, i) => mount(g, keys[i + 1])));
+  const Ws = games.map(g => g.world);
+  Ws[0].netLog = [];
+  const R = { net, keys, games, Ws, HW: Ws[0], GW: Ws[1], done() { Math.random = real; } };
+  R.frame = () => { simNow += 1000 / 60; net.pump(); for (let s = 0; s < 2; s++) { games.forEach(g => g.update(1 / 120)); keys.forEach(k => k.pressed = new Set()); } };
+  R.run = n => { for (let f = 0; f < n; f++) R.frame(); };
+  /* the host's side kicks off, and play is on */
+  R.run(60); keys[0].held.add('ArrowUp'); R.run(30); keys[0].held.clear(); R.run(30);
+  return R;
+}
+/* one screen's ball over some frames, against the host's */
+function watch(R, gi, frames, each) {
+  const W = R.Ws[gi], H = R.HW, tr = [];
+  for (let f = 0; f < frames; f++) {
+    if (each) each(f);
+    R.frame();
+    const b = W.ball, h = H.ball;
+    tr.push({ x: b.x, y: b.y - b.z, hx: h.x, hy: h.y - h.z, mode: R.games[gi].net.mode });
+  }
+  const st = tr.map((t, i) => i ? Math.hypot(t.x - tr[i - 1].x, t.y - tr[i - 1].y) : 0);
+  let worst = 1, jumps = 0, apart = 0;
+  for (let i = 2; i < st.length - 1; i++) {
+    if (st[i - 1] > 1.5 && tr[i].mode === 'kicked' && tr[i - 1].mode === 'kicked') worst = Math.min(worst, st[i] / st[i - 1]);
+    if (st[i] > 8 && st[i] > 2 * Math.max(st[i - 1], st[i + 1])) jumps++;
+  }
+  for (const t of tr) if (t.mode === 'kicked') apart = Math.max(apart, Math.hypot(t.x - t.hx, t.y - t.hy));
+  return { tr, steps: st.slice(1).map(v => +v.toFixed(1)).join(' '), modes: tr.map(t => t.mode[0]).join(''), worst: +worst.toFixed(2), jumps, apart: +apart.toFixed(1) };
+}
+async function scene(name, o = {}) {
+  let R;
+  if (name === 'shot') {
+    R = await rig(o);
+    const { HW, GW } = R, hg = HW.players[GW.me.idx], hb = HW.ball;
+    GW.me.x = 330; GW.me.y = 70; GW.me.vx = GW.me.vy = 0; GW.me.face = -1;
+    R.run(20);
+    Object.assign(hb, { owner: hg, last: hg, x: hg.x - 5, y: hg.y, z: 0, vx: 0, vy: 0, vz: 0, target: null, kick: o.fresh ? null : { kind: 'pass', from: [0, 0], to: [0, 0], by: HW.me, id: hb.kicks = (hb.kicks || 0) + 1 } });
+    R.run(30);
+    R.keys[1].pressed.add('KeyX');
+    const w = watch(R, 1, 36);
+    R.done();
+    return { rtt: +R.games[1].net.rtt.toFixed(3), modes: w.modes, steps: w.steps, worst: w.worst, jumps: w.jumps, apart: w.apart, host: HW.netLog.slice(0, 3) };
+  }
+  if (name === 'tackle') {
+    R = await rig(o);
+    const { HW, GW } = R, hi = HW.me.idx, hb = HW.ball;
+    HW.me.x = 120; HW.me.y = 60; GW.me.x = 205; GW.me.y = 66; GW.me.vx = GW.me.vy = 0;
+    Object.assign(hb, { owner: HW.me, last: HW.me, x: HW.me.x + 5, y: 60, z: 0, vx: 0, vy: 0, vz: 0, target: null });
+    R.run(20);
+    R.keys[0].held.add('ArrowRight');
+    let at = -1, seen = null;
+    for (let f = 0; f < 90 && at < 0; f++) {
+      const gh = GW.players[hi];
+      if (gh.x > GW.me.x - 26) { R.keys[1].held.add('ArrowLeft'); R.keys[1].pressed.add('KeyX'); at = f; seen = { guestSawHostAt: +gh.x.toFixed(1), hostWasAt: +HW.me.x.toFixed(1) }; }
+      R.frame();
+    }
+    const w = watch(R, 1, 70, f => { if (f === 3) R.keys[1].held.clear(); });
+    R.keys[0].held.clear();
+    R.done();
+    return { seen, hostPlayer: HW.me.st, hostBall: hb.owner ? (hb.owner === HW.me ? 'still the host\'s' : 'player ' + hb.owner.idx) : 'loose', lastTouch: hb.last === HW.players[GW.me.idx] ? 'guest' : hb.last === HW.me ? 'host' : hb.last && hb.last.idx,
+      modes: w.modes, steps: w.steps, jumps: w.jumps, apart: w.apart, host: HW.netLog.slice(0, 3) };
+  }
+  if (name === 'pass') {
+    R = await rig(Object.assign({ mode: 3 }, o));
+    const { HW, GW } = R, hg = HW.players[GW.me.idx], hb = HW.ball;
+    /* 70 px from the teammate, and the stick toward them as the pass goes */
+    const mate = GW.me.team.players.find(p => p !== GW.me && !p.gk);
+    GW.me.x = socClamp(mate.x - 70, 40, SOC.PL - 40); GW.me.y = mate.y; GW.me.vx = GW.me.vy = 0; GW.me.face = 1;
+    R.run(20);
+    Object.assign(hb, { owner: hg, last: hg, x: hg.x + 5, y: hg.y, z: 0, vx: 0, vy: 0, vz: 0, target: null, kick: { kind: 'pass', from: [0, 0], to: [0, 0], by: HW.me, id: hb.kicks = (hb.kicks || 0) + 1 } });
+    R.run(30);
+    const dx = mate.x - GW.me.x, dy = mate.y - GW.me.y;
+    R.keys[1].held.add(dx > 0 ? 'ArrowRight' : 'ArrowLeft');
+    if (Math.abs(dy) > 20) R.keys[1].held.add(dy > 0 ? 'ArrowDown' : 'ArrowUp');
+    R.keys[1].pressed.add('KeyZ');
+    R.frame(); R.keys[1].held.clear();
+    let target = null;
+    const w = watch(R, 1, 90, f => { if (f === 12) target = GW.ball.target || (GW.ball.owner !== GW.me && GW.ball.owner); });
+    /* back: how far the ball ever went back the way it came, on the guest's
+       screen, once on its way (a pass that overshot and came back) */
+    const tr = w.tr, k = tr.findIndex((t, i) => i > 0 && Math.hypot(t.x - tr[0].x, t.y - tr[0].y) > 12);
+    let back = 0;
+    if (k > 0) {
+      const ux = tr[k].x - tr[0].x, uy = tr[k].y - tr[0].y, m = Math.hypot(ux, uy);
+      let far = -1e9;
+      for (const t of tr.slice(k)) { const s = ((t.x - tr[0].x) * ux + (t.y - tr[0].y) * uy) / m; far = Math.max(far, s); back = Math.max(back, far - s); }
+    }
+    R.done();
+    return { to: target ? 'player ' + target.idx : 'nobody', hostOwner: hb.owner ? hb.owner.idx : -1, back: +back.toFixed(1), modes: w.modes, steps: w.steps, worst: w.worst, jumps: w.jumps, host: HW.netLog.slice(0, 3) };
+  }
+  if (name === 'throw' || name === 'punt') {
+    /* a guest in goal with the ball in his hands lets it go: it must leave
+       on every screen, and he must not be left holding nothing */
+    R = await rig(Object.assign({ players: 3 }, o));
+    const { HW, Ws } = R, KW = Ws[2], kp = KW.me, hk = HW.players[kp.idx], hb = HW.ball;
+    Object.assign(hb, { owner: hk, last: hk, target: null, shot: 0, vx: 0, vy: 0, vz: 0, inNet: 0 });
+    hk.holding = true; socCatch(hk, false);
+    R.run(90);
+    R.keys[2].pressed.add(name === 'throw' ? 'KeyZ' : 'KeyX');
+    /* unseen: frames the ball was out of his hands on his screen and not drawn */
+    const seen = [];
+    let unseen = 0;
+    const w = watch(R, 2, 120, () => {
+      const s = kp.st + (kp.holding ? '*' : ''); if (seen[seen.length - 1] !== s) seen.push(s);
+      if (KW.ball.hidden && !kp.holding) unseen++;
+    });
+    R.done();
+    return { keeper: seen.join(' > '), left: R.games[2].net.stats.kicks === 1 && R.games[2].net.stats.kickFail === 0,
+      owners: Ws.map(W => W.ball.owner ? W.ball.owner.idx : 'loose'), stuckHolding: kp.holding && !(KW.ball.owner === kp), unseen, jumps: w.jumps, steps: w.steps };
+  }
+  if (name === 'save') {
+    R = await rig(Object.assign({ players: 3 }, o));
+    const { HW, Ws } = R, SW = Ws[1], KW = Ws[2], hb = HW.ball, kp = KW.me, hs = HW.players[SW.me.idx];
+    SW.me.x = 120; SW.me.y = SOC.PD / 2 + 6; SW.me.vx = SW.me.vy = 0; SW.me.face = -1;
+    R.run(20);
+    Object.assign(hb, { owner: hs, last: hs, x: hs.x - 5, y: hs.y, z: 0, vx: 0, vy: 0, vz: 0, target: null, kick: { kind: 'pass', from: [0, 0], to: [0, 0], by: HW.me, id: hb.kicks = (hb.kicks || 0) + 1 } });
+    R.run(30);
+    const score0 = HW.score.slice();
+    R.keys[1].pressed.add('KeyX');
+    let dived = -1;
+    const w = watch(R, 2, 90, f => { const b = KW.ball; if (dived < 0 && b.x < kp.x + 46 && b.vx < 0) { R.keys[2].pressed.add('KeyX'); dived = f; } });
+    const hk = HW.players[kp.idx];
+    R.done();
+    return { keeperDivedAt: dived, onKeepersScreen: kp.holding ? 'caught' : 'not caught', host: HW.score.join('-') !== score0.join('-') ? 'GOAL' : hk.holding ? 'saved, in his hands' : 'no goal, loose',
+      hostScore: HW.score.join('-'), modes: w.modes, steps: w.steps, jumps: w.jumps, why: HW.netLog.slice(0, 3) };
+  }
+}
+window.scene = scene;
+document.getElementById('out').textContent = 'ready: await bench({ lat, jit, loss, secs, mode, players, render }), await scene(\'shot\' | \'tackle\' | \'pass\' | \'save\' | \'throw\' | \'punt\', { lat, jit, seed })';
+</script>
+</body>
+</html>

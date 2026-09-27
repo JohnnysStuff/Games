@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beach Volley Test Page</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0c0a16; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<!-- the arcade's own pixel face, Soccer's look (SocArt draws the frames,
+     SocUI the boxes and lettering), and the game itself: the same files the
+     arcade builds in (src/js/games/volley/), so what is tried here ships -->
+<script src="../src/js/core/hud.js"></script>
+<script src="../src/js/games/soccer/art.js"></script>
+<script src="../src/js/games/soccer/ball.js"></script>
+<script src="../src/js/games/soccer/ui.js"></script>
+<script src="../src/js/games/volley/art-data.js"></script>
+<script src="../src/js/games/volley/art.js"></script>
+<script src="../src/js/games/volley/sound.js"></script>
+<script src="../src/js/games/volley/court.js"></script>
+<script src="../src/js/games/volley/player.js"></script>
+<script src="../src/js/games/volley/rally.js"></script>
+<script src="../src/js/games/volley/ai.js"></script>
+<script src="../src/js/games/volley/beach.js"></script>
+<script src="../src/js/games/volley/ui.js"></script>
+<script src="../src/js/games/volley/view.js"></script>
+<script src="../src/js/games/volley/match.js"></script>
+<script>
+/* A stand-in for the arcade shell: the stage fitted to the window, a fixed
+   1/120 s step, and keys and the pointer read the way api.input reads them
+   (pointer in stage units, clicks taken one at a time). Escape pauses; M on
+   the pause card goes back to the game's menu. ?debug exposes window.vol
+   for stepping by hand:
+     vol.run(seconds, { hold: ['ArrowRight'], press: ['KeyZ'] })
+     vol.state()      the phase, the score, the ball, everyone
+     vol.cpu()        both sides played by the computer (a demo) */
+const Q = new URLSearchParams(location.search);
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d', { alpha: false });
+const keys = new Set();
+let pend = new Set(), now = new Set(), paused = false, game = null;
+const pointer = { x: -1, y: -1, inside: false }, clicks = [];
+let view = { s: 1, ox: 0, oy: 0, dpr: 1 };
+addEventListener('keydown', e => {
+  if (e.code === 'Escape' || e.code === 'KeyP') { if (game && game.world.phase !== 'menu') paused = !paused; return; }
+  if (paused && e.code === 'KeyM') { paused = false; game.toMenu(); return; }
+  if (!e.repeat) pend.add(e.code);
+  keys.add(e.code);
+  if (e.code.startsWith('Arrow') || e.code === 'Space') e.preventDefault();
+});
+addEventListener('keyup', e => keys.delete(e.code));
+addEventListener('blur', () => keys.clear());
+const stagePt = e => {
+  const r = cv.getBoundingClientRect(), d = view.dpr;
+  return { x: ((e.clientX - r.left) * d - view.ox) / view.s, y: ((e.clientY - r.top) * d - view.oy) / view.s };
+};
+cv.addEventListener('pointermove', e => { const p = stagePt(e); pointer.x = p.x; pointer.y = p.y; pointer.inside = p.x >= 0 && p.x <= 960 && p.y >= 0 && p.y <= 600; });
+cv.addEventListener('pointerleave', () => { pointer.inside = false; });
+cv.addEventListener('pointerdown', e => { const p = stagePt(e); clicks.push({ x: p.x, y: p.y, btn: e.button }); if (clicks.length > 8) clicks.shift(); });
+const api = {
+  W: 960, H: 600,
+  input: { down: c => keys.has(c), pressed: c => now.has(c), pointer, takeClick: () => clicks.shift() || null },
+  cursor: c => { if (cv.style.cursor !== c) cv.style.cursor = c; }
+};
+function fit() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  cv.width = Math.max(1, Math.round(innerWidth * dpr)); cv.height = Math.max(1, Math.round(innerHeight * dpr));
+}
+addEventListener('resize', fit);
+function draw() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  if (cv.width !== Math.max(1, Math.round(innerWidth * dpr)) || cv.height !== Math.max(1, Math.round(innerHeight * dpr))) fit();
+  const s = Math.min(cv.width / 960, cv.height / 600), ox = (cv.width - 960 * s) / 2, oy = (cv.height - 600 * s) / 2;
+  view = { s, ox, oy, dpr };
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#0c0a16'; ctx.fillRect(0, 0, cv.width, cv.height);
+  ctx.setTransform(s, 0, 0, s, ox, oy);
+  game.render(ctx);
+  if (window.vol && vol.zoomS) {
+    /* debug: the 1x picture round (vol.zx, vol.zy), blown up to fill the window */
+    const p = game.pix, z = vol.zoomS, w = cv.width / z, h = cv.height / z;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = false; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.drawImage(p, (vol.zx ?? 240) - w / 2, (vol.zy ?? 150) - h / 2, w, h, 0, 0, cv.width, cv.height);
+    return;
+  }
+  if (paused) {
+    const U = SocUI;
+    U.rect(ctx, 0, 0, 960, 600, 'rgba(12,10,22,.6)');
+    U.box(ctx, 330, 200, 300, 170, { shine: '#34344e', base: U.C.deep });
+    U.block(ctx, 'PAUSED', 480, 250, 5, U.C.yel, U.C.ochre, 3);
+    U.text(ctx, 'ESC  RESUME', 480, 314, 2, U.C.rim);
+    U.text(ctx, 'M  BACK TO MENU', 480, 340, 2, U.C.mist);
+  }
+}
+function step() { now = pend; pend = new Set(); game.update(1 / 120); }
+let acc = 0, last = performance.now();
+function loop(t) {
+  const dt = Math.min(.1, (t - last) / 1000); last = t;
+  if (!paused && !(window.vol && vol.freeze)) { acc += dt; while (acc >= 1 / 120) { step(); acc -= 1 / 120; } }
+  draw();
+  requestAnimationFrame(loop);
+}
+(async () => {
+  await VolArt.load();
+  try { await document.fonts.ready; } catch (e) {}
+  game = volMount(api);
+  fit();
+  if (Q.has('debug')) {
+    window.vol = {
+      game, W: game.world, api,
+      run(sec, o = {}) {
+        for (const k of o.hold || []) keys.add(k);
+        for (const k of o.press || []) pend.add(k);
+        for (let i = 0; i < Math.round(sec * 120); i++) step();
+        for (const k of o.hold || []) keys.delete(k);
+        draw();
+        return this.state();
+      },
+      state() {
+        const W = game.world, b = W.ball;
+        return { phase: W.phase, score: W.score.join('-'), serving: W.serving, ball: [b.x, b.y, b.z].map(v => +v.toFixed(1)), team: b.team, tc: b.tc, kind: b.kind,
+          ruled: W.ruled && W.ruled.why,
+          players: W.players.map(p => `${p.team.i}:${p.i}${p.human ? '*' : ''} ${p.st}/${p.an} ${p.x.toFixed(0)},${p.y.toFixed(0)},${p.z.toFixed(0)}`) };
+      },
+      /* the computer plays your player too */
+      cpu(lvl) { const W = game.world; for (const p of W.players) if (p.human || lvl) { p.human = false; p.lvl = VOL_LEVELS[lvl || 'normal']; } W.me = null; },
+      /* A pretend person at the keys for `secs` of game time: arrows toward
+         where the ball comes down on our side, Z just before it gets there
+         (X to spike a third touch that is high enough, with spike: true),
+         and serves by holding Z. Returns what happened, touch by touch
+         (* marks the person's). trace: everyone's role every 0.1 s. */
+      play(secs, opts = {}) {
+        const W = game.world, held = new Set(), log = [];
+        let lastId = -1, ruled = false;
+        for (let i = 0; i < Math.round(secs * 120); i++) {
+          const me = W.me, b = W.ball, t = me.team, want = new Set(), press = [];
+          if (W.phase === 'serve' && W.server === me && me.st === 'move') {
+            if (me.act.charge === undefined) { if (W.serveT > .5) { press.push('KeyZ'); want.add('KeyZ'); } }
+            else if (me.act.charge < (opts.power || .8)) want.add('KeyZ');
+          } else if (W.phase === 'rally' && me.st === 'move') {
+            const mine = b.team !== t.i || (b.last !== me && b.tc < 3), n = volTouchNo(b, t);
+            const spike = opts.spike && n === 3 && volApex(b) > 60;
+            const h = spike ? VOL_AT.hit : n === 2 && volApex(b) > 40 ? VOL_AT.set : VOL_AT.bump, C = volComing(b, h);
+            if (C && mine && volSide(C.x) === t.i) {
+              const tx = C.x - me.face * (h === VOL_AT.set ? 3 : spike ? 4 : 5), dx = tx - me.x, dy = C.y - me.y;
+              if (Math.abs(dx) > 2) want.add(dx > 0 ? 'ArrowRight' : 'ArrowLeft');
+              if (Math.abs(dy) > 2) want.add(dy > 0 ? 'ArrowDown' : 'ArrowUp');
+              if (spike) { if (C.t < VOL_JUMP_LEAD + .01 && Math.hypot(dx, dy) < 14) press.push('KeyX'); }
+              else if (C.t < .25 && Math.hypot(dx, dy) < 12) press.push('KeyZ');
+            }
+          }
+          for (const k of ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'KeyZ', 'KeyX']) { if (want.has(k)) { held.add(k); keys.add(k); } else { held.delete(k); keys.delete(k); } }
+          for (const k of press) pend.add(k);
+          step();
+          if (b.id !== lastId) { lastId = b.id; const L = volLanding(b); log.push(`${W.t.toFixed(2)} ${b.kind} t${b.team} tc${b.tc} by ${b.last ? b.last.team.i + ':' + b.last.i + (b.last === me ? '*' : '') : '-'} lands ${L.x.toFixed(0)},${L.y.toFixed(0)} in ${L.t.toFixed(2)}`); }
+          if (opts.trace && W.phase === 'rally' && Math.round(W.t * 120) % 12 === 0) log.push('   ' + W.teams.map(t => t.players.map(p => { const r = t.plan && t.plan.roles.get(p); return `${t.i}:${p.i} ${p.st} ${p.x.toFixed(0)},${p.y.toFixed(0)} ${r ? r.do + (r.h || '') : '-'}`; }).join(' | ')).join(' || '));
+          if (W.ruled && !ruled) { ruled = true; log.push(`${W.t.toFixed(2)} ${W.ruled.why} to ${W.ruled.win}: ${W.score}`); if (opts.stop && opts.stop(W)) break; }
+          if (!W.ruled) ruled = false;
+          if (W.phase === 'over' && W.deadT > 2) game.start(W.cfg);
+        }
+        for (const k of held) keys.delete(k);
+        draw();
+        return log;
+      },
+      /* Computer against computer for `secs` of game time, as fast as it
+         will go, a new game whenever one ends: how rallies end (why, the
+         last touch's kind), how long they are, and the scores. */
+      sim(secs, lvl = 'normal') {
+        const W = game.world, why = {}, lens = [], scores = [];
+        let seen = false, cross = 0;
+        if (W.phase === 'menu') { W.menu = null; game.start(volCfg({})); }
+        this.cpu(lvl);
+        for (let i = 0; i < Math.round(secs * 120); i++) {
+          const px = W.ball.x;
+          now = new Set(); game.update(1 / 120);
+          if (W.phase === 'rally' && (px - VOL.NX) * (W.ball.x - VOL.NX) < 0) cross++;
+          if (W.ruled && !seen) { seen = true; const k = W.ruled.why + ':' + W.ball.kind; why[k] = (why[k] || 0) + 1; lens.push(cross); cross = 0; }
+          if (!W.ruled) seen = false;
+          if (W.phase === 'over' && W.deadT > 2) { scores.push(W.score.join('-')); game.start(W.cfg); this.cpu(lvl); }
+        }
+        return { rallies: lens.length, crossings: +(lens.reduce((s, v) => s + v, 0) / Math.max(1, lens.length)).toFixed(2),
+                 long: lens.filter(v => v >= 4).length, why: Object.entries(why).sort((a, b) => b[1] - a[1]), games: scores };
+      },
+      draw
+    };
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

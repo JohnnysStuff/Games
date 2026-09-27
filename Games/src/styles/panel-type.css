@@ -1,0 +1,21 @@
+/* ============================================================
+   PANEL TYPE — quieter. Everything was reading at heading
+   weight, so nothing had a hierarchy and it all felt shouty.
+   ============================================================ */
+/* overlay panels: smaller, lighter, with room to breathe */
+.panel{padding:26px 28px 22px;max-width:min(520px,calc(100vw - 32px))}
+.panel h2{font-size:24px;font-weight:640;letter-spacing:-.02em;margin:0 0 4px}
+.panel .sub{font-size:13px;font-weight:450;color:var(--muted);margin:0 0 18px}
+.btn{font-size:14px;font-weight:600;height:42px}
+.btn.sec{font-weight:550}
+
+/* the MP panel used the same heavy scale */
+.mp-panel h2{font-size:19px;font-weight:640;letter-spacing:-.02em}
+.mp-row b{font-weight:600}
+.mp-btn{font-weight:580}
+.mp-h{font-size:8.6px;font-weight:600;letter-spacing:.1em;opacity:.78}
+
+/* the hub's own type */
+.tag{font-weight:550;letter-spacing:.05em}
+.hero h1{font-weight:660;letter-spacing:-.03em}
+

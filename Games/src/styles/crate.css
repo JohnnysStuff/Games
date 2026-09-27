@@ -1,0 +1,242 @@
+/* ============================================================== crates ==
+   The ceremony a crate is opened with (shell/crate.js): the case, the lid,
+   the light and the item that comes up out of it, over a dark stage. The
+   item is shown as a swatch: the object the game draws, built out of CSS. */
+
+/* ---- the swatches ----
+   Each one is the object the game draws, not a symbol standing in for it: a
+   golf ball is dimpled, a cue has its tip and its wrap and its butt, a trail
+   is the ribbon that comes off the ball, and a pool set is three of its own
+   balls racked up — the colours for those come out of the same rule the table
+   racks with. Every shape is sized in per cent inside a square, so a swatch
+   cannot walk out of its tile at any size it is asked for. */
+.sw{ position:relative;display:block;flex:none;border-radius:0;background:none;overflow:hidden }
+/* a lit sphere, which is what both games put on the table */
+.sw i.bl{ position:absolute;border-radius:50%;
+  background:radial-gradient(circle at 34% 28%, var(--l), var(--d) 82%);
+  box-shadow:inset -1px -2px 4px rgba(0,0,0,.3) }
+/* golf: one ball, and the dimples the shader gives it */
+.sw.golf i.bl{ inset:7% }
+.sw.golf i.bl::after{ content:'';position:absolute;inset:0;border-radius:50%;
+  background-image:radial-gradient(circle, rgba(0,0,0,.24) 30%, transparent 33%);
+  background-size:19% 19%;opacity:.65 }
+/* pool: the cue ball in front of two of the set's own, one solid, one striped */
+.sw.set i.bl{ width:46%;height:46% }
+.sw.set i.s1{ left:1%;top:8% }
+.sw.set i.s2{ right:1%;top:8%;
+  background:radial-gradient(circle at 34% 28%, rgba(255,255,255,.4), rgba(0,0,0,.34) 86%),
+             linear-gradient(var(--iv) 0 27%, var(--l) 27% 73%, var(--iv) 73%) }
+.sw.set i.cue{ width:56%;height:56%;left:22%;bottom:1% }
+/* the six spots, of which two ever face you at once */
+.sw.set i.cue::after{ content:'';position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 63% 31%, var(--p) 13%, transparent 14%),
+             radial-gradient(circle at 27% 67%, var(--p) 9%, transparent 10%) }
+/* a cue, on the diagonal, in the parts the table gives it */
+.sw.cue i.st{ position:absolute;left:-4%;top:45%;width:108%;height:10%;
+  transform:rotate(-38deg);border-radius:1px;
+  background:linear-gradient(90deg,
+    #2f6fb3 0 4%, #f1ece0 4% 8%, var(--l) 8% 50%, #d8ae55 50% 54%,
+    var(--d) 54% 72%, #1b1b20 72% 86%, var(--d) 86% 97%, #0f0f10 97%) }
+.sw.cue i.st::after{ content:'';position:absolute;inset:0;
+  background:linear-gradient(rgba(255,255,255,.34), transparent 45%, rgba(0,0,0,.36)) }
+/* a trail: the ribbon that comes off the ball, and nothing else — the game
+   lays down one additive stripe, so a swatch that promised sparks was
+   promising something that is not there */
+.sw.trail i.rb{ position:absolute;left:4%;top:38%;width:78%;height:24%;
+  transform:rotate(-18deg);border-radius:50%;
+  background:linear-gradient(90deg, transparent, var(--d) 48%, var(--l)) }
+.sw.trail i.hd{ position:absolute;right:6%;top:33%;width:24%;height:34%;
+  transform:rotate(-18deg);border-radius:50%;background:var(--l);
+  box-shadow:0 0 7px 1px var(--l) }
+.sw.none i.rb{ position:absolute;inset:28% 6%;border-radius:2px;
+  border:1px dashed rgba(242,236,226,.26) }
+/* a nameplate: a border and a face, which is all one is */
+.sw.plate i.pl{ position:absolute;inset:27% 4%;border-radius:2px;
+  border:1px solid var(--l);background:var(--d) }
+.sw.plate i.pl::after{ content:'';position:absolute;inset:26% 14% auto;
+  border-top:1px solid var(--l);opacity:.4 }
+
+/* ---- the chest ----
+   A box with a lid that has thickness to it: the body is six faces and the lid
+   is a slab of six more, hinged on the body's back-top edge. It drops onto the
+   table, the clasp lets go, the lid swings back and knocks against its own
+   weight, and what is inside comes up out of the light.
+
+   Body 230 x 120 x 155, lid slab 26 deep. The hinge is the only part worth
+   reading twice: go to the back-top edge, turn about it, come forward half the
+   depth, then up half the slab. All the timing lives here, so `.skip` lands
+   the whole sequence in one class. */
+.gm-box{ position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:#04060a;z-index:4;animation:boxFade .16s var(--ease) both }
+.gm-boxin{ display:flex;flex-direction:column;align-items:center;gap:6px }
+/* The chest, the item above it and the caption under it come to about 600px,
+   which a short window does not have. Scaling the column keeps it centred and
+   keeps the parts in the same relation to each other, where shrinking the
+   scene alone would only leave the canvas hanging out of the bottom of it. */
+@media (max-height:700px){ .gm-boxin{ transform:scale(.86) } }
+@media (max-height:600px){ .gm-boxin{ transform:scale(.72) } }
+.scene3d{ position:relative;width:470px;height:430px;perspective:1150px;perspective-origin:50% 44% }
+/* the rendered chest, and the flat one standing down when it is present */
+.chest-cv{ position:absolute;left:50%;top:0;margin-left:-235px;display:block }
+.gm-box.lit .crate-fall{ display:none }
+.gm-box.lit .scene3d{ perspective:none }
+
+/* the chest falls, settles, then breathes */
+.crate-fall{ position:absolute;left:50%;top:74%;width:0;height:0;transform-style:preserve-3d;
+  animation:crateFall .58s cubic-bezier(.18,1.45,.42,1) both, crateShake .5s var(--ease) .54s both }
+.crate3d{ position:absolute;transform-style:preserve-3d;
+  animation:crateTurn .8s cubic-bezier(.2,.9,.3,1) both, crateIdle 10s ease-in-out 1.6s infinite }
+
+/* ---- the body ---- */
+.cf{ position:absolute;left:0;top:0;box-sizing:border-box;
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,.16) 0 2px,transparent 2px 26px),
+    linear-gradient(168deg,#5a3a22 0%,#3f2716 48%,#231409 100%);
+  border:1px solid rgba(0,0,0,.45);
+  box-shadow:inset 0 0 30px rgba(0,0,0,.55) }
+.cf.front,.cf.back{ width:230px;height:120px;margin:-60px 0 0 -115px }
+.cf.left,.cf.right{ width:155px;height:120px;margin:-60px 0 0 -77.5px }
+.cf.bottom,.cf.inner{ width:230px;height:155px;margin:-77.5px 0 0 -115px }
+.cf.front { transform:translateZ(77.5px) }
+.cf.back  { transform:rotateY(180deg) translateZ(77.5px) }
+.cf.right { transform:rotateY(90deg) translateZ(115px) }
+.cf.left  { transform:rotateY(-90deg) translateZ(115px) }
+.cf.bottom{ transform:rotateX(90deg) translateZ(60px) }
+/* the iron bands, with their rivets */
+.cf.front::before,.cf.back::before,.cf.left::before,.cf.right::before{
+  content:'';position:absolute;top:-1px;bottom:-1px;left:17%;width:19px;
+  background:linear-gradient(90deg,#1b1b20,#4a4a52 35%,#26262c);
+  box-shadow:0 0 0 1px rgba(0,0,0,.5), 22px 0 0 0 transparent;
+  border-left:1px solid rgba(255,255,255,.06) }
+.cf.front::after,.cf.back::after,.cf.left::after,.cf.right::after{
+  content:'';position:absolute;top:-1px;bottom:-1px;right:17%;width:19px;
+  background:linear-gradient(90deg,#1b1b20,#4a4a52 35%,#26262c);
+  box-shadow:0 0 0 1px rgba(0,0,0,.5);
+  border-left:1px solid rgba(255,255,255,.06) }
+/* the inside, lit by whatever is in it */
+.cf.inner { transform:rotateX(-90deg) translateZ(40px);
+  background:radial-gradient(ellipse at 50% 50%,var(--rar),#120c06 74%);
+  border-color:transparent;box-shadow:none;opacity:0;
+  animation:crateGlow .45s var(--ease) .86s both }
+.crate-label{ position:absolute;left:0;right:0;bottom:16px;text-align:center;
+  font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(242,236,226,.5) }
+/* the clasp on the front, which lets go a beat before the lid moves */
+.clasp{ position:absolute;left:50%;top:-16px;width:34px;height:40px;margin-left:-17px;z-index:2;
+  border-radius:3px;background:linear-gradient(180deg,#e0bd6a,#8a6a22);
+  box-shadow:0 2px 6px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.4);
+  transform-origin:50% 12%;animation:claspPop .4s cubic-bezier(.3,1.6,.5,1) .74s both }
+.clasp::after{ content:'';position:absolute;left:50%;top:22px;width:9px;height:9px;margin-left:-4.5px;
+  border-radius:50%;background:#2a1c07 }
+
+/* ---- the lid: a slab with six faces of its own ---- */
+.lid{ position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d;
+  animation:lidRattle .34s var(--ease) .56s both, lidSwing .62s cubic-bezier(.26,1.36,.42,1) .92s both }
+.lf{ position:absolute;left:0;top:0;box-sizing:border-box;
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,.16) 0 2px,transparent 2px 26px),
+    linear-gradient(168deg,#67441f 0%,#4a2d15 55%,#2a1809 100%);
+  border:1px solid rgba(0,0,0,.45);
+  box-shadow:inset 0 0 22px rgba(0,0,0,.5) }
+.lf.top,.lf.under{ width:230px;height:155px;margin:-77.5px 0 0 -115px }
+.lf.lfront,.lf.lback{ width:230px;height:26px;margin:-13px 0 0 -115px }
+.lf.lleft,.lf.lright{ width:155px;height:26px;margin:-13px 0 0 -77.5px }
+.lf.top   { transform:rotateX(-90deg) translateZ(13px) }
+.lf.under { transform:rotateX(90deg) translateZ(13px);
+  background:linear-gradient(180deg,#2a1809,#140b04);box-shadow:inset 0 0 24px rgba(0,0,0,.7) }
+.lf.lfront{ transform:translateZ(77.5px) }
+.lf.lback { transform:rotateY(180deg) translateZ(77.5px) }
+.lf.lleft { transform:rotateY(-90deg) translateZ(115px) }
+.lf.lright{ transform:rotateY(90deg) translateZ(115px) }
+/* the band carries over the lid, and the rarity's colour rides its edge */
+.lf.top::before{ content:'';position:absolute;top:0;bottom:0;left:17%;width:19px;
+  background:linear-gradient(90deg,#1b1b20,#4a4a52 35%,#26262c) }
+.lf.top::after{ content:'';position:absolute;top:0;bottom:0;right:17%;width:19px;
+  background:linear-gradient(90deg,#1b1b20,#4a4a52 35%,#26262c) }
+.lf.lfront::after{ content:'';position:absolute;inset:auto 0 0 0;height:4px;
+  background:var(--rar);opacity:0;box-shadow:0 0 16px 3px var(--rar);
+  animation:crateSeam .4s var(--ease) .8s both }
+
+/* ---- what comes out of it ---- */
+.prize{ position:absolute;left:50%;top:8px;width:320px;margin-left:-160px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;pointer-events:none }
+.prize-rays{ position:absolute;left:50%;top:22px;width:420px;height:420px;margin:-210px 0 0 -210px;
+  opacity:0;pointer-events:none;
+  background:conic-gradient(from 0deg,transparent 0 6deg,var(--rar) 6deg 9deg,transparent 9deg 24deg);
+  -webkit-mask-image:radial-gradient(circle,#000 8%,transparent 62%);
+  mask-image:radial-gradient(circle,#000 8%,transparent 62%);
+  animation:rayFade .8s var(--ease) 1.18s both, raySpin 22s linear 1.18s infinite }
+.prize-glow{ position:absolute;left:50%;top:22px;width:300px;height:300px;margin:-150px 0 0 -150px;
+  border-radius:50%;opacity:0;pointer-events:none;
+  background:radial-gradient(circle,var(--rar) 0%,transparent 64%);
+  animation:glowIn .8s var(--ease) 1.18s both }
+/* the item itself, out of the box and turning in the light */
+.prize-item{ position:relative;z-index:1;
+  animation:prizeUp .85s cubic-bezier(.2,1.16,.36,1) 1.3s both }
+.prize-item .sw{ filter:drop-shadow(0 10px 18px rgba(0,0,0,.55)) drop-shadow(0 0 22px var(--rar));
+  animation:prizeBob 3.4s ease-in-out 2.1s infinite }
+.prize-cap{ display:flex;flex-direction:column;align-items:center;text-align:center;
+  width:440px;pointer-events:none }
+.prize-rar{ position:relative;z-index:1;margin-top:16px;padding:4px 14px 3px;
+  background:var(--rar);color:#12100c;border-radius:2px;
+  font-size:10.5px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
+  animation:riseIn .34s var(--ease) 1.76s both }
+.prize-name{ position:relative;z-index:1;margin-top:10px;color:#fff;
+  font-family:"Barlow Condensed","Bahnschrift Condensed",Bahnschrift,"Arial Narrow",system-ui,sans-serif;
+  font-size:38px;font-weight:800;font-style:italic;letter-spacing:.01em;text-transform:uppercase;
+  line-height:1;text-shadow:0 3px 0 rgba(0,0,0,.4);
+  animation:riseIn .36s var(--ease) 1.86s both }
+.prize-slot{ position:relative;z-index:1;margin-top:8px;color:rgba(242,236,226,.6);
+  font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  animation:riseIn .36s var(--ease) 1.94s both }
+.prize-shards{ position:relative;z-index:1;margin-top:9px;color:var(--rar);
+  font-size:13px;font-weight:700;letter-spacing:.06em;
+  animation:riseIn .36s var(--ease) 2.02s both }
+/* Sparks off the light. `bspark`, not `spark`: a trail whose finish is
+   `spark` draws as `.sw spark spark`, and a bare `.spark` here put that
+   swatch at opacity 0 on a particle's drift — the item came out of the
+   chest invisible. There is a third `.spark` in the hub as well. */
+.bspark{ position:absolute;left:50%;top:40px;width:5px;height:5px;border-radius:50%;
+  background:var(--rar);opacity:0;pointer-events:none;
+  animation:sparkUp 1.6s ease-out infinite }
+#gmDone{ animation:riseIn .3s var(--ease) 2.15s both }
+
+@keyframes boxFade{ from{opacity:0} to{opacity:1} }
+@keyframes crateFall{ from{transform:translateY(-330px)} to{transform:none} }
+@keyframes crateShake{ 0%{transform:translateY(0)} 28%{transform:translateY(6px)} 62%{transform:translateY(-3px)} 100%{transform:none} }
+@keyframes crateTurn{ from{transform:rotateX(-10deg) rotateY(-138deg)} to{transform:rotateX(-18deg) rotateY(-34deg)} }
+@keyframes crateIdle{
+  0%{transform:rotateX(-18deg) rotateY(-34deg)}
+  50%{transform:rotateX(-15deg) rotateY(-23deg)}
+  100%{transform:rotateX(-18deg) rotateY(-34deg)} }
+@keyframes crateSeam{ from{opacity:0} to{opacity:.95} }
+@keyframes crateGlow{ from{opacity:0} to{opacity:.9} }
+@keyframes claspPop{ 0%{transform:none;opacity:1} 55%{transform:rotateX(52deg) translateY(-3px)} 100%{transform:rotateX(104deg) translateY(2px);opacity:.85} }
+/* the lid strains against the clasp, then goes */
+@keyframes lidRattle{
+  0%  { transform:translateY(-60px) translateZ(-77.5px) rotateX(0deg) translateZ(77.5px) translateY(-13px) }
+  45% { transform:translateY(-60px) translateZ(-77.5px) rotateX(-6deg) translateZ(77.5px) translateY(-13px) }
+  100%{ transform:translateY(-60px) translateZ(-77.5px) rotateX(0deg) translateZ(77.5px) translateY(-13px) } }
+/* back-top edge · turn about it · forward · up half the slab */
+@keyframes lidSwing{
+  from{ transform:translateY(-60px) translateZ(-77.5px) rotateX(0deg) translateZ(77.5px) translateY(-13px) }
+  to  { transform:translateY(-60px) translateZ(-77.5px) rotateX(-112deg) translateZ(77.5px) translateY(-13px) } }
+@keyframes rayFade{ from{opacity:0;transform:scale(.6)} to{opacity:.42;transform:none} }
+@keyframes raySpin{ from{rotate:0deg} to{rotate:360deg} }
+@keyframes glowIn{ from{opacity:0;transform:scale(.4)} to{opacity:.55;transform:none} }
+@keyframes prizeUp{ from{opacity:0;transform:translateY(190px) scale(.35)} 60%{opacity:1} to{opacity:1;transform:none} }
+@keyframes prizeBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+@keyframes sparkUp{
+  0%{ opacity:0;transform:translate(0,0) scale(.6) }
+  12%{ opacity:.9 }
+  100%{ opacity:0;transform:translate(var(--dx),-150px) scale(.3) } }
+/* One click and the whole sequence lands at its end. Skipping runs the
+   clock forward, it does not squash it. Collapsing every duration to a
+   hundredth of a second also caught the ones that loop — the bob on the
+   prize, the turning rays, the sparks — and set them spinning a hundred
+   times a second, which is what "glitches out" looks like. A delay of minus
+   three seconds is past the end of every one-shot here and leaves the loops
+   running at their own speed. */
+.gm-box.skip *{ animation-delay:-3s!important }
+
+

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ball Brawl Net Bench</title>
+<style>
+  html, body { margin: 0; background: #0b0e1d; color: #e8ecf4; font: 12px/1.4 ui-monospace, monospace; }
+  #views { display: flex; gap: 6px; padding: 6px; }
+  canvas { width: 49%; aspect-ratio: 16/10; background: #000; }
+  pre { margin: 6px; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div id="views"><canvas id="hv" width="960" height="600"></canvas><canvas id="gv" width="960" height="600"></canvas></div>
+<pre id="out">loading…</pre>
+<!-- the game, from the same files the arcade builds in -->
+<script src="../src/js/core/util.js"></script>
+<script src="../src/js/core/hud.js"></script>
+<script src="../src/js/core/gfx3d.js"></script>
+<script src="../src/js/games/brawl/core.js"></script>
+<script src="../src/js/games/brawl/sim.js"></script>
+<script src="../src/js/games/brawl/matchups.js"></script>
+<script src="../src/js/games/brawl/cpu.js"></script>
+<script src="../src/js/games/brawl/models.js"></script>
+<script src="../src/js/games/brawl/view.js"></script>
+<script src="../src/js/games/brawl/ui.js"></script>
+<script src="../src/js/games/brawl/net.js"></script>
+<script src="../src/js/games/brawl/match.js"></script>
+<script>
+/* Ball Brawl online without a network: a host and a guest in one page,
+   each running the real match (games/brawl/match.js), joined by a pretend
+   party whose messages arrive late, unevenly and sometimes not at all. It
+   all runs on a simulated clock, so a whole match takes moments.
+
+     await bench({ lat: 80, jit: 40, loss: .05, matches: 5 })
+
+   Two pretend players pick after a while (sometimes rerolling first) and
+   aim somewhere at random, always well inside the time allowed. What it
+   says: whether both screens saw the same fight every round (the fight's
+   fingerprint and its winner), whether they agree who won the match,
+   whether each side's picks and aims were its own (a clock running out
+   early would make them for it), how long each round took, how long each
+   side sat waiting for the other, and what the traffic cost. render: true draws
+   both screens as it goes (host left, guest right). */
+window.Sound = {};
+window.cv = document.createElement('canvas');
+window.Stage = { scale: 1, dpr: 1 };
+let simNow = 1000;
+performance.now = () => simNow;
+
+function party(o) {
+  const players = [{ id: 'H', name: 'Host' }, { id: 'G', name: 'Guest' }];
+  const q = [], chanAt = {};
+  const T = { sent: 0, lost: 0, bytes: 0, snaps: 0, cmds: 0 };
+  /* one channel each way; a websocket keeps order, so nothing arrives
+     ahead of a message sent before it */
+  const deliver = (ch, txt, fn) => {
+    T.sent++; T.bytes += txt.length;
+    if (Math.random() < o.loss) { T.lost++; return; }
+    const at = Math.max(chanAt[ch] || 0, simNow + o.lat + Math.random() * o.jit);
+    chanAt[ch] = at; q.push({ at, fn });
+  };
+  const mk = (id, role) => ({ active: true, role, me: id, players: players.slice(), _cmdQ: [], _snap: null, _events: [], hostLeft: false, _lastQ: undefined, seq: 0 });
+  const H = mk('H', 'host'), G = mk('G', 'guest');
+  H.send = function (ev, m) {
+    if (ev === 'snap') { m.q = ++this.seq; m.ts = Math.round(simNow); T.snaps++; }
+    const txt = JSON.stringify(m);
+    deliver('h>g', txt, () => {
+      const p = JSON.parse(txt);
+      if (ev === 'snap') { if (G._lastQ !== undefined && p.q <= G._lastQ) return; G._lastQ = p.q; G._snap = p; }
+      else if (ev === 'over') G._events.push(['o', p]);
+    });
+  };
+  H.cmd = () => {};
+  G.cmd = m => { m.from = 'G'; T.cmds++; const txt = JSON.stringify(m); deliver('g>h', txt, () => H._cmdQ.push(JSON.parse(txt))); };
+  G.send = () => {};
+  return { H, G, T, pump() { for (let i = q.length - 1; i >= 0; i--) if (q[i].at <= simNow) { q[i].fn(); q.splice(i, 1); } } };
+}
+
+function side(sess, role) {
+  const keys = new Set(), pressed = new Set();
+  const api = {
+    input: { pointer: { x: 0, y: 0, down: false, inside: false }, takeClick: () => null,
+             anyPressed: (...k) => k.some(c => pressed.has(c)), any: (...k) => k.some(c => keys.has(c)),
+             down: c => keys.has(c), pressed: c => pressed.has(c) },
+    covered: false, opt: () => 'normal', setOpt() {}, load: (k, d) => d, save() {}, best: () => 0,
+    party: { inRoom: true, isHost: role === 'host', size: 2 }, hub() {}
+  };
+  const FK = { on: false, out: 1, dt: 1 / 60, mode: () => role, go() {}, party() {}, escape: () => false };
+  const res = { end: null, left: false };
+  const game = bbMatch(api, { FK, net: sess, end(r) { res.end = r; }, left() { res.left = true; } });
+  return { role, game, pressed, res, plan: { round: -1 }, fights: {}, waitT: 0, phaseT: {}, own: { pick: 0, pickClock: 0, aim: 0, aimClock: 0, pr: 0, ar: 0 } };
+}
+
+/* a player: takes a card after a while, now and then rerolling first, and
+   aims somewhere at random */
+function brain(s, rnd) {
+  const g = s.game, P = g.P, M = g.M;
+  if (P.ph === 'pick' && !P.myPick) {
+    if (s.plan.round !== M.round) s.plan = { round: M.round, pickAt: simNow + 300 + rnd() * 5000, reroll: rnd() < .3, aimAt: 0 };
+    if (s.plan.reroll && simNow > s.plan.pickAt - 1500) { s.pressed.add('KeyR'); s.plan.reroll = false; }
+    else if (simNow >= s.plan.pickAt) { P.sel = (rnd() * 3) | 0; s.pressed.add('Space'); s.plan.picked = M.round; }
+  }
+  if (P.ph === 'aim' && !P.aimLocked) {
+    if (!s.plan.aimAt) s.plan.aimAt = simNow + 300 + rnd() * 4000;
+    if (simNow >= s.plan.aimAt) { P.viewAng = rnd() * 6.2832; s.pressed.add('Space'); s.plan.aimed = M.round; }
+  }
+}
+function seeded(x) { return () => (x = (x * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff; }
+
+async function bench(o) {
+  o = Object.assign({ lat: 60, jit: 30, loss: 0, matches: 3, render: false, seed: 5 }, o);
+  const out = { matches: 0, rounds: 0, same: 0, differ: 0, agree: 0, disagree: 0, errors: [], roundSecs: [], waitH: [], waitG: [], stuck: 0, own: { host: { pick: 0, pickClock: 0, aim: 0, aimClock: 0 }, guest: { pick: 0, pickClock: 0, aim: 0, aimClock: 0 } } };
+  let T = { sent: 0, lost: 0, bytes: 0, snaps: 0, cmds: 0 };
+  const rh = seeded(o.seed), rg = seeded(o.seed * 7 + 3);
+  const ch = o.render && document.getElementById('hv').getContext('2d'), cg = o.render && document.getElementById('gv').getContext('2d');
+  for (let m = 0; m < o.matches; m++) {
+    const net = party(o);
+    const H = side(net.H, 'host'), G = side(net.G, 'guest');
+    let f = 0, r0 = simNow, lastRound = 0;
+    const limit = 60 * 120 * 12;                     // twelve minutes of steps is a match gone wrong
+    while (!(H.res.end && G.res.end) && f++ < limit) {
+      simNow += 1000 / 120;
+      net.pump();
+      for (const s of [H, G]) {
+        try {
+          brain(s, s === H ? rh : rg);
+          s.game.update();
+        } catch (e) { out.errors.push(s.role + ': ' + (e && e.stack || e)); }
+        s.pressed.clear();
+        const F = s.game.F;
+        if (F && !s.fights[F.round] && F.round) s.fights[F.round] = { hash: F.hash, winner: F.winner };
+        if (s.game.ph === 'wait') s.waitT += 1 / 120;
+        /* whose choice each pick and aim was: the player's, or the clock's */
+        const P = s.game.P, r = P.round, w = s.own;
+        if (P.myPick && w.pr !== r) { w.pr = r; if (s.plan.picked === r) w.pick++; else w.pickClock++; }
+        if (P.aimLocked && w.ar !== r) { w.ar = r; if (s.plan.aimed === r) w.aim++; else w.aimClock++; }
+      }
+      if (H.game.M.round !== lastRound) { if (lastRound) out.roundSecs.push((simNow - r0) / 1000); r0 = simNow; lastRound = H.game.M.round; }
+      if (o.render && f % 12 === 0) {
+        for (const [s, c] of [[H, ch], [G, cg]]) { c.setTransform(1, 0, 0, 1, 0, 0); try { s.game.render(c); } catch (e) {} }
+        await new Promise(r => setTimeout(r, 0));
+      }
+    }
+    if (f >= limit) out.stuck++;
+    for (const k in H.fights) {
+      out.rounds++;
+      const a = H.fights[k], b = G.fights[k];
+      if (b && a.hash === b.hash && a.winner === b.winner) out.same++; else out.differ++;
+    }
+    const he = H.res.end, ge = G.res.end;
+    if (he && ge && he.win === !ge.win && he.mine === ge.theirs && he.theirs === ge.mine) out.agree++; else out.disagree++;
+    out.waitH.push(+H.waitT.toFixed(1)); out.waitG.push(+G.waitT.toFixed(1));
+    for (const s of [H, G]) for (const k in out.own[s.role]) out.own[s.role][k] += s.own[k];
+    for (const k in T) T[k] += net.T[k];
+    H.game.destroy(); G.game.destroy();
+    out.matches++;
+  }
+  const avg = a => a.length ? +(a.reduce((s, v) => s + v, 0) / a.length).toFixed(1) : 0;
+  const res = {
+    matches: out.matches, stuck: out.stuck, rounds: out.rounds,
+    'same fight on both screens': out.same + ' of ' + out.rounds, 'match result agreed': out.agree + ' of ' + out.matches,
+    'host picked and aimed itself': out.own.host.pick + ' and ' + out.own.host.aim + ' of ' + (out.own.host.pick + out.own.host.pickClock) + ' rounds',
+    'guest picked and aimed itself': out.own.guest.pick + ' and ' + out.own.guest.aim + ' of ' + (out.own.guest.pick + out.own.guest.pickClock) + ' rounds',
+    'round length (s)': avg(out.roundSecs), 'host waited (s, per match)': out.waitH, 'guest waited (s, per match)': out.waitG,
+    traffic: T, 'kB per match': +(T.bytes / 1024 / Math.max(1, out.matches)).toFixed(1), errors: out.errors.slice(0, 5)
+  };
+  document.getElementById('out').textContent = JSON.stringify(res, null, 2);
+  return res;
+}
+document.getElementById('out').textContent = 'ready: await bench({ lat, jit, loss, matches, render })';
+</script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<!-- Built from src/ by tools/build.mjs. Edit the files there and rebuild;
+     changes made to games.html directly are lost on the next build. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- which version this copy is; the build fills it in from src/js/shell/release.js,
+     and the updater checks it on a downloaded copy before offering to save it -->
+<meta name="arcade-version" content="@build:version">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- The tab name. This is the one place to change it: the markup title is what
+     shows while the page parses, and the script below reads it back as the
+     title to restore after the boss key, so the two can never drift. -->
+<title>Dashboard</title>
+<!-- Two display faces the games letter themselves with: a condensed grotesque
+     for the sports chrome, and a squared techno face for the sci-fi ones. Both
+     are painted onto canvases, which never request a font on their own — see
+     Hud.warm(). If the network eats them, the stacks in Hud.FAM fall back to
+     faces that ship with the machine and nothing is lost but the flavour. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700;1,800&family=Orbitron:wght@700;900&display=swap">
+<style>
+/* @build:styles */
+</style>
+</head>
+<body class="locked booting">
+
+<header class="hdr">
+  <div class="brand" id="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path fill="#fff" d="M7.2 6.8h9.6a4.6 4.6 0 0 1 4.5 5.6l-.9 4.3a2.4 2.4 0 0 1-4.1 1.2L14.6 16H9.4l-1.7 1.9a2.4 2.4 0 0 1-4.1-1.2l-.9-4.3a4.6 4.6 0 0 1 4.5-5.6z"/>
+        <path d="M8 9.9v3.4M6.3 11.6h3.4" fill="none" stroke="rgba(12,16,34,.62)" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="15.9" cy="10.6" r="1.15" fill="rgba(12,16,34,.62)"/>
+        <circle cx="17.9" cy="12.7" r="1.15" fill="rgba(12,16,34,.62)"/>
+      </svg>
+    </span>
+    <span class="brand-word">Arcade</span>
+  </div>
+  <span class="hdr-live" id="hdrLive" title="Players online right now"><i></i><b>…</b>online</span>
+  <!-- the version: opens What's new, and becomes an update button when a newer copy is out -->
+  <button class="verbtn" id="verBtn" type="button" title="What's new" aria-label="What's new">
+    <i></i>
+    <svg class="vb-new" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l1.7 4.6 4.6 1.7-4.6 1.7L12 15.8l-1.7-4.6-4.6-1.7 4.6-1.7z"/><path d="M18.4 15.2l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>
+    <svg class="vb-upd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg>
+    <span id="verTx">What's new</span>
+    <em id="verNo"></em>
+  </button>
+  <span class="hdr-title" id="hdrTitle"></span>
+  <div class="hdr-sp"></div>
+  <nav class="hnav" aria-label="Community">
+    <button class="hnav-b" id="lbBtn" title="Leaderboards" aria-label="Leaderboards">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5.5a5 5 0 0 1-10 0V4z"/><path d="M17 5.5h2.2a.8.8 0 0 1 .8.8v.7A3.8 3.8 0 0 1 16.6 11M7 5.5H4.8a.8.8 0 0 0-.8.8v.7A3.8 3.8 0 0 0 7.4 11"/><path d="M12 14.5v3M8.5 20.5h7M9.8 20.5l.5-3h3.4l.5 3"/></svg>
+      <span>Leaderboards</span>
+    </button>
+    <button class="hnav-b" id="mpBtn" title="Friends and party" aria-label="Friends and party">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M3 20c.4-3.5 2.9-5.6 6-5.6s5.6 2.1 6 5.6"/><path d="M15.5 4.8a3.3 3.3 0 0 1 0 6.4M17.6 14.6c2 .6 3.2 2.5 3.4 5.2"/></svg>
+      <span>Friends</span>
+      <span id="mpBadge"></span>
+    </button>
+  </nav>
+  <button class="ghostbtn" id="backBtn" style="display:none">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+    Hub
+  </button>
+  <!-- only ever shown to the one account; see the Cheats module for why that
+       is a convenience rather than a lock -->
+  <button class="iconbtn" id="cheatBtn" title="Cheats (Shift+Alt+C)" aria-label="Cheats" style="display:none">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 8.7l5.4-.8z"/></svg>
+  </button>
+  <button class="iconbtn" id="soundBtn" title="Sound" aria-label="Toggle sound"></button>
+  <button class="iconbtn" id="notiBtn" title="Friend notifications" aria-label="Friend notifications"></button>
+  <button class="iconbtn" id="themeBtn" title="Theme" aria-label="Toggle theme"></button>
+  <button class="lvlbtn" id="lvlBtn" title="Your level" aria-label="Level and coins">
+    <span class="lv-n">1</span>
+    <span class="lv-bar"><span class="lv-fill" style="width:0%"></span></span>
+    <span class="lv-c"><i></i><b>0</b></span>
+  </button>
+  <button class="ghostbtn" id="acctBtn" title="Sign in" aria-label="Account">
+    <span class="acct-av" id="acctAv"></span>
+    <span id="acctName"></span>
+  </button>
+</header>
+
+<main id="hub" class="h-enter">
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-stats" id="heroStats"></div>
+    </section>
+    <div id="rails"></div>
+    <div class="toolbar">
+      <div class="tb-title"><h2>All games</h2><span id="gameCount"></span></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Search games" autocomplete="off" spellcheck="false" aria-label="Search games">
+        <kbd>/</kbd>
+      </div>
+      <!-- the sort is a menu of the hub's own; the select below still holds the value -->
+      <div class="sortdd" id="sortDd">
+        <button class="sortdd-b" id="sortDdB" aria-haspopup="menu" aria-expanded="false">
+          <span class="h-cap">Sort</span><b id="sortDdL">Featured</b>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="sortdd-m" id="sortDdM" role="menu"></div>
+      </div>
+      <select class="sortsel" id="sortSel" aria-label="Sort games" hidden>
+        <option value="featured">Featured</option>
+        <option value="recent">Recently played</option>
+        <option value="most">Most played</option>
+        <option value="best">Highest score</option>
+        <option value="az">A – Z</option>
+      </select>
+      <button class="randbtn" id="randBtn" title="Play something random">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="8.6" cy="8.6" r="1.3" fill="currentColor"/><circle cx="15.4" cy="15.4" r="1.3" fill="currentColor"/><circle cx="15.4" cy="8.6" r="1.3" fill="currentColor"/><circle cx="8.6" cy="15.4" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg>
+        <span>Surprise me</span>
+      </button>
+    </div>
+    <div class="party-note" id="partyNote" style="display:none"></div>
+    <div class="grid h-deal" id="grid"></div>
+    <div class="empty" id="noRes" style="display:none">No games match that.</div>
+  </div>
+</main>
+
+<div id="play">
+  <div class="stagewrap" id="stagewrap">
+    <canvas id="cv"></canvas>
+    <div id="embedWrap">
+      <iframe id="embedFrame" title="Game" allow="autoplay; fullscreen; gamepad; xr-spatial-tracking; clipboard-write"></iframe>
+      <div id="embedLoad"><span class="spinner"></span><b>Loading build…</b><span class="hint"></span></div>
+    </div>
+    <!-- Every game now keeps its own score on its own canvas, so the stage is
+         the whole screen and Escape is the way back out of it. A touch screen
+         has no Escape, so it — and only it — gets a button. -->
+    <button class="pausefab" id="pauseFab" title="Pause" aria-label="Pause">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 5v14M15 5v14"/></svg>
+    </button>
+    <div class="keyhint" id="keyHint" aria-hidden="true"><kbd>Esc</kbd><span>Pause</span></div>
+    <div class="ov" id="ov"><div class="panel" id="panel"></div></div>
+  </div>
+</div>
+
+<div id="chatDock">  <button id="chatFab" title="Chat (Enter)" aria-label="Open chat">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12.5a7.5 7.5 0 01-10.9 6.7L4 20.5l1.4-5.2A7.5 7.5 0 1120.5 12.5z"/></svg>
+    <span id="chatBadge"></span>
+  </button>
+  <div id="chatBox">
+    <div class="chat-head">
+      <b>Chat</b><span id="chatWho" class="mp-small"></span><span class="sp"></span>
+      <button id="chatClose" aria-label="Close chat">✕</button>
+    </div>
+    <div id="chatLog"></div>
+    <form id="chatForm" autocomplete="off">
+      <input id="chatIn" maxlength="200" placeholder="Say something…" autocomplete="off" spellcheck="false">
+      <button type="submit" id="chatSend" aria-label="Send">➤</button>
+    </form>
+  </div>
+</div>
+
+<div id="gateScreen" aria-hidden="true">
+  <div class="gate-mark">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="1.5" y="6" width="21" height="12.5" rx="4.5" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M7 10.5v3.5M5.25 12.25h3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="16" cy="11" r="1.35" fill="currentColor"/>
+      <circle cx="18.4" cy="13.6" r="1.35" fill="currentColor"/>
+    </svg>
+    <span>Arcade</span>
+  </div>
+  <p class="gate-sub">Sign in to see the games, the leaderboards and your party.</p>
+  <span class="gate-check"><span class="spinner"></span>Checking your session…</span>
+</div>
+<div id="acctOv"><div class="acct-panel" id="acctPanel"></div></div>
+
+<div id="lbOv"><div class="acct-panel lb-panel" id="lbPanel"></div></div>
+
+<div id="cheatOv"><div class="cheat-panel" id="cheatPanel"></div></div>
+
+<div id="toasts" aria-live="polite"></div>
+
+<div class="sheet-ov" id="pfOv">
+  <div class="sheet" id="pfSheet">
+    <div class="sheet-hd">
+      <div><h2 id="pfTitle">Profile</h2><p id="pfSub"></p></div>
+      <button class="sheet-x" id="pfX" aria-label="Close">✕</button>
+    </div>
+    <div class="sheet-tabs" id="pfTabs" role="tablist"></div>
+    <div class="sheet-body" id="pfBody"></div>
+  </div>
+</div>
+
+<div class="sheet-ov" id="keysOv">
+  <div class="sheet" style="width:min(620px,100%)">
+    <div class="sheet-hd">
+      <div><h2>Keyboard shortcuts</h2><p>Everything the arcade answers to</p></div>
+      <button class="sheet-x" id="keysX" aria-label="Close">✕</button>
+    </div>
+    <div class="sheet-body" id="keysBody"></div>
+  </div>
+</div>
+
+<div class="sheet-ov" id="updOv" role="dialog" aria-modal="true" aria-labelledby="updTitle"><div class="sheet" id="updBox"></div></div>
+
+<div id="cmdOv">
+  <div class="cmd-box">
+    <div class="cmd-field">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="cmdIn" placeholder="Search games and commands…" spellcheck="false" autocomplete="off">
+    </div>
+    <div class="cmd-list" id="cmdList"></div>
+    <div class="cmd-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> move</span>
+      <span><kbd>↵</kbd> open</span>
+      <span><kbd>esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<div id="boss" aria-hidden="true">
+  <div class="boss-bar">
+    <div class="bb-logo">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 10.5L12 5.5l9 5-9 5-9-5z" fill="#0f9d58"/><path d="M6.5 12.4V17c0 1.4 2.5 2.6 5.5 2.6s5.5-1.2 5.5-2.6v-4.6" stroke="#0f9d58" stroke-width="1.7"/></svg>
+      <span>Classes</span>
+    </div>
+    <div class="bb-sp"></div>
+    <div class="bb-dot">J</div>
+  </div>
+  <div class="boss-body">
+    <h1>Classes</h1>
+    <div class="boss-grid" id="bossGrid"></div>
+  </div>
+  <div class="boss-hint">press ` to return</div>
+</div>
+
+<div id="mpov"><div class="mp-panel" id="mpPanel"></div></div>
+<div id="mpToast"><div class="t-msg"></div><div class="t-row"><button class="mp-btn sec" data-tdec>Dismiss</button></div></div>
+
+<script>
+"use strict";
+/* ============================================================================
+   ARCADE — a games hub in one page
+
+   The scripts below are the modules in src/js, pasted in the order
+   src/manifest.json gives, and they share this one scope:
+     core/    what every game stands on: storage, sound, input, the stage, the
+              registry, the canvas and WebGL renderers, the front-page kit
+     games/   one file per game, each a single registerGame({...}) call
+     shell/   the app around the games: hub, session and loop, progression,
+              cosmetics, multiplayer, accounts
+   ========================================================================== */
+/* @build:scripts */
+</script>
+</body>
+</html>

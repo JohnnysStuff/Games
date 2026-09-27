@@ -1,0 +1,116 @@
+REFEREE_FRONT_NOTES
+
+File: referee_front.png
+Actual dimensions: 1254 x 1254 pixels
+Format: RGBA PNG
+Requested dimensions: 1024 x 1024 pixels
+Generation: built-in image tool, transparent_background=true
+Reference: C:\Users\johnt\Documents\Assets\game_ready\referee.png
+Delivered image is byte-for-byte identical to the selected final image-tool output.
+No resizing, cropping, recolouring, alpha cleanup or scripted image edits.
+SHA256: 0CDE7EF15A399966C89BB3A3ECB6977ABA118D0A8B7F8B77EED3FDBA749537CB
+
+OBSERVED ROW COUNTS (top to bottom)
+1 Standing:   1
+2 Watching:   1
+3 Sidestep:   8
+4 Whistle:    4
+5 Point:      3
+6 Yellow card:6
+7 Red card:   6
+8 Play on:    3
+Total: 32 sprites
+
+VISUAL REVIEW
+All rows retain frontal faces and torsos with both eyes visible.
+Pointing and play-on gestures are directed toward image-right.
+The third card poses were corrected to hold cards on image-left.
+The fourth and fifth card poses show the card raised on image-left and
+the other arm extended toward image-right, in both yellow and red rows.
+Unused space remains empty. The delivered canvas is not a literal 128-pixel
+grid because the raw output is 1254 square. Fine pixel identity, exact phase
+motion, strict palette and hard-edge alpha are not certified by visual review.
+
+EXACT PROMPTS USED
+The initial generation was followed by three image-tool correction passes.
+All prompts are recorded verbatim below, in execution order.
+
+PROMPT 1 — INITIAL GENERATION
+Use case: stylized-concept. Generate ONE new FRONT-VIEW referee sprite sheet. The supplied image is ONLY a character, costume, scale and rendering reference; DO NOT reproduce its sideways viewpoint. Follow the brief below. Absolute priority: torso and face remain frontal with BOTH eyes visible in every sprite; any glance to image-right must not turn the face into a profile or three-quarter view. Front view means the viewer sees the centred moustache, both grey temples, both eyes, white collar and central whistle. No change to requested row order/counts.
+
+Attached: referee.png, the referee sheet you made before. Use it only as the CHARACTER, SCALE and STYLE reference. Make a new sheet of the SAME referee seen FROM THE FRONT.
+
+Create referee_front.png with the built-in image tool, transparent background, requested 1024x1024. Keep the tool's output exactly as it comes: no resizing, cropping, recolouring, alpha clean-up or scripted edits. My own tool does all the formatting, and a different canvas size is fine. Also save REFEREE_FRONT_NOTES.txt with the file's actual size, the row counts you see and the exact prompt you used.
+
+WHERE HE IS: he works along the FAR touchline facing the pitch, so the camera sees his FRONT. In every frame he faces the viewer: face, chest and both eyes toward us, symmetrical, standing square to the camera. No side views, no 3/4 turns, no back views. "Left" and "right" always mean the sides of the IMAGE, not his own left and right. Anything that goes one way (stepping, looking, pointing, sweeping the arms) goes toward the RIGHT edge of the image. The game mirrors frames for the other way.
+
+CHARACTER (exactly as in referee.png): the same original older, stern referee, not a linesman (whistle, no flag). Same chibi build (big head, short limbs), same ~100-image-pixel standing height as referee.png, NOT enlarged. Same chunky square art-pixel blocks, dark outline, flat colours. Short dark hair GREY AT BOTH SIDES, neat dark moustache centred under the nose, serious eyebrows. Pure black pupils with small pure white highlights, the same eye design in every frame. Very dark CHARCOAL short-sleeve shirt, slightly lighter than the outline so his shape reads, WHITE collar at the neck and white cuff stripes on both sleeves. Charcoal shorts, dark socks with white tops, black boots. Small silver whistle on a BLACK cord round his neck, hanging at the middle of his chest. No badge, number or logo.
+
+LAYOUT: invisible grid of 8 columns x 8 rows, 128x128 cells. Each row starts in the leftmost cell, and unused cells stay completely empty. Boots on a baseline at local y117. At least 10px of clear transparent space around every sprite and between neighbours and rows. Don't crop raised cards or hands. Same scale, head, face, clothes and outline in every frame: change only the parts that move. EXACT row counts 1,1,8,4,3,6,6,3 = 32 sprites, no extras.
+
+ROW 1 STANDING: ONE frame. Square to us, arms relaxed at his sides, feet a little apart. This is the size reference. Seven empty cells.
+
+ROW 2 WATCHING: ONE frame. Square to us, hands clasped BEHIND his back (both upper arms visible, elbows slightly out, hands hidden behind him), chest out, eyes looking straight ahead and a little down at the pitch. Seven empty cells.
+
+ROW 3 SIDESTEP: EIGHT frames, a looping sideways shuffle toward the RIGHT edge of the image. This is how he follows play along the touchline. Body and face stay square to us the whole time; only his head turns a little, with his eyes on the right, where he is going.
+1 feet together, knees bent;
+2 right foot lifts and reaches out sideways, body rising;
+3 legs spread wide, body at its highest;
+4 right foot lands wide, legs apart;
+5 weight shifts onto it, left foot starts to lift;
+6 left foot draws in, both feet just off the ground (a light skip);
+7 left foot lands beside the right, feet together;
+8 knees bend, body one art pixel lower, ready to push again.
+Arms bent at the elbows, swinging a little in rhythm; the whistle cord swings slightly. Head, face and shirt drawn the same in all eight (only shifted up or down with the bob); only legs, arms and cord move.
+
+ROW 4 WHISTLE: FOUR frames.
+1 the hand on the LEFT of the image lifts the whistle to his mouth;
+2 blowing, cheeks puffed, the OTHER arm raised straight UP above his head, palm open;
+3 the same, cheeks a little puffier;
+4 lowering both arms.
+
+ROW 5 POINT: THREE frames.
+1 the arm on the RIGHT of the image rising out to the side;
+2 that arm fully extended straight out toward the RIGHT edge, pointing slightly DOWN, head turned to look where he points, other arm at his side;
+3 the same pose held.
+
+ROW 6 YELLOW CARD: SIX frames.
+1 the hand on the LEFT of the image goes to his breast pocket;
+2 it pulls out a SMALL bright yellow rectangular card;
+3 arm rising with the card;
+4 that arm straight UP, card high ABOVE his head, the OTHER arm pointing straight out toward the RIGHT edge, stern face;
+5 the same, the card with a tiny shake;
+6 lowering the card.
+The card is about the size of his face, flat bright yellow with a thin dark outline, no writing.
+
+ROW 7 RED CARD: the SAME six poses as row 6, with a SMALL bright RED card and sterner eyebrows. Same pose sequence and card position.
+
+ROW 8 PLAY ON: THREE frames.
+1 both arms swing up from his sides;
+2 BOTH arms swept out together toward the RIGHT edge and a little forward, straight, palms UP, the left arm crossing in front of his chest (waving play on);
+3 the same held, arms slightly higher.
+Body still square to us.
+
+Transparent background, completely empty: no shadows, ground, grass, touchline, ball, flag, motion lines, text, labels, numbers or visible grid. No blur, gradients, soft edges, antialiasing, coloured fringe, smears or stray pixels.
+
+PROMPT 2 — CARD CONTINUITY
+Targeted correction to this FRONT-VIEW referee sheet. Preserve the whole original canvas, all32sprites and all8rows with counts1,1,8,4,3,6,6,3. Every face and torso remains square to the viewer, both eyes visible. Do not change scale, art rendering, character design, costume, other poses or transparent background.
+Fix ONLY the card-arm continuity in ROW6 YELLOW CARD and ROW7 RED CARD (rows counted from1):
+- THIRD sprite in each card row currently has the card rising on the RIGHT side of the image, which is WRONG. Put the card in the hand on the LEFT side of the image, elbow bent as that LEFT-side arm raises it. The hand on the right side is at his side or beginning to point. Card must remain in the image-LEFT hand through all six frames, NEVER switch hands.
+- FIFTH sprite in each card row must duplicate the FOURTH sprite's body and arms: LEFT-side arm raised straight UP holding card above head, RIGHT-side arm fully extended horizontally toward the RIGHT edge pointing. Keep that pointing arm extended; only give the raised card a tiny shake in frame5.
+Maintain exact same card-arm positions for corresponding yellow/red frames. Thin dark outlined bright yellow/red cards, no writing. Preserve every other row and all empty cells. Raw transparent PNG, no resizing/cropping, no ground/shadows/labels/grid or extra objects.
+
+PROMPT 3 — THREE LOCAL CORRECTIONS
+Edit only THREE individual sprites in this sheet:
+A) The THIRD sprite in the YELLOW CARD row (sixth horizontal row, sprite centered near x470,y860): its card and raised forearm are currently on the RIGHT of that sprite's head. MOVE that card-holding arm to the LEFT of its head. Card must sit near x420, not x520. Bend the elbow on the LEFT of the image as it lifts the yellow card. Lower the arm on the RIGHT of the image. Keep face and body facing us.
+B) Make the IDENTICAL arm-position correction to the THIRD sprite in the RED CARD row (seventh horizontal row, sprite centered near x470,y1015): raised RED card and forearm LEFT of head near x420, not right near x520. Other arm lowered.
+C) The FIFTH sprite in the RED CARD row (center near x835,y1015): extend its free arm fully toward the RIGHT edge, just like the FIFTH yellow-card sprite directly above it. Keep the red card held high on the LEFT of its head.
+Use image-left/image-right, NOT the referee's anatomical left/right.
+Preserve all other pixels/poses/positions/rows and all32sprites, moustache/face/costume, original whole canvas and transparency. No new objects or text.
+
+PROMPT 4 — FINAL HELD-CARD POSES (DELIVERED OUTPUT)
+Make exactly TWO local sprite corrections. Leave all other sprites unchanged.
+1) In the YELLOW CARD row (sixth row), the FOURTH sprite currently has its free arm down. Copy the FIFTH sprite's fully extended image-RIGHT pointing arm onto this FOURTH sprite. Its LEFT-side hand already holds yellow card high and stays unchanged. Result: fourth AND fifth both have raised card on image-left and pointing arm stretched horizontally to image-right.
+2) In the RED CARD row (seventh row), perform the same correction to the FOURTH sprite: extend free arm horizontally to image-RIGHT, exactly like the FIFTH red-card sprite. Keep red card high on image-left.
+Do not change third or fifth sprites, and do not move card hands between sides. Keep all front-facing heads, all other pixels/poses,32sprites,8rows, original canvas size, character scale and transparent background. No new objects/text/ground/shadows.
+

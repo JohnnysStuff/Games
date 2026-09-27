@@ -1,0 +1,20 @@
+/* ============================================================
+   SKRIBBL — the guess field.
+   A real DOM input, because the shell gives Enter to global chat
+   and the canvas can't take focus.
+   ============================================================ */
+#skGuess{
+  position:absolute;left:0;top:0;bottom:auto;transform:none;box-sizing:border-box;margin:0;
+  display:none;width:420px;height:44px;padding:0 16px;z-index:6;
+  border-radius:12px;font:600 15px ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color:#f5f3ff;background:rgba(15,10,34,.94);caret-color:#c4b5fd;
+  border:1.5px solid rgba(167,139,250,.42);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 10px 24px -12px rgba(0,0,0,.9);
+  transition:border-color .16s, box-shadow .16s;
+}
+#skGuess::placeholder{color:#8a82b8;font-weight:500}
+#skGuess:focus{
+  outline:none;border-color:#c4b5fd;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 0 0 3px rgba(167,139,250,.28), 0 10px 24px -12px rgba(0,0,0,.9);
+}
+

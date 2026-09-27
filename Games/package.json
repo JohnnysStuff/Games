@@ -1,0 +1,14 @@
+{
+  "name": "arcade",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A games hub that ships as one self-contained page (games.html), built from src/.",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "check": "node tools/build.mjs --check",
+    "test": "node tools/build.mjs && node tests/mini-golf.test.cjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

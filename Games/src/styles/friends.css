@@ -1,0 +1,37 @@
+/* ============================================================
+   FRIENDS — list, requests, and a live thread per friend
+   ============================================================ */
+.fr-msg{font-size:12px;font-weight:600;min-height:15px;margin-bottom:6px}
+.fr-msg.err{color:#f87171}
+.fr-msg.ok{color:#4ade80}
+.fr-dot{width:9px;height:9px;border-radius:50%;background:var(--border-2);flex:none}
+.fr-dot.on{background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.18)}
+.fr-n{flex:1;min-width:0;font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fr-s{font-size:11px;color:var(--muted);flex:none}
+.fr-x{
+  flex:none;width:24px;height:24px;border-radius:7px;color:var(--muted);font-size:12px;
+  display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .14s,background .14s;
+}
+.fr-x:hover{background:var(--surface-2);color:var(--text)}
+/* an invite waiting for you, and the button that sends one */
+.fr-inv{height:26px;padding:0 10px;font-size:11.5px;flex:none;opacity:0;transition:opacity .14s}
+
+/* a pending friend request belongs on the button that opens the list
+   (#mpBtn is already positioned, in multiplayer.css) */
+.mp-alert{
+  position:absolute;top:-3px;right:-3px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;
+  background:#ef4444;color:#fff;font-size:10px;font-weight:750;line-height:16px;text-align:center;
+  box-shadow:0 0 0 2px var(--bg);pointer-events:none;
+}
+
+.fr-setup{
+  padding:20px;border-radius:14px;background:var(--glass-thin);border:1px solid var(--glass-brd);text-align:center;
+}
+.fr-setup b{display:block;font-size:14.5px;margin-bottom:7px}
+.fr-setup span{display:block;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.fr-setup code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
+  padding:1px 5px;border-radius:5px;background:var(--surface-2);color:var(--text-2);
+}
+/* the friends pane borrows the party frame, so it needs no sheet padding */
+#mpFriends{margin-top:4px}

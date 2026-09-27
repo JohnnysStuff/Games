@@ -1,0 +1,382 @@
+BEACH VOLLEY — ORIGINAL IMAGE-TOOL OUTPUTS
+Created 2026-09-27
+Folder: C:\Users\johnt\Documents\Assets\volley_ready\
+
+METHOD
+Seven sheets generated sequentially with the built-in image_gen tool, transparent_background=true. Each sheet's visual row counts were checked before starting the next. Correction attempts also used the image tool. Final selected PNGs were copied unchanged; SHA-256 checks confirm byte-for-byte identity with their selected generated originals. No scripted image drawing, resizing, cropping, recolouring or alpha cleanup was performed.
+
+All seven PNGs are32-bit ARGB and have fully transparent corner pixels. These are original generated source sheets for your formatting tool, not validated exact-cell atlases. Exact sprite pixel scale, palette identity, breathing offsets and frame-to-frame pixel identity are not guaranteed. Some soft/fringed edge pixels remain in the generated art. Canvas dimensions, spacing and baseline alignment need your usual formatting pass.
+
+SIZES AND VISUALLY OBSERVED ROW COUNTS
+volley_player.png: 1254 x 1254px; rows 1, 4, 8, 6, 5, 5; total 29.
+volley_attack.png: 1254 x 1254px; rows 1, 8, 5, 6, 8, 0; total 28.
+volley_emotes.png: 1254 x 1254px; rows 1, 6, 4, 6, 4, 4; total 25.
+volley_umpire.png: 1254 x 1254px; rows 1, 2, 4, 3, 3, 3; total 16.
+beach_fans.png: 1254 x 1254px; rows 1, 2, 2, 4, 4, 4, 2, 2; total 21.
+beach_props.png: 1536 x 1024px; rows 4, 4; total 8.
+beach_critters.png: 1254 x 1254px; rows 2, 2, 4, 1, 4, 2; total 15.
+
+OBSERVED DIFFERENCES TO REVIEW
+
+volley_player.png
+Six occupied rows; all requested counts present. Standing size visually about110px. The ready faces and arm shapes are not pixel-identical across frames. The requested one-art-pixel breathing offsets are not mechanically verified.
+
+volley_attack.png
+Five occupied rows plus clear space below. All requested counts present. The output does not follow exact requested cell coordinates; the fifth row extends into the nominal sixth-row region when interpreted as a 6-row uniform grid. Airborne toe baselines vary.
+
+volley_emotes.png
+Six occupied rows; all requested counts present. Long dives are separated. Standing sprite is visually larger than volley_player's standing sprite; some cheer frames turn toward the viewer. Lowest-point baselines vary.
+
+volley_umpire.png
+Six occupied rows; all requested counts present. Seated signals and white/navy outfit present. Umpire remains larger than the requested100px standing height after the image-tool reduction attempt. Some pointing frames turn slightly; the third whistle frame closes the eyes.
+
+beach_fans.png
+Eight occupied rows; all requested counts present. Fans were reduced using the image tool but remain visually around80px standing rather than60px. Waving row frames1 and3 still show only one raised arm despite two correction attempts. Towel poses do not cleanly show all four specified positions.
+
+beach_props.png
+Two rows of four distinct props, in the requested order. Relative sizes and exact P-based scale differ from the brief; props are substantially larger than the requested pixel heights. Background samples are transparent despite colour visible in some previews.
+
+beach_critters.png
+Six occupied rows; all requested counts present. Gull right-facing and crab front-facing. After the image-tool reduction, gulls and crabs remain larger than the requested30px/18px heights, and the grid is not the requested128px layout.
+
+EXACT PROMPTS USED
+Prompts below are recorded verbatim, including all correction prompts. References and selected original paths are recorded separately.
+
+============================================================
+volley_player.png
+Selected original: C:\Users\johnt\.codex\generated_images\01a0de47-a796-78b1-92e4-bc271ea85633\exec-1c8d7aad-b262-45ae-a331-4a53137f0422.png
+Reference: C:\Users\johnt\Documents\Assets\game_ready\player_short.png
+transparent_background: true
+
+INITIAL PROMPT:
+Create ONE transparent PNG pixel-art sprite sheet for BEACH VOLLEY. Input image is the character/style/scale reference only, not the layout. Match his identity while changing soccer clothes to the specified beach clothes. Requested canvas 1024x1024.
+
+RULES FOR EVERY SHEET
+- Transparent background, the requested size given for each sheet (a different canvas size is fine). Keep each output exactly as the tool gives it: no resizing, cropping, recolouring, alpha clean-up or scripted edits. My own tool does all the formatting.
+- Save every file in C:\Users\johnt\Documents\Assets\volley_ready\. When all seven are done, also write VOLLEY_NOTES.txt there: each file's actual size, the row counts you see in it, and the exact prompt you used for it.
+- Style: the same original chibi pixel art as player_short.png: big head, short limbs, chunky square art-pixel blocks, dark outline, flat colours. Pure black pupils with small pure white highlights, the same eye design in every frame. Characters are about 100 image pixels tall standing, the same as player_short.png, NOT enlarged.
+- Layout: an invisible grid (given for each sheet). Each row is one animation and starts in the leftmost cell; unused cells stay completely empty. At least 10px of clear transparent space around every sprite and between neighbours and rows. Don't crop raised hands. EXACT row counts, no extras.
+- In every frame keep the same scale, head, face, hair, clothes and outline: change only the parts that move.
+- NO ball anywhere: the game draws the ball.
+- Completely empty background: no shadows, sand, ground, net, sky, water, motion lines, text, labels, numbers or visible grid. No blur, gradients, soft edges, antialiasing, coloured fringe, smears or stray pixels.
+- Check each sheet's row counts before moving on to the next.
+
+
+THE PLAYER (sheets 1 to 3): the SAME character as player_short.png (same face, eyes, skin, short brown hair and size), now a BEACH VOLLEYBALL player: bright YELLOW sleeveless tank top with GREEN trim round the neck and armholes (the SAME yellow and green as the soccer kit: my game recolours them for each team), dark BLUE board shorts to just above the knee, BARE FEET (no shoes, no socks). No headband, sunglasses, number, logo or jewellery. Side view: EVERY frame faces RIGHT, toward the net; the game mirrors frames for the other side. Jumps: the game lifts the player into the air itself, so draw airborne poses in place in their cell with the lowest toe on the baseline. Do NOT draw the height of a jump.
+
+
+1) volley_player.png — requested 1024x1024. Reference: player_short.png. Grid: 8 columns x 6 rows of cells 128 wide x 160 tall, bare feet on a baseline at local y145. Row counts 1,4,8,6,5,5 = 29 sprites.
+ROW 1 STAND: ONE frame, standing relaxed, arms at the sides, feet a little apart. The size reference. Seven empty cells.
+ROW 2 READY: FOUR frames, a looping ready stance: knees well bent, weight forward on the balls of the feet, forearms forward at waist height, hands apart, eyes forward. Frames 2 and 4 are frame 1 with the head and shoulders ONE art pixel lower (a small bounce); frame 3 is frame 1 again.
+ROW 3 RUN: EIGHT frames, a looping run to the RIGHT through soft sand: quick short strides, knees high, arms pumping opposite the legs.
+ROW 4 BACKPEDAL: SIX frames, a looping run BACKWARDS toward the LEFT edge while still facing right: small shuffling steps, body upright, arms forward and ready, eyes looking up as if tracking a high ball.
+ROW 5 BUMP: FIVE frames, a forearm pass: 1 ready, arms coming together; 2 both arms straight out in front and angled down, hands clasped, thumbs side by side, forearms together making one flat platform, knees bent deep; 3 the same platform, legs pushing up, arms lifting a little (the contact); 4 arms held still at chest height, body taller (the follow-through); 5 arms apart, back to ready.
+ROW 6 SET: FIVE frames, an overhead set: 1 ready, hands rising; 2 both hands just above the forehead, fingers spread, thumbs and first fingers making a triangle window, elbows out, knees bent; 3 the same hands, legs straightening (the contact); 4 both arms extended straight up and a little forward, fingers pointing up, on the toes; 5 arms coming down.
+
+
+Count carefully before finishing: exactly SIX rows with 1 / 4 / 8 / 6 / 5 / 5 sprites. Keep all unused cells transparent. No ball. Tiny sprites with ample negative space, consistent ~100px standing height. All sprites face right.
+
+FIRST CORRECTION PROMPT (reference: preceding generated output for this sheet):
+Edit this BEACH VOLLEY sprite sheet with ONE change: make every sprite substantially smaller, about 62% of its current width and height, so the relaxed standing character is about 100 image pixels tall instead of about 160. Keep the square canvas the same size, keep each sprite in its existing invisible cell, aligned at that cell's existing foot baseline, and increase the transparent empty space around it. Preserve EXACTLY the six rows and counts 1,4,8,6,5,5 (29 total), poses, right-facing orientation, short brown hair, character identity, yellow sleeveless tank green trim, blue shorts and bare feet. Keep chunky hard square pixel blocks with clean dark outlines, pure black pupils white highlights. No resampled blur, no antialiasing, no new details. No ball, text, grid, background or shadows. Transparent PNG. Do not add or remove any sprites; all previously empty cells remain empty.
+
+============================================================
+volley_attack.png
+Selected original: C:\Users\johnt\.codex\generated_images\01a0de47-a796-78b1-92e4-bc271ea85633\exec-416356ce-e89b-40a8-9807-0e3d7f70f7e3.png
+Reference: C:\Users\johnt\Documents\Assets\volley_ready\volley_player.png
+transparent_background: true
+
+INITIAL PROMPT:
+Create ONE transparent PNG sprite sheet volley_attack.png for BEACH VOLLEY, requested 1024x1024. Input image is the FINAL volleyball character reference. Preserve its small sprite size, original face, body, hair, pixel style, bare feet and tank top. The reference row1 standing sprite must appear in row1 cell1 here at the SAME size. Do not enlarge the sprites to fill cells. Create new poses as follows.
+
+RULES FOR EVERY SHEET
+- Transparent background, the requested size given for each sheet (a different canvas size is fine). Keep each output exactly as the tool gives it: no resizing, cropping, recolouring, alpha clean-up or scripted edits. My own tool does all the formatting.
+- Save every file in C:\Users\johnt\Documents\Assets\volley_ready\. When all seven are done, also write VOLLEY_NOTES.txt there: each file's actual size, the row counts you see in it, and the exact prompt you used for it.
+- Style: the same original chibi pixel art as player_short.png: big head, short limbs, chunky square art-pixel blocks, dark outline, flat colours. Pure black pupils with small pure white highlights, the same eye design in every frame. Characters are about 100 image pixels tall standing, the same as player_short.png, NOT enlarged.
+- Layout: an invisible grid (given for each sheet). Each row is one animation and starts in the leftmost cell; unused cells stay completely empty. At least 10px of clear transparent space around every sprite and between neighbours and rows. Don't crop raised hands. EXACT row counts, no extras.
+- In every frame keep the same scale, head, face, hair, clothes and outline: change only the parts that move.
+- NO ball anywhere: the game draws the ball.
+- Completely empty background: no shadows, sand, ground, net, sky, water, motion lines, text, labels, numbers or visible grid. No blur, gradients, soft edges, antialiasing, coloured fringe, smears or stray pixels.
+- Check each sheet's row counts before moving on to the next.
+
+
+THE PLAYER (sheets 1 to 3): the SAME character as player_short.png (same face, eyes, skin, short brown hair and size), now a BEACH VOLLEYBALL player: bright YELLOW sleeveless tank top with GREEN trim round the neck and armholes (the SAME yellow and green as the soccer kit: my game recolours them for each team), dark BLUE board shorts to just above the knee, BARE FEET (no shoes, no socks). No headband, sunglasses, number, logo or jewellery. Side view: EVERY frame faces RIGHT, toward the net; the game mirrors frames for the other side. Jumps: the game lifts the player into the air itself, so draw airborne poses in place in their cell with the lowest toe on the baseline. Do NOT draw the height of a jump.
+
+
+2) volley_attack.png — requested 1024x1024. Reference: the volley_player.png you just made (the same character exactly). Grid: 8 columns x 6 rows of 128x160 cells, baseline y145; the sixth row stays empty. Row counts 1,8,5,6,8 = 28 sprites.
+ROW 1 STAND: ONE frame identical to volley_player.png row 1. The size reference.
+ROW 2 SPIKE: EIGHT frames: 1 last step planted, knees bent deep, both arms swung straight back; 2 take-off, both arms swinging forward and up, onto the toes; 3 in the air, legs bent back, the front hand pointing up at the ball, the hitting arm (the one nearer us) drawn back behind the head with the elbow high, like drawing a bow; 4 the hitting arm whipping forward over the head, palm open; 5 CONTACT: the hitting arm fully stretched up and forward above the head, wrist snapping down, the other arm pulled in to the chest; 6 follow-through, the hitting arm swinging down across the body; 7 coming down, legs straightening, arms low; 8 landing, knees bent deep, arms out for balance.
+ROW 3 BLOCK: FIVE frames: 1 crouched at the net, hands at shoulder height, palms toward the right; 2 jumping, both arms rising straight up; 3 full stretch, BOTH arms straight UP and leaning FORWARD toward the right, hands wide open, fingers spread, palms facing right; 4 the same with the hands one art pixel higher; 5 coming down, arms lowering, knees bending.
+ROW 4 SERVE: SIX frames, a standing overhand serve: 1 standing side-on, the front hand held out at chest height, palm up (where the game puts the ball); 2 the front hand lifting high (the toss), the hitting arm drawn back, elbow high; 3 the hitting arm swinging up and forward, body turning toward the right; 4 CONTACT, the hitting arm straight up and slightly forward, hand flat and firm; 5 follow-through, the arm coming down toward the right; 6 back to a ready stance.
+ROW 5 JUMP SERVE: EIGHT frames: 1 standing, the front hand held low and forward (holding the ball, which is not drawn); 2 the front hand throwing up high and forward (the toss); 3 a long step toward the right, both arms swinging back; 4 take-off, both arms swinging up; 5 in the air, legs bent back, the hitting arm drawn back, elbow high; 6 CONTACT, the hitting arm whipping forward high above the head; 7 follow-through, the arm across the body, coming down; 8 landing, knees bent.
+
+
+EXACT ROW COUNTS: 1,8,5,6,8,0. Six evenly spaced invisible rows; sixth row entirely transparent. 28 total sprites. Lowest toe of every airborne pose rests on its row baseline; no vertical jump displacement. Absolutely NO BALL. Reference small standing height ~100 image pixels.
+
+============================================================
+volley_emotes.png
+Selected original: C:\Users\johnt\.codex\generated_images\01a0de47-a796-78b1-92e4-bc271ea85633\exec-930ffafd-308d-4857-aa9c-79f7a5e3d1a0.png
+Reference: C:\Users\johnt\Documents\Assets\volley_ready\volley_player.png
+transparent_background: true
+
+INITIAL PROMPT:
+Create ONE transparent pixel-art BEACH VOLLEY sprite sheet volley_emotes.png, requested 1024x1024. Input image is the final volleyball character reference. Preserve precisely the small standing size, face, short brown hair, yellow sleeveless green-trim tank, blue board shorts, bare feet and chunky rendering. New layout has SIX columns instead of eight, for long horizontal dives. Do not enlarge the characters.
+
+RULES FOR EVERY SHEET
+- Transparent background, the requested size given for each sheet (a different canvas size is fine). Keep each output exactly as the tool gives it: no resizing, cropping, recolouring, alpha clean-up or scripted edits. My own tool does all the formatting.
+- Save every file in C:\Users\johnt\Documents\Assets\volley_ready\. When all seven are done, also write VOLLEY_NOTES.txt there: each file's actual size, the row counts you see in it, and the exact prompt you used for it.
+- Style: the same original chibi pixel art as player_short.png: big head, short limbs, chunky square art-pixel blocks, dark outline, flat colours. Pure black pupils with small pure white highlights, the same eye design in every frame. Characters are about 100 image pixels tall standing, the same as player_short.png, NOT enlarged.
+- Layout: an invisible grid (given for each sheet). Each row is one animation and starts in the leftmost cell; unused cells stay completely empty. At least 10px of clear transparent space around every sprite and between neighbours and rows. Don't crop raised hands. EXACT row counts, no extras.
+- In every frame keep the same scale, head, face, hair, clothes and outline: change only the parts that move.
+- NO ball anywhere: the game draws the ball.
+- Completely empty background: no shadows, sand, ground, net, sky, water, motion lines, text, labels, numbers or visible grid. No blur, gradients, soft edges, antialiasing, coloured fringe, smears or stray pixels.
+- Check each sheet's row counts before moving on to the next.
+
+
+THE PLAYER (sheets 1 to 3): the SAME character as player_short.png (same face, eyes, skin, short brown hair and size), now a BEACH VOLLEYBALL player: bright YELLOW sleeveless tank top with GREEN trim round the neck and armholes (the SAME yellow and green as the soccer kit: my game recolours them for each team), dark BLUE board shorts to just above the knee, BARE FEET (no shoes, no socks). No headband, sunglasses, number, logo or jewellery. Side view: EVERY frame faces RIGHT, toward the net; the game mirrors frames for the other side. Jumps: the game lifts the player into the air itself, so draw airborne poses in place in their cell with the lowest toe on the baseline. Do NOT draw the height of a jump.
+
+
+3) volley_emotes.png — requested 1024x1024. Reference: volley_player.png (the same character exactly). Grid: 6 columns x 6 rows of cells 160 wide x 160 tall (wide, because a dive is long), baseline y145; the lowest point of every frame sits on the baseline. Row counts 1,6,4,6,4,4 = 25 sprites.
+ROW 1 STAND: ONE frame identical to volley_player.png row 1. The size reference.
+ROW 2 DIVE: SIX frames, a diving save toward the RIGHT: 1 a long lunge, front leg bent, body low, both arms reaching forward together; 2 launching forward, body nearly flat, arms stretched far ahead, one hand flat, palm down; 3 flying horizontally, arms stretched out in front, legs straight behind; 4 landing on the belly, chest down, arms still forward, legs up behind; 5 lying flat, face down, head lifted to watch the ball; 6 pushing up onto hands and knees. No sand spray.
+ROW 3 GET UP: FOUR frames: 1 on hands and knees; 2 one knee up, a hand on it; 3 rising, brushing sand off the chest; 4 standing in a ready stance.
+ROW 4 CHEER: SIX frames, a fist pump (the last two loop): 1 crouched, fists at the chest, grinning; 2 jumping, the fist nearer us punched straight UP, mouth open shouting; 3 top of the jump, both fists up; 4 landing, pulling one fist down to the waist, mouth open; 5 standing, both fists raised to shoulder height, shouting; 6 the same with the fists one art pixel higher.
+ROW 5 HIGH FIVE: FOUR frames toward the RIGHT (the teammate uses them mirrored): 1 turning a little toward the right, the arm nearer the right edge rising; 2 on the toes, that arm straight up and slightly forward, palm open and flat toward the right, big grin; 3 the slap, the arm snapped a little further forward, fingers spread; 4 the arm coming down, still grinning.
+ROW 6 SAD: FOUR frames (a loop): 1 both hands on top of the head, looking up in disbelief; 2 the same, eyes closed, mouth a flat line; 3 hands dropped to the hips, head down; 4 the same, shoulders one art pixel lower.
+
+
+Exactly six rows: 1,6,4,6,4,4 sprites, total25. Horizontal diving poses must clearly show BOTH arms reaching RIGHT, head at the right end, feet at the left end. Lowest point of each sprite aligned to row baseline, including airborne poses. All unused cells fully transparent. No ball, no sand, no effects.
+
+============================================================
+volley_umpire.png
+Selected original: C:\Users\johnt\.codex\generated_images\01a0de47-a796-78b1-92e4-bc271ea85633\exec-be1d63a4-7477-4ddd-bcae-edf208f67f4a.png
+Reference: C:\Users\johnt\Documents\Assets\game_ready\player_short.png
+transparent_background: true
+
+INITIAL PROMPT:
+Create ONE transparent PNG pixel-art BEACH VOLLEY sprite sheet volley_umpire.png, requested1024x1024. Input image is STYLE AND SCALE REFERENCE ONLY, NOT subject, clothing, orientation or layout. Draw a new female umpire as specified, in the same original chunky chibi pixel-art style with big head and short limbs. About100 image pixels tall standing; tiny sprites, abundant empty space, DO NOT enlarge to fill cells.
+
+RULES FOR EVERY SHEET
+- Transparent background, the requested size given for each sheet (a different canvas size is fine). Keep each output exactly as the tool gives it: no resizing, cropping, recolouring, alpha clean-up or scripted edits. My own tool does all the formatting.
+- Save every file in C:\Users\johnt\Documents\Assets\volley_ready\. When all seven are done, also write VOLLEY_NOTES.txt there: each file's actual size, the row counts you see in it, and the exact prompt you used for it.
+- Style: the same original chibi pixel art as player_short.png: big head, short limbs, chunky square art-pixel blocks, dark outline, flat colours. Pure black pupils with small pure white highlights, the same eye design in every frame. Characters are about 100 image pixels tall standing, the same as player_short.png, NOT enlarged.
+- Layout: an invisible grid (given for each sheet). Each row is one animation and starts in the leftmost cell; unused cells stay completely empty. At least 10px of clear transparent space around every sprite and between neighbours and rows. Don't crop raised hands. EXACT row counts, no extras.
+- In every frame keep the same scale, head, face, hair, clothes and outline: change only the parts that move.
+- NO ball anywhere: the game draws the ball.
+- Completely empty background: no shadows, sand, ground, net, sky, water, motion lines, text, labels, numbers or visible grid. No blur, gradients, soft edges, antialiasing, coloured fringe, smears or stray pixels.
+- Check each sheet's row counts before moving on to the next.
+
+
+4) volley_umpire.png — requested 1024x1024. Reference: player_short.png, for style and scale only.
+WHO: a new, original BEACH VOLLEYBALL UMPIRE: a cheerful woman in her forties, dark hair in a low ponytail through the back of a WHITE SUN VISOR, a white short-sleeve polo shirt with a NAVY collar, navy shorts, white trainers with white socks, a small silver whistle on a BLACK cord at the middle of her chest. No badge, number or logo.
+FRONT VIEW: she sits high on an umpire's chair at the far end of the net, facing the court, so we see her FRONT. In every frame: face, chest and both eyes toward us, symmetrical. No side views, 3/4 turns or back views. "Left" and "right" mean the sides of the IMAGE, not hers; anything that goes one way goes toward the RIGHT edge (the game mirrors it). Do NOT draw the chair.
+SITTING, seen from the front as on a high stool: thighs level and pointing toward us (short, foreshortened), shins hanging straight down, feet together, the soles on the baseline (as if resting on the chair's footrest).
+Grid: 8 columns x 6 rows of 128x160 cells, baseline y145. Row counts 1,2,4,3,3,3 = 16 sprites.
+ROW 1 STAND: ONE frame standing, square to us, arms relaxed. The size reference only.
+ROW 2 SIT: TWO frames, hands resting on the thighs; frame 2 is frame 1 with the head and shoulders ONE art pixel lower.
+ROW 3 WHISTLE: FOUR frames, sitting: 1 the hand on the LEFT of the image lifts the whistle to the mouth; 2 blowing, cheeks puffed, the OTHER arm raised straight UP, palm open; 3 the same, cheeks puffier; 4 lowering both arms.
+ROW 4 POINT (who serves next): THREE frames, sitting: 1 the arm on the RIGHT of the image rising; 2 that arm fully extended straight out toward the RIGHT edge at shoulder height, palm down, head turned to look where it points; 3 the same held.
+ROW 5 IN (the ball landed in): THREE frames, sitting: 1 the arm on the RIGHT of the image rising; 2 that arm stretched out toward the RIGHT and DOWN at 45 degrees, palm open and facing down, pointing at the sand; 3 the same held.
+ROW 6 OUT (the ball landed out): THREE frames, sitting: 1 both arms rising; 2 BOTH forearms raised straight UP beside the head, elbows bent at shoulder height, palms facing her own face; 3 the same held.
+
+
+Exactly six rows with 1,2,4,3,3,3 sprites =16. Most of the right half of the sheet stays fully transparent. Every frame except row1 is SITTING with foreshortened thighs, shins hanging down and feet together. No chair, ground, shadow, ball, text. Every face remains FRONT VIEW, both eyes visible; for pointing use a rightward gaze while preserving the front-facing head. Crisp hard square pixel steps, no smoothing. White sunvisor must be open at the top, ponytail behind. Navy collar, white polo, navy shorts, white trainers. Preserve same face and costume in all frames.
+
+FIRST CORRECTION PROMPT (reference: preceding generated output for this sheet):
+Edit this transparent BEACH VOLLEY umpire sprite sheet: reduce all sixteen sprites to about 62% of their current dimensions so the standing umpire is about100 image pixels tall, keeping the canvas size unchanged and each sprite in its existing invisible cell with soles on its existing row baseline. Preserve six rows exactly 1,2,4,3,3,3 sprites. Keep the character design, clothes, white visor, dark ponytail, white polo navy collar, navy shorts, white socks/trainers, silver whistle black cord, all gesture poses and frontal orientation unchanged. Rows2-6 remain seated with hanging shins. Preserve chunky square hard pixel-art blocks and clean dark outlines. No blur, no smoothing, no fringe. Preserve ample clear space and empty cells; absolutely no chair, ground, shadow, ball, text or extra sprites. Transparent background.
+
+============================================================
+beach_fans.png
+Selected original: C:\Users\johnt\.codex\generated_images\01a0de47-a796-78b1-92e4-bc271ea85633\exec-89cf06f8-a03b-4b23-8867-c03d4c369bad.png
+Reference: C:\Users\johnt\Documents\Assets\game_ready\fans.png
+transparent_background: true
+
+INITIAL PROMPT:
+Create ONE transparent PNG pixel-art sprite sheet beach_fans.png for BEACH VOLLEY, requested1024x1024. Input image is reference for the same small boy fan's face, brown hair, skin and chunky art style, NOT his soccer clothes, props or poses. Change to beach outfit and poses below. VERY SMALL sprite art: standing height approximately60 IMAGE PIXELS, only about6% of canvas height. Do NOT enlarge to fill cells. Use fewer chunky square art pixels than the players, not finer detail.
+
+RULES FOR EVERY SHEET
+- Transparent background, the requested size given for each sheet (a different canvas size is fine). Keep each output exactly as the tool gives it: no resizing, cropping, recolouring, alpha clean-up or scripted edits. My own tool does all the formatting.
+- Save every file in C:\Users\johnt\Documents\Assets\volley_ready\. When all seven are done, also write VOLLEY_NOTES.txt there: each file's actual size, the row counts you see in it, and the exact prompt you used for it.
+- Style: the same original chibi pixel art as player_short.png: big head, short limbs, chunky square art-pixel blocks, dark outline, flat colours. Pure black pupils with small pure white highlights, the same eye design in every frame. Characters are about 100 image pixels tall standing, the same as player_short.png, NOT enlarged.
+- Layout: an invisible grid (given for each sheet). Each row is one animation and starts in the leftmost cell; unused cells stay completely empty. At least 10px of clear transparent space around every sprite and between neighbours and rows. Don't crop raised hands. EXACT row counts, no extras.
+- In every frame keep the same scale, head, face, hair, clothes and outline: change only the parts that move.
+- NO ball anywhere: the game draws the ball.
+- Completely empty background: no shadows, sand, ground, net, sky, water, motion lines, text, labels, numbers or visible grid. No blur, gradients, soft edges, antialiasing, coloured fringe, smears or stray pixels.
+- Check each sheet's row counts before moving on to the next.
+
+
+5) beach_fans.png — requested 1024x1024. Reference: fans.png for the character, scale and style. The SAME small chibi fan, about 60 IMAGE PIXELS TALL standing, drawn in the SAME SIZE art-pixel blocks as the player (fewer blocks and less detail, not a finer drawing), with generous empty space around; never enlarge it to fill the cells. Beach outfit: bright YELLOW tank top with GREEN trim (the same yellow and green, for recolouring), blue swim shorts, bare feet; the same skin, face and short brown hair as fans.png. Every frame faces DIRECTLY TOWARD US: symmetrical face, both eyes visible.
+Grid: 8 columns x 8 rows of 128x128 cells, baseline y117 for the feet, or for the seat when sitting. Row counts 1,2,2,4,4,4,2,2 = 21 sprites.
+ROW 1 STANDING: ONE small front-view standing pose, arms down. The size reference.
+ROW 2 SITTING: TWO frames sitting cross-legged on the ground, hands on the knees; frame 2 is frame 1 with the head and shoulders ONE art pixel lower.
+ROW 3 CLAPPING: TWO frames sitting cross-legged: 1 hands APART in front of the chest, 2 hands TOGETHER.
+ROW 4 CHEERING: FOUR frames: 1 sitting; 2 springing up; 3 standing, BOTH arms straight UP, mouth wide OPEN; 4 standing, arms in a V, mouth open.
+ROW 5 WAVING: FOUR frames standing, both arms up over the head, swaying together: 1 leaning to the image LEFT, 2 straight up, 3 leaning RIGHT, 4 straight up.
+ROW 6 TOWEL: FOUR frames standing, swinging a small YELLOW towel with a GREEN stripe round above the head in one raised hand: 1 towel to the left, 2 behind the head, 3 to the right, 4 in front.
+ROW 7 GROANING: TWO frames sitting cross-legged, both hands on the head, mouth turned down; frame 2 with the head one art pixel lower.
+ROW 8 STANDING CLAP: TWO frames standing: 1 hands apart, 2 hands together.
+
+
+Exactly EIGHT rows of 1,2,2,4,4,4,2,2 sprites =21 total. Each row begins in first column of invisible8-column grid; remaining cells completely empty, especially the entire right half. All fans directly FRONT facing, same face. Cross-legged sitting poses in rows2,3,7. Bare feet, blue swim shorts, yellow tank green trim. Row5 has NO PROP (both hands waving). Row6 has ONLY the yellow towel green stripe. No flag, scarf, ball, ground, shadows or text. Tiny60px standing size with spacious cells.
+
+FIRST CORRECTION PROMPT (reference: preceding generated output for this sheet):
+Edit this beach fan sprite sheet, preserving the canvas and all EXACT row counts 1,2,2,4,4,4,2,2 (21 total). Correct sprite SCALE: all fans need to be about HALF their current width and height, standing about60 image pixels tall. Leave them centered horizontally in existing cells with feet or seat at existing baselines; huge transparent clear spaces are intentional. Retain the same boy, front-facing eyes, hair, yellow green-trim tank, blue shorts, bare feet, chunky square pixels. Correct row5 WAVING: in ALL FOUR frames BOTH ARMS stay raised overhead, swaying TOGETHER left, up, right, up. Correct row6 TOWEL: one raised hand swings yellow towel green stripe left, behind head, right, in front. Other rows and poses unchanged. No new sprites or props, no ball, ground, shadow, text or grids. True transparent PNG, crisp hard pixel edges.
+
+SECOND CORRECTION PROMPT (reference: preceding generated output for this sheet):
+Make a precise local edit to ONLY THE FIFTH ROW of this transparent sprite sheet (the four barehanded standing fans between the cheering row and the towel row). In row5 frame1, RAISE the arm currently hanging on the image-right side: both hands must be overhead, leaning together to image LEFT. In row5 frame3, RAISE the arm currently hanging on the image-left side: both hands must be overhead, leaning together to image RIGHT. Row5 frames2 and4 stay both arms up. There should be NO lowered hand in ANY of the four row5 poses. Keep the exact same canvas, sprite sizes, locations, character, pixels, palette, outfits, and EVERY OTHER ROW untouched. Exactly8rows counts1,2,2,4,4,4,2,2. Transparent PNG, no added objects, no ball, no labels.
+
+============================================================
+beach_props.png
+Selected original: C:\Users\johnt\.codex\generated_images\01a0de47-a796-78b1-92e4-bc271ea85633\exec-9ff97bed-4da2-4cd3-bdb1-245d0a8e2ce1.png
+Reference: C:\Users\johnt\Documents\Assets\game_ready\player_short.png
+transparent_background: true
+
+INITIAL PROMPT:
+Create ONE transparent PNG BEACH VOLLEY scenery sprite sheet beach_props.png, requested1536x1024 landscape. The attached player image is STYLE and art-pixel SCALE reference ONLY; do not draw any people. Exactly EIGHT isolated scenery sprites, TWO ROWS of FOUR pieces, in the exact order below. Each object drawn only once. Chunky square pixel blocks, dark outlines, small flat colour palette, classic original chibi arcade-game aesthetic. Front view slightly above. P=100 image pixels, one reference player height. Enforce the listed relative heights: palm350, tower300, chair170, umbrella200; board160, cooler35, castle50, ring90. All pieces stand on the bottom baseline of their row; never enlarge small pieces to fill cells. Abundant transparent negative space.
+
+RULES FOR EVERY SHEET
+- Transparent background, the requested size given for each sheet (a different canvas size is fine). Keep each output exactly as the tool gives it: no resizing, cropping, recolouring, alpha clean-up or scripted edits. My own tool does all the formatting.
+- Save every file in C:\Users\johnt\Documents\Assets\volley_ready\. When all seven are done, also write VOLLEY_NOTES.txt there: each file's actual size, the row counts you see in it, and the exact prompt you used for it.
+- Style: the same original chibi pixel art as player_short.png: big head, short limbs, chunky square art-pixel blocks, dark outline, flat colours. Pure black pupils with small pure white highlights, the same eye design in every frame. Characters are about 100 image pixels tall standing, the same as player_short.png, NOT enlarged.
+- Layout: an invisible grid (given for each sheet). Each row is one animation and starts in the leftmost cell; unused cells stay completely empty. At least 10px of clear transparent space around every sprite and between neighbours and rows. Don't crop raised hands. EXACT row counts, no extras.
+- In every frame keep the same scale, head, face, hair, clothes and outline: change only the parts that move.
+- NO ball anywhere: the game draws the ball.
+- Completely empty background: no shadows, sand, ground, net, sky, water, motion lines, text, labels, numbers or visible grid. No blur, gradients, soft edges, antialiasing, coloured fringe, smears or stray pixels.
+- Check each sheet's row counts before moving on to the next.
+
+
+6) beach_props.png — requested 1536x1024 (landscape). Reference: player_short.png, for style and scale only (P = one player height, about 100 image pixels). EIGHT separate pieces of beach scenery, each drawn ONCE, in two rows of four, left to right. Each piece stands on the bottom of its row with at least 20px of clear space around it; no piece touches another. Seen from the front and a little above, like the player.
+TOP ROW: 1 PALM TREE: a slightly curved trunk leaning a little to the right, ringed bark, about seven drooping green fronds, three coconuts; about 3.5 P tall. 2 LIFEGUARD TOWER: a small white-and-red wooden hut on four stilts, a ladder at the front, a red flag on a pole on the roof; about 3 P tall. 3 UMPIRE'S CHAIR: a tall white metal volleyball umpire's chair seen from the FRONT, two front legs splayed slightly, a small padded navy seat 1.2 P above the ground with short armrests, a footrest bar 0.6 P up, empty; about 1.7 P tall. 4 BEACH UMBRELLA: open, red and white stripes, the pole planted in the sand (its foot on the bottom of the row), the canopy tilted a little; about 2 P tall.
+BOTTOM ROW: 5 SURFBOARD standing upright in the sand, turquoise with a white stripe; 1.6 P tall. 6 COOLER: a blue cool box with a white lid and handle; 0.35 P tall. 7 SANDCASTLE: two towers and a wall with a tiny flag; 0.5 P tall. 8 LIFE RING: a red and white life ring hanging on a short wooden post; 0.9 P tall.
+
+
+Count: TOP ROW palm tree / lifeguard tower / EMPTY FRONT-FACING umpire chair / beach umbrella. BOTTOM ROW upright surfboard / small cooler / small sandcastle / life ring on post. 4+4 exactly. No actual sand or ground around the objects, no backdrop, water, net, people, ball, shadows, text or grid. The castle itself is sand-coloured but no sand patch beneath it. Hard square pixel edges, no gradients or smoothing. Actual transparency.
+
+============================================================
+beach_critters.png
+Selected original: C:\Users\johnt\.codex\generated_images\01a0de47-a796-78b1-92e4-bc271ea85633\exec-d82813ba-2cde-4b82-924a-799988019dd8.png
+Reference: C:\Users\johnt\Documents\Assets\game_ready\player_short.png
+transparent_background: true
+
+INITIAL PROMPT:
+Create ONE transparent PNG pixel-art BEACH VOLLEY sprite sheet beach_critters.png, requested1024x1024. The input player sprite sheet is STYLE REFERENCE ONLY: use the same chunky square pixel blocks and dark outline, no humans. Animals must be TINY SIMPLE SPRITES using FEWER blocks, not detailed larger drawings. Seagull standing only30 image pixels tall, crab only18px tall30pxwide, flying gull70px wingspan. Lots of transparent space in each128pxcell; do not fill cells with enlarged animals.
+
+RULES FOR EVERY SHEET
+- Transparent background, the requested size given for each sheet (a different canvas size is fine). Keep each output exactly as the tool gives it: no resizing, cropping, recolouring, alpha clean-up or scripted edits. My own tool does all the formatting.
+- Save every file in C:\Users\johnt\Documents\Assets\volley_ready\. When all seven are done, also write VOLLEY_NOTES.txt there: each file's actual size, the row counts you see in it, and the exact prompt you used for it.
+- Style: the same original chibi pixel art as player_short.png: big head, short limbs, chunky square art-pixel blocks, dark outline, flat colours. Pure black pupils with small pure white highlights, the same eye design in every frame. Characters are about 100 image pixels tall standing, the same as player_short.png, NOT enlarged.
+- Layout: an invisible grid (given for each sheet). Each row is one animation and starts in the leftmost cell; unused cells stay completely empty. At least 10px of clear transparent space around every sprite and between neighbours and rows. Don't crop raised hands. EXACT row counts, no extras.
+- In every frame keep the same scale, head, face, hair, clothes and outline: change only the parts that move.
+- NO ball anywhere: the game draws the ball.
+- Completely empty background: no shadows, sand, ground, net, sky, water, motion lines, text, labels, numbers or visible grid. No blur, gradients, soft edges, antialiasing, coloured fringe, smears or stray pixels.
+- Check each sheet's row counts before moving on to the next.
+
+
+7) beach_critters.png — requested 1024x1024. Reference: player_short.png, for style only: the SAME SIZE art-pixel blocks; small animals get FEWER blocks, not a finer drawing. Grid: 8 columns x 6 rows of 128x128 cells; standing frames on a baseline at local y110. Row counts 2,2,4,1,4,2 = 15 sprites.
+SEAGULL: white head and body, grey wings with black tips, yellow beak with a small red spot, orange legs; side view facing RIGHT; about 30 image pixels tall standing.
+ROW 1 GULL STAND: TWO frames; frame 2 has the head one art pixel lower.
+ROW 2 GULL PECK: TWO frames: 1 head down, pecking at the ground; 2 head back up.
+ROW 3 GULL FLY: FOUR frames, a flapping loop flying to the right: wings up, level, down, level; wingspan about 70 image pixels; centred in the cell (no baseline).
+ROW 4 GULL GLIDE: ONE frame, wings spread level, gliding to the right.
+CRAB: bright orange-red, two big raised claws, eyes on stalks, seen from the front; about 18 image pixels tall and 30 wide.
+ROW 5 CRAB WALK: FOUR frames, a sideways scuttle toward the right, legs alternating.
+ROW 6 CRAB SNAP: TWO frames: 1 claws raised and open, 2 claws snapped shut.
+
+Exactly SIX rows with counts2,2,4,1,4,2 =15 sprites, start from leftmost cell each row. Invisible8column grid, most cells empty. Standing/pecking gulls sideview RIGHT, white and grey with black wingtips yellowbeak redspot orangelegs. Flying gull frames wings UP / LEVEL / DOWN / LEVEL, every beak pointsRIGHT. One glide sprite alone row4. Orange-red crabs directlyFRONT with two eye stalks and two claws; row5 scuttling4, row6 clawsOPEN thenCLOSED2. Do NOT draw ground, ball, shadows, water, sand, motion lines, grid or labels. True transparent background, hard square edges, flat colours, clean silhouettes.
+
+FIRST CORRECTION PROMPT (reference: preceding generated output for this sheet):
+Correct ONLY the SCALE of every animal in this sprite sheet. They are MUCH TOO LARGE. Keep the 1254x1254 canvas and layout unchanged but make each animal ONE QUARTER of its current height and width. A standing gull must be only30 pixels tall (~2.4% of canvas height), a crab18 pixels tall30wide (~1.4% of canvas height), flying gull wingspan70pixels. Most of every cell must be EMPTY TRANSPARENT SPACE. Small animals should use fewer chunky square pixel blocks, not finer detail. Keep the current15 poses, facing directions, colours, dark outline and clean square pixels. Six rows EXACTLY 2,2,4,1,4,2. Preserve each sprite's horizontal cell centre and its row's baseline, except flying poses centered. No extra sprites, text, ground, shadow or backdrop. True transparent PNG.
+
+
+
+============================================================
+BEACH VOLLEY — THREE ADDITIONAL SHEETS (2026-09-27)
+============================================================
+Built-in image_gen tool, generated one sheet at a time. Each sheet's counts were visually checked before proceeding. The ball sheet received one image-tool correction. All final PNGs copied byte-for-byte unchanged; SHA-256 equality verified. No scripted image edits or alpha cleanup.
+Reference for all three: C:\Users\johnt\Documents\Assets\volley_ready\volley_player.png
+
+ACTUAL SIZES AND OBSERVED COUNTS
+beach_ball.png: 1254 x 1254px; Format32bppArgb; 6 rows: 8, 2, 6, 5, 5, 3 = 29 pieces (footprint pair counted as one piece); transparent.
+beach_net.png: 1536 x 1024px; Format32bppArgb; 2 rows: 2, 1 = 3 pieces; transparent.
+beach_backdrop.png: 1536 x 1024px; Format24bppRgb; one continuous opaque scene; animation-row count not applicable; 4 clouds, one left island with two palms, one right sailboat.
+
+OBSERVATIONS FOR YOUR FORMATTING/REVIEW
+beach_ball.png: Counts match. Balls and effects remain larger than the requested pixel dimensions after the image-tool correction. Effect rows are spaced across more of the sheet than a strict common8-column grid. Some faint fringe pixels remain. The conspicuous red preview speckles were inspected read-only:39592 red pixels in the lower region had nonzero alpha, with maximum alpha3/255 (nearly transparent). The source PNG has been preserved exactly. Frame-perfect highlight identity and a mathematically exact full rotation are not verified.
+beach_net.png: Top row has separate post and antenna; bottom row has one horizontal net section. The post, antenna and net thickness are larger than requested; mesh cells are also coarser. No drawn baseplate. Background sample pixels have alpha0.
+beach_backdrop.png: Full opaque1536x1024 scene, empty sand foreground,4 clouds, distant left island and right sailboat. Level horizon is visually aroundy243 rather than requestedy200; foam reaches approximatelyy370 instead ofy330. Sand texture/ripples are more noticeable than the requested very sparse subtle texture. Sky has flat/dithered bands with some smooth-looking colour transitions; exact3px art blocks are not verified.
+
+EXACT PROMPTS USED
+
+------------------------------------------------------------
+beach_ball.png
+Selected original: C:\Users\johnt\.codex\generated_images\01a0de47-a796-78b1-92e4-bc271ea85633\exec-9d8d421f-bf9a-40bd-ad08-14867aa2d415.png
+transparent_background: true
+
+INITIAL PROMPT (verbatim):
+Create ONE transparent PNG pixel-art sprite sheet beach_ball.png for BEACH VOLLEY, requested1024x1024. The input image volley_player.png is ONLY the visual style and art-pixel size reference; draw NO people. New small volleyball and sand effects, not a copy of the reference layout. Art blocks about3 image pixels each; a24px ball uses only about8 art blocks across, intentionally tiny and simple. Do not enlarge small sprites to fill their cells. Use an invisible8-column by6-row grid, each row left aligned and empty unused cells. Same scale for every frame of an animation.
+
+RULES FOR EVERY SHEET
+- Keep each output exactly as the tool gives it: no resizing, cropping, recolouring, alpha clean-up or scripted edits. My own tool does all the formatting.
+- Save every file in C:\Users\johnt\Documents\Assets\volley_ready\ and add each file's actual size, the row counts you see in it, and the exact prompt you used to the end of VOLLEY_NOTES.txt.
+- Style: the same original chunky pixel art as volley_player.png: square art-pixel blocks the SAME SIZE as the player's (about 3 image pixels each), flat colours, a dark outline round objects. No blur, gradients, soft edges, antialiasing, coloured fringe, smears or stray pixels.
+- Layout (sheets 1 and 2): an invisible grid; each row starts in its leftmost cell; unused cells stay completely empty; at least 16px of clear transparent space around every piece and between rows. EXACT counts, no extras. Never enlarge small things to fill cells.
+- No people, text, labels, numbers or visible grid anywhere.
+- Check each sheet's row counts before moving on to the next.
+
+
+1) beach_ball.png — 1024x1024, transparent background. Six rows:
+ROW 1 BALL SPIN: EIGHT frames of ONE beach volleyball turning one full revolution, rolling toward the right. About 24 image pixels across (a quarter of P: bigger than life so it reads in the game). A classic beach volleyball: curved panels of bright YELLOW, sky BLUE and WHITE, dark outline, and one small white shine at the top left that stays in the same place in every frame (only the panels turn).
+ROW 2 BALL HIT: TWO frames of the same ball squashed by a hard hit: flat (about 30 wide, 18 tall), then half squashed (27 wide, 21 tall).
+ROW 3 SAND SPRAY: SIX frames of the burst when the ball slams into the sand, seen from the front: a crown of pale sand grains thrown up and out, growing, then falling and thinning to a few grains. About 64 wide and 40 tall at its biggest; its bottom edge on the row's baseline.
+ROW 4 FOOT PUFF: FIVE frames of a small low puff of sand kicked up when a player lands from a jump, about 40 wide and 20 tall at its biggest, spreading out and breaking up into fewer grains (NOT fading with transparency).
+ROW 5 DIVE SPLASH: FIVE frames of sand thrown forward (to the right) and up by a full-length dive, about 72 wide and 30 tall at its biggest.
+ROW 6 SAND MARKS: THREE separate flat marks on the sand, seen from the front and a little above: a pair of bare footprints (each print about 10x6); a round dent where the ball landed (about 26x10, a darker hollow with a light rim); a long skid trench left by a dive (about 96x14, a darker furrow with a light raised edge).
+All grains and marks in 3 or 4 warm sand shades, a little lighter and darker than sand of #EFD29A.
+
+
+Final count check: exactly SIX rows with 8 / 2 / 6 / 5 / 5 / 3 pieces, TOTAL29. Row6 footprint pair is ONE piece in cell1, ball dent one piece cell2, long skid one piece cell3. No balls in sand effect rows. True transparent background; particles remain opaque flat sand shades and disappear by fewer grains, not fading. All sprites tiny with large clear space; darkest outlines only where appropriate. No text, grid, ground plane, shadows or extra decorative objects.
+
+CORRECTION PROMPT (verbatim; reference was initial generated beach_ball image):
+Correct this BEACH VOLLEY sprite sheet. Keep its square canvas, six rows and EXACT counts8,2,6,5,5,3. TWO corrections: (1) dramatically shrink all sprites to ONE QUARTER current width and height within their existing cells, leaving vast transparent empty space. The eight row1 balls must be only24 image pixels diameter, about8 chunky art pixels across. Sand bursts maximum64x40px, foot puffs40x20px, dive sprays72x30px, skid96x14px. (2) completely remove ALL red, yellow, grey, noisy, semi-transparent glow/fringe/speckles surrounding sand sprites. Sand effects consist ONLY of simple solid square grains and flat clusters using FOUR colours: pale cream #FFE6B7, sand #EFD29A, tan #D7B37A, brown #B58A54. Outside those deliberately placed square grains is perfectly empty transparency. No soft edge pixels, antialiasing, gradients, glows, blur or stray pixels. Each sand animation grows then breaks into sparse separate square grains, not blurred piles. Preserve volleyball yellow/skyblue/white curved panels and fixed upper-left white highlight. Row6 footprint pair, ball dent, long skid. Same layout counts, no extra objects. Use strict clean low-resolution pixel-art silhouettes. Transparent PNG.
+
+------------------------------------------------------------
+beach_net.png
+Selected original: C:\Users\johnt\.codex\generated_images\01a0de47-a796-78b1-92e4-bc271ea85633\exec-d46fdcff-c008-42d1-a996-3ad31e134380.png
+transparent_background: true
+
+INITIAL PROMPT (verbatim):
+Create ONE transparent PNG pixel-art asset sheet beach_net.png, requested1536x1024 landscape. Input volley_player.png is ONLY a reference for chunky square art pixels about3 image pixels and flat colours with dark object outlines; no people. This is a sparse asset sheet of THREE isolated components, not an assembled court net. Huge empty transparent space intentional.
+
+RULES FOR EVERY SHEET
+- Keep each output exactly as the tool gives it: no resizing, cropping, recolouring, alpha clean-up or scripted edits. My own tool does all the formatting.
+- Save every file in C:\Users\johnt\Documents\Assets\volley_ready\ and add each file's actual size, the row counts you see in it, and the exact prompt you used to the end of VOLLEY_NOTES.txt.
+- Style: the same original chunky pixel art as volley_player.png: square art-pixel blocks the SAME SIZE as the player's (about 3 image pixels each), flat colours, a dark outline round objects. No blur, gradients, soft edges, antialiasing, coloured fringe, smears or stray pixels.
+- Layout (sheets 1 and 2): an invisible grid; each row starts in its leftmost cell; unused cells stay completely empty; at least 16px of clear transparent space around every piece and between rows. EXACT counts, no extras. Never enlarge small things to fill cells.
+- No people, text, labels, numbers or visible grid anywhere.
+- Check each sheet's row counts before moving on to the next.
+
+
+2) beach_net.png — 1536x1024 landscape, transparent background. Two rows:
+ROW 1, TWO pieces standing on the row's baseline: the NET POST: a round metal pole about 140 image pixels tall and 8 thick, its lower two thirds wrapped in a thick padded foam sleeve (dark navy blue with one white stripe), a small metal cleat with a coiled white rope near the top, going straight down into the sand (flat bottom, no base plate). Then the ANTENNA: a thin rod about 50 pixels tall and 3 thick in alternating RED and WHITE stripes about 6 pixels long, with a tiny clamp at its bottom.
+ROW 2, ONE piece: a straight section of beach volleyball net seen straight on from the front, lying horizontal across the canvas, about 1200 pixels long and 60 tall: a white top band about 6 pixels tall with a thin navy edge, black square mesh (squares about 6 pixels, cords one art pixel thick), a thinner white bottom band, and a white rope running out of each end.
+
+
+EXACT layout: TOP ROW only2 pieces near LEFT edge: first a slim padded post about140px tall, second a separate tiny antenna about50px tall, aligned at bottoms. All other top-row cells EMPTY. BOTTOM ROW only1 piece, the wide shallow net strip,1200px long but only60px tall, a20:1 aspect ratio; centered horizontally with clear margins and empty transparency through every mesh opening. Do not draw net posts attached to this strip. Post is a narrow cylinder, NO base/feet/stand. Navy foam lower2/3, one white stripe; silver upper section and small coiledwhite rope cleat. Antenna redwhite bands and tiny clamp. Net topband white6px with thin navy edge; thinner white bottom band; black squaremesh6px squares with3px cords; white ropes at both ends. No ground, shadow, labels or decorations. Do not enlarge the pole or antenna to fill the available row height. Count2+1=3 isolated assets. Transparent PNG.
+
+------------------------------------------------------------
+beach_backdrop.png
+Selected original: C:\Users\johnt\.codex\generated_images\01a0de47-a796-78b1-92e4-bc271ea85633\exec-dfd19dfe-700f-466c-b6e4-173564cf5b23.png
+transparent_background: false
+
+INITIAL PROMPT (verbatim):
+Create ONE OPAQUE pixel-art background beach_backdrop.png for BEACH VOLLEY, landscape1536x1024, artwork fills all edges. Input volley_player.png is ONLY a reference for the square art-pixel block scale, about3 image pixels per art block, and original arcade aesthetic. DO NOT draw the character or any sprites from the reference. This is a continuous background, NOT a sprite sheet.
+
+3) beach_backdrop.png — 1536x1024 landscape, NOT transparent: the scenery behind the court, filling the whole canvas edge to edge, seen from the front with a dead level horizon. From the top down:
+- SKY: bright blue, lighter toward the horizon in flat bands with simple dithering (no smooth gradient), with 3 or 4 small puffy pixel clouds. No sun disc.
+- HORIZON: a straight line about 200 pixels from the top.
+- SEA: from the horizon down to about 300 pixels from the top: deep blue at the horizon turning turquoise toward the beach, a few short white wave glints, a small far-away island with two palms at the left, one tiny far-away sailboat at the right.
+- SHORE: about 300 to 330 pixels from the top: a wavy white band of foam over darker wet sand.
+- SAND: from about 330 pixels to the bottom edge: warm pale sand (around #EFD29A) with a fine, sparse texture of slightly lighter and darker grains and a few very soft wind ripples. LOW CONTRAST and EVEN, so sprites and court lines read clearly on top of it. Nothing on the sand at all: no court, net, lines, people, towels, umbrellas, palms, shells, footprints or objects of any kind.
+Same art-pixel size as the players (about 3 image pixels each), flat colours, no outlines on the sky or the sea, no text.
+
+Composition is crucial: horizon DEAD LEVEL at y200, only about20% down from the top; sea a SHALLOW100px strip y200-300, foamy shoreline30px y300-330. The bottom TWO THIRDS (y330-1024) must be empty uniform pale sand around#EFD29A. Do NOT put horizon in the middle. Tiny distant two-palm island on the LEFT in the SEA ONLY, tiny sailboat RIGHT in the SEA ONLY. Exactly3 or4 small puffy pixel clouds in upper blue sky, no sun. The foreground sand contains NO objects at all. Sand grains and subtle wind ripples extremely sparse, LOW CONTRAST, evenly distributed, made of flat square pixels. All sky and sea shading uses discrete flat colour bands and simple pixel dithering, never smooth gradients. Hard square3px art blocks everywhere, no blur, antialiasing, coloured fringe, text, grid or border. No outlines on sky/sea. OPAQUE edge-to-edge PNG, no transparent areas.
+

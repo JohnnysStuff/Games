@@ -1,0 +1,22 @@
+/* ============================================================
+   HUB — the level banner and the continue rail
+   ============================================================ */
+.rail{margin:0 0 26px}
+.rail-hd{display:flex;align-items:baseline;gap:10px;margin-bottom:11px}
+.rail-hd h2{margin:0;font-size:15px;font-weight:700;letter-spacing:-.02em}
+.rail-hd span{font-size:12px;color:var(--muted)}
+.rail-hd .rail-more{margin-left:auto;font-size:12px;font-weight:600;color:var(--accent)}
+.rail-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.rail-strip::-webkit-scrollbar{display:none}
+.rail-card{
+  position:relative;flex:0 0 auto;width:186px;border-radius:14px;overflow:hidden;text-align:left;
+  background:var(--surface);border:1px solid var(--border);
+  transition:transform .18s var(--spring),border-color .18s,box-shadow .18s;
+}
+.rail-card:hover{transform:translateY(-3px);border-color:var(--border-2);box-shadow:var(--shadow)}
+.rail-card .rc-art{height:82px;background:var(--void);overflow:hidden}
+.rail-card .rc-art svg{width:100%;height:100%;display:block}
+.rail-card .rc-b{padding:9px 11px 11px}
+.rail-card .rc-b b{display:block;font-size:13px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-card .rc-b span{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+

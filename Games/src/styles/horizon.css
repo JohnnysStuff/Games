@@ -1,0 +1,170 @@
+/* ========================================================== HORIZON ======
+   Golf and pool wear the racing-festival interface: a wall of hard-edged
+   tiles over the scene, condensed capitals, one yellow that always means
+   "this one, now", and the keys that work printed along the foot.
+
+   The rules are few and they hold everywhere:
+     tiles, not cards     — square corners, no radius, a shadow underneath;
+     one accent           — yellow selects, orange marks, nothing else shouts;
+     type does hierarchy  — italic capitals for figures, tracked capitals for
+                            labels, and no middle size at all;
+     the keys are printed — every screen says what it answers to.
+
+   The front pages draw themselves on the canvas; this dresses the shell's
+   own markup around them, so the pause card and the results ledger keep
+   working exactly as they do everywhere else.
+   ========================================================================= */
+/* ---- the clubhouse palette ----
+   The shell's own tokens, re-coloured for the two sports, so whatever the
+   shell draws in #play — the stage, the pause card, the wait panel —
+   sits in the same green (golf) and baize-and-brass (pool). */
+#play:is([data-game="golf"],[data-game="pool"]){
+  --bg:#0c211c;--surface:#122e26;--surface-2:#1b3b31;--surface-3:#25493d;
+  --text:#faf8ec;--text-2:#d2dfd3;--muted:#a4bbad;--border:#ffffff18;--border-2:#ffffff30;
+  --accent:#d9ed9a;--accent-soft:#d9ed9a19;--void:#0b2019;
+  --glass-hi:#ffffff0c;--glass-brd:#ffffff20;
+}
+#play[data-game="pool"]{--bg:#101817;--surface:#172321;--surface-2:#22312c;--surface-3:#304238;
+  --text:#fbf3e1;--text-2:#d8cfbd;--muted:#aaa896;--accent:#e6c287;--accent-soft:#e6c28718;--void:#090f0e}
+#play:is([data-game="golf"],[data-game="pool"]) .stagewrap::after{display:none}
+/* the shell's buttons, where one still shows (the wait panel) */
+#play:is([data-game="golf"],[data-game="pool"]) .btn{background:var(--accent);color:#14281e;border-radius:8px;border:1px solid transparent;box-shadow:none;height:36px;min-height:36px;font-weight:600;flex-shrink:0}
+#play:is([data-game="golf"],[data-game="pool"]) .btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
+#play:is([data-game="golf"],[data-game="pool"]) .btn.sec{background:var(--surface-2);border-color:var(--border-2);color:var(--text)}
+#play:is([data-game="golf"],[data-game="pool"]) :focus-visible{outline-color:var(--accent)}
+
+/* ---- the festival interface ---- */
+#play:is([data-game="golf"],[data-game="pool"]){
+  --fh-y:#f5e11c; --fh-o:#f4621f; --fh-n2:rgba(8,16,28,.84); --fh-ink:#12161d;
+  --fh-mu:rgba(244,244,240,.6);
+  --fh-face:"Barlow Condensed","Bahnschrift Condensed",Bahnschrift,"Arial Narrow",system-ui,sans-serif;
+}
+#play[data-game="pool"]{ --fh-y:#ffd400; --fh-o:#e0532a }
+
+/* the scene stays, darkened and pulled to one corner */
+#play:is([data-game="golf"],[data-game="pool"]) .ov{
+  background:linear-gradient(105deg,rgba(4,10,8,.93) 38%,rgba(4,10,8,.55) 100%);
+  -webkit-backdrop-filter:blur(7px) saturate(115%);backdrop-filter:blur(7px) saturate(115%);
+  align-items:stretch;padding:0;
+}
+#play[data-game="pool"] .ov{ background:linear-gradient(105deg,rgba(7,6,4,.93) 38%,rgba(10,7,4,.55) 100%) }
+#play:is([data-game="golf"],[data-game="pool"]) .ov.lg-ov .panel{
+  width:100%;max-width:none;max-height:100%;padding:0;background:none;border:0;box-shadow:none;
+  display:flex;align-items:stretch;
+}
+
+/* ------------------------------------------ the results: the frame --- */
+/* the purse, read like a credit balance in the corner of a race screen */
+#play:is([data-game="golf"],[data-game="pool"]) .lg-purse{ text-align:right }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-purse b{
+  font-family:var(--fh-face);font-size:30px;font-weight:800;font-style:italic;color:var(--fh-y);margin-top:0;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-rule{ display:none }
+
+/* the stat wall */
+#play:is([data-game="golf"],[data-game="pool"]) .lg-stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(122px,1fr));gap:8px;margin-bottom:18px;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-stat{
+  background:rgba(244,244,240,.93);color:var(--fh-ink);padding:12px 14px 10px;
+  box-shadow:2px 4px 0 rgba(0,0,0,.3);border-bottom:4px solid transparent;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-stat:first-child{ border-bottom-color:var(--fh-o) }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-stat b{
+  font-family:var(--fh-face);font-size:30px;font-weight:800;font-style:italic;line-height:1;color:var(--fh-ink);
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-stat span{
+  font-family:var(--fh-face);font-size:11px;font-weight:700;letter-spacing:.18em;
+  color:rgba(18,22,29,.62);margin-top:5px;
+}
+
+/* the foot: what the keys do, and the one thing you came here to press */
+#play:is([data-game="golf"],[data-game="pool"]) .lg-bar{
+  border-top:2px solid rgba(244,244,240,.14);margin-top:auto;padding-top:14px;gap:14px;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-act{
+  font-family:var(--fh-face);font-size:14px;font-weight:700;letter-spacing:.16em;color:var(--fh-mu);
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-act:hover{ color:#fff }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-act.prim{
+  background:var(--fh-y);color:var(--fh-ink);padding:11px 26px;box-shadow:3px 4px 0 rgba(0,0,0,.35);
+  font-size:17px;font-weight:800;letter-spacing:.2em;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-act.prim:hover{ background:#fff;color:var(--fh-ink) }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-act kbd{
+  font-family:var(--fh-face);font-size:11px;font-weight:700;letter-spacing:.16em;
+  border-color:rgba(18,22,29,.45);color:rgba(18,22,29,.7);
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-act:not(.prim) kbd{ border-color:rgba(244,244,240,.3);color:var(--fh-mu) }
+
+/* --------------------------------------------------------- the pause --- */
+#play:is([data-game="golf"],[data-game="pool"]) .ov:not(.lg-ov){
+  align-items:center;padding:24px;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .panel{
+  font-family:var(--fh-face);color:var(--text);background:var(--fh-n2);border:0;border-left:5px solid var(--fh-y);
+  border-radius:0;box-shadow:6px 8px 0 rgba(0,0,0,.35);width:min(420px,100%);padding:26px 28px 22px;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+#play:is([data-game="golf"],[data-game="pool"]) .panel::before{ display:none }
+#play:is([data-game="golf"],[data-game="pool"]) .panel h2{
+  font-family:var(--fh-face);font-size:34px;font-weight:800;font-style:italic;text-transform:uppercase;
+  letter-spacing:.02em;color:#fff;margin-bottom:2px;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .panel .sub{
+  font-family:var(--fh-face);font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--fh-mu);margin-bottom:18px;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .pz-act{
+  font-family:var(--fh-face);font-size:16px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  border-radius:0;background:rgba(244,244,240,.08);color:rgba(244,244,240,.82);margin-bottom:2px;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .pz-act:hover,
+#play:is([data-game="golf"],[data-game="pool"]) .pz-act:focus-visible{ background:rgba(244,244,240,.2);color:#fff }
+#play:is([data-game="golf"],[data-game="pool"]) .pz-act.prim{ background:var(--fh-y);color:var(--fh-ink) }
+#play:is([data-game="golf"],[data-game="pool"]) .pz-act.prim:hover,
+#play:is([data-game="golf"],[data-game="pool"]) .pz-act.prim:focus-visible{ background:#fff }
+#play:is([data-game="golf"],[data-game="pool"]) .pz-act kbd{
+  font-family:var(--fh-face);font-size:11px;font-weight:700;letter-spacing:.14em;border-radius:0;
+  background:transparent;border-color:currentColor;opacity:.65;
+}
+
+/* ----------------------------------- the results: verdict and lines --- */
+#play:is([data-game="golf"],[data-game="pool"]) .lg{
+  font-family:var(--fh-face);width:100%;padding:clamp(18px,4vh,44px) clamp(20px,5vw,72px);
+  display:flex;flex-direction:column;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg .num{ font-family:var(--fh-face) }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-verdict{
+  font-size:clamp(34px,6vw,62px);font-weight:800;font-style:italic;letter-spacing:.01em;color:#fff;
+  text-shadow:0 3px 0 rgba(0,0,0,.35);
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-where{
+  font-family:var(--fh-face);font-size:14px;font-weight:600;letter-spacing:.2em;color:var(--fh-mu);margin-top:6px;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-cap{ font-family:var(--fh-face);font-size:11px;font-weight:700;letter-spacing:.2em }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-tag{
+  border:0;background:var(--fh-o);color:#fff;font-family:var(--fh-face);
+  font-size:12px;font-weight:700;letter-spacing:.18em;padding:6px 14px;
+  align-self:flex-start;          /* the column would otherwise stretch it wall to wall */
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-tag.bad{ background:#8c2f22 }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-row{
+  background:rgba(244,244,240,.08);padding:8px 12px;margin-bottom:2px;font-size:15px;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-row .lbl{ font-size:15px;letter-spacing:.06em }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-row .amt{ color:var(--fh-y);font-weight:800;font-style:italic }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-row .led{ border-bottom:0 }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-total{
+  border-top:0;background:var(--fh-y);color:var(--fh-ink);padding:10px 12px;margin-top:6px;
+}
+#play:is([data-game="golf"],[data-game="pool"]) .lg-total .lbl{ color:rgba(18,22,29,.7);font-size:12px;letter-spacing:.2em }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-total .amt{ color:var(--fh-ink);font-style:italic;font-weight:800 }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-xpbar{ height:6px;background:rgba(244,244,240,.16) }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-xpbar i{ background:var(--fh-y) }
+#play:is([data-game="golf"],[data-game="pool"]) .lg-note{ color:var(--fh-y) }
+
+@media (max-width:760px){
+  #play:is([data-game="golf"],[data-game="pool"]) .lg-act.prim{ padding:9px 16px;font-size:14px }
+}
+

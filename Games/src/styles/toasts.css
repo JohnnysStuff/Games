@@ -1,0 +1,30 @@
+/* ============================================================
+   TOASTS — level-ups, unlocks, quest completions. They stack
+   from the bottom-right and never steal focus.
+   ============================================================ */
+#toasts{
+  position:fixed;right:16px;bottom:16px;z-index:300;
+  display:flex;flex-direction:column-reverse;gap:9px;pointer-events:none;
+  max-width:min(340px,calc(100vw - 32px));
+}
+.toast{
+  display:flex;align-items:center;gap:12px;padding:12px 15px;border-radius:14px;pointer-events:auto;
+  background:var(--glass);border:1px solid var(--glass-brd);
+  -webkit-backdrop-filter:saturate(180%) blur(var(--blur));backdrop-filter:saturate(180%) blur(var(--blur));
+  box-shadow:inset 0 1px 0 var(--glass-hi), var(--shadow-lg);
+  animation:toastIn .34s var(--spring) both;
+}
+.toast.out{animation:toastOut .22s var(--ease) both}
+@keyframes toastIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateX(24px) scale(.97)}}
+.toast .tst-ico{
+  width:34px;height:34px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;
+  font-size:17px;background:var(--accent-soft);color:var(--accent);border:1px solid var(--glass-brd);
+}
+.toast .tst-ico svg{width:18px;height:18px}
+.toast .tst-b{min-width:0;flex:1}
+.toast .tst-b b{display:block;font-size:13.5px;font-weight:650;letter-spacing:-.01em}
+.toast .tst-b span{display:block;font-size:11.5px;color:var(--muted);margin-top:1px;line-height:1.4}
+.toast.gold .tst-ico{background:rgba(245,166,35,.15);color:#f5a623;border-color:rgba(245,166,35,.3)}
+.toast.good .tst-ico{background:rgba(52,211,153,.15);color:#22b07d;border-color:rgba(52,211,153,.3)}
+

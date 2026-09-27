@@ -1,0 +1,49 @@
+{
+ "cell": [
+  24,
+  18
+ ],
+ "anchor": [
+  12,
+  16
+ ],
+ "cols": 4,
+ "anims": {
+  "gull_stand": {
+   "row": 0,
+   "frames": 2,
+   "t": 0.5,
+   "loop": true
+  },
+  "gull_peck": {
+   "row": 1,
+   "frames": 2,
+   "t": 0.22,
+   "loop": true
+  },
+  "gull_fly": {
+   "row": 2,
+   "frames": 4,
+   "t": 0.09,
+   "loop": true
+  },
+  "gull_glide": {
+   "row": 3,
+   "frames": 1,
+   "t": 1,
+   "loop": true
+  },
+  "crab_walk": {
+   "row": 4,
+   "frames": 4,
+   "t": 0.1,
+   "loop": true
+  },
+  "crab_snap": {
+   "row": 5,
+   "frames": 2,
+   "t": 0.25,
+   "loop": true
+  }
+ }
+}

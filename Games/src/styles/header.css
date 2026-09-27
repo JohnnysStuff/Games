@@ -1,0 +1,34 @@
+/* ============================================================
+   HEADER
+   ============================================================ */
+.hdr{
+  position:sticky; top:0; z-index:60;
+  display:flex; align-items:center; gap:14px;
+  height:60px; padding:0 20px;
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter:saturate(180%) blur(14px);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:-.02em;font-size:16px}
+.brand svg{display:block;flex:none}
+.hdr-sp{flex:1}
+.iconbtn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:10px;color:var(--text-2);
+  border:1px solid transparent; transition:background .16s var(--ease), color .16s var(--ease), border-color .16s;
+}
+.iconbtn:hover{background:var(--surface-2);color:var(--text);border-color:var(--border)}
+.iconbtn svg{width:17px;height:17px;display:block}
+.ghostbtn{
+  display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 13px;
+  border-radius:10px;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-2);font-size:13.5px;font-weight:550;
+  transition:background .16s var(--ease),color .16s,border-color .16s,transform .1s;
+}
+.ghostbtn:hover{background:var(--surface-2);color:var(--text);border-color:var(--border-2)}
+.ghostbtn:active{transform:translateY(1px)}
+.ghostbtn svg{width:15px;height:15px}
+.hdr-title{font-weight:600;font-size:15px;letter-spacing:-.01em}
+.hdr-title span{color:var(--muted);font-weight:450}
+

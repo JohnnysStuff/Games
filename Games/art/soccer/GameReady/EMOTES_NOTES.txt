@@ -1,0 +1,84 @@
+SOCCER EMOTE SHEETS
+
+Saved using the built-in image tool with transparent_background=true.
+Per your selection, these are the image-tool outputs unchanged: no resizing,
+palette conversion, alpha cleanup, cropping, regridding or scripted artwork edits.
+
+ACTUAL FILE DIMENSIONS
+player_celebrate.png         1341 x 1173
+player_celebrate_spiky.png   1341 x 1173
+player_celebrate_afro.png    1341 x 1173
+player_celebrate_long.png    1341 x 1173
+player_sad.png               1448 x 1086
+player_sad_spiky.png         1448 x 1086
+player_sad_afro.png          1448 x 1086
+player_sad_long.png          1448 x 1086
+keeper_emotes.png            1586 x 992
+
+VISUAL CHECK
+Celebration: seven rows, counts 1/8/6/8/8/6/4 (41 sprites).
+Sad: six rows, counts 1/6/4/4/6/4 (25 sprites).
+Keeper: five rows, counts 1/6/6/4/6 (23 sprites).
+Every sheet begins with a single standing reference frame.
+The face-down fourth flat-out sprite was corrected to lie on his back.
+White tears are retained. No balls or labels were added.
+Six hair variants were made with image-tool edits of the new base sheets.
+
+LIMITS OF RAW GENERATED OUTPUTS
+These are not the originally requested 1024-wide canvases or exact 128-pixel
+cell grids. Exact reference scale, 10-pixel clearances, hard alpha edges,
+palette identity and pixel-identical non-hair regions are not certified.
+Some frame-to-frame redraw differences and coloured edge fringes remain.
+
+EXACT BASE GENERATION PROMPTS
+CELEBRATE
+Create player_celebrate.png, exactly1024x896, transparent PNG, using attached player_short.png as CHARACTER REFERENCE. New seven-row animation sheet. Match original short-haired chibi player EXACTLY: same face, hair, big head, short limbs, roughly100 image pixels tall standing, identical pixel-block scale/dark outline/flat palette. Right-facing, yellow shirt green trim, blue shorts, red socks, dark boots, bare hands.
+CRITICAL LAYOUT: 8columns x7rows, each invisible cell128x128. Each animation starts column1 at left. Grounded boots baseline local y117. Keep all art within local x10..117,y10..117, giving at least10px transparent clearance from adjacent sprites and rows. No sprite touches another. Keep reference proportions and size; do not enlarge to fill canvas. Unused cells alpha0. No visible grid/labels/numbers/text, shadows, ground/grass, ball, motion lines, blur, gradients, soft edges, noisy fringes, stray shapes. Hard square pixel blocks. Same invariant hair/face/kit details reused through all frames; only moving parts change. Happy faces may change as specified.
+EXACT ROWS TOP TO BOTTOM, counts1,8,6,8,8,6,4 (41sprites):
+Row1 STANDING: one ordinary relaxed right-facing standing frame, identical to reference standing pose, used to measure size. Other seven cells empty.
+Row2 FLOSS: eight distinct sequential loop frames, BIG GRIN, arms straight swinging TOGETHER past hips behind body on one side then in front on other, hips moving opposite arms. Frame1 arms behind left/hips right;2 swinging through;3 arms across front right/hips left;4 hold extreme;5 reverse through;6 arms behind left/hips right;7 return through;8 transition to1. Recognizable floss, not random arm waving.
+Row3 KNEE SLIDE: SIXframes:1run-up stride;2drop onto BOTH knees;3slide on knees with both arms spread wide;4lean torso back yelling;5still on knees pump BOTH fists high;6still kneeling fists lower ready to pump again. Frames5/6 loop together.
+Row4 BACKFLIP: EIGHTframes:1deep crouch arms back;2jump arms swing;3airborne tuck knees chest leaning BACK;4fully UPSIDE DOWN in backward somersault;5rotate around feet down;6land crouched;7stand tall both arms raised V clearly outside head;8same victory V with small celebratory bounce. Frames7/8 loop. Keep backward flip sequence legible and same head/body size in rotations.
+Row5 AIRPLANE: EIGHT-frame run cycle facing right, BOTH arms straight out like wings, alternate banking torso/arms left/right, pumping legs. All8 frames distinct phases of same looping airplane run.
+Row6 ROBOT DANCE: SIX distinct stiff poses facing right, elbows exactly right angles, angular wrists and alternating bent arms/rigid hips, original grin. Six positions make a loop.
+Row7 FLEX: FOUR-frame loop, torso3/4 toward viewer while head/nose right, BOTH arms raised bent flexing biceps, grin; alternate left/right emphasized flex. Only4occupied cells.
+All rows evenly spaced128px, entire1024x896 canvas. Original character only, no new design or objects.
+
+SAD
+Create player_sad.png, EXACT1024x768 PNG, fully TRANSPARENT. Use attached player_short.png as exact character reference: same short brown hair, face, chibi proportions, pixel-block size, dark contour and flat palette, about100image pixels tall in ordinary standing pose. Same yellow jersey green trim, blue shorts, red socks and dark boots. Bare hands. Every pose faces RIGHT, including lying poses with face directed up-right. No different character.
+LAYOUT: 8columns by6rows, invisible128x128 cells. Each row starts at leftmost cell; unused cells empty. Character art stays within local x10..117,y10..117, grounded sole baseliney117, at least10px transparent gap between all neighbours and rows. Same character size as reference standing frame, do not enlarge. Exact row counts1,6,4,4,6,4 =25sprites total.
+Row1: ONE ordinary relaxed standing frame copied faithfully from reference. Other7cells empty.
+Row2 KNEES: SIXframes:1shoulders sag;2bend knees sinking;3on BOTH knees;4head buried in hands;5kneeling head in hands slight rock forward;6same slight rock back. Last2 loop gentle rocking.
+Row3 FLAT OUT: FOURframes:1fall backward;2impact onto back;3lying on BACK arms spread wide like a starfish, feet apart, chest up;4same lying pose chest down one art pixel. Last2 loop breathing. A single intact player in each frame, no second head, grey blob, rock or accidental props.
+Row4 DISBELIEF: FOUR looping frames, upright facing right, BOTH HANDS resting ON TOP OF HEAD, mouth aghast, look upward; restrained small body bob/reaction, same hair/face scale.
+Row5 STOMP: SIX looping frames: angry brows, clenched fists;1windup right foot;2kick forward at empty ground;3stamp;4shift weight windup other foot;5kick/stamp other foot;6return. Do NOT draw grass, dirt, motion lines or dust.
+Row6 CRY: FOUR looping frames: comic tears, eyes squeezed shut;1large PURE WHITE tear streams;2streams continue chin quivers;3wipe eyes with forearm;4lower wiping arm, tears resume. Tears WHITE ONLY, NO BLUE or cyan. Body and kit unchanged.
+Hard opaque square pixel art. Consistent head/face/hair/kit throughout except specified expressions/movements. Reuse design between frames rather than random shape changes. Dark clean outline with no stray pixels/fringe. No shadows, ground, grass, balls, labels, text, grid or motion lines. No blur, gradients, soft edges. Full1024x768canvas six evenly spaced128px rows.
+
+SAD CORRECTION
+Make ONE targeted correction to this sad-player sprite sheet. In the THIRD ROW ("flat out"), replace the FOURTH sprite with an exact copy of the THIRD sprite, with only the chest lowered a tiny amount for breathing. Both frames3 and4 must show the character lying ON HIS BACK, face UP and toward the right, arms spread like a starfish. The current fourth sprite is wrongly face-down; fix only that. Preserve all other sprites, all six rows, all positions, empty space, original pixel scale, canvas dimensions, expressions, short hair, kit colours and transparent background. Do not draw a shadow or ground. No ball, labels, motion lines or other additions.
+
+KEEPER
+Create keeper_emotes.png EXACT1024x640 PNG, fully transparent background. Attached keeper.png is the exact CHARACTER REFERENCE. Same short brown-haired chibi goalkeeper, same face/proportions/head size/100px standing height/pixel-block scale, dark pixel outline, palette, yellow jersey with green collar/cuffs, blue shorts, red socks, dark boots, WHITE goalkeeper gloves. Right-facing in every frame.
+Invisible uniform 8column x5row grid,128x128cells. Frames start leftmostcell each row. Sole baseline117 within each row. At least10px clear transparent separation between sprites and rows, entire silhouette inside cell x10..117/y10..117. Keep reference standing character size, no enlarged poses. Empty cells empty. Exact frame counts1,6,6,4,6 (23sprites total), left to right, top to bottom:
+ROW1: ONE ordinary relaxed STANDING keeper pose like reference standing frame, white gloves relaxed at sides, NO BALL. Other7cells transparent.
+ROW2 ROAR: SIXframe looping jump/pump animation.1bend knees fists bent;2jump BOTH fists up;3airborne BOTH fists high, mouth wide-open shouting;4lower fists slightly midair;5land bent knees mouth roaring;6prepare next pump. Powerful happy roar, BOTH white-gloved fists visible, never joined into a ball.
+ROW3 KNEE SLIDE: SIXframes.1run-up stride;2drop onto BOTH knees;3slide on knees BOTH arms spread wide;4lean back yelling;5still kneeling pump BOTH gloved fists upward;6still kneeling fists return slightly down preparing another pump. Last2 form looping fist-pump.
+ROW4 SLUMPED: FOURframes.1lower into sitting;2sit slumped head down FOREARMS ON KNEES;3same seated slumped pose gentle inhale;4same exhale one-art-pixel upper-body movement. Last2 loop. No grass or ground drawn.
+ROW5 GROUND PUNCH: SIXframe loop, kneeling right-facing in frustration.1kneel clenched fists;2raise one gloved fist;3swing arm down;4fist reaches imaginary ground beside knee;5withdraw fist;6raise again. Other glove braces naturally. Angry face, clear connected limbs, no duplicate hands or extra objects. Do NOT draw impact bursts/dirt/grass/motionlines.
+Crisp hard square pixels, flat colour and solid dark contours. Invariant head/hair/kit/scale through frames, no random redraw drift. NO BALL anywhere. NO shadows, ground, grass, text, labels, grid, numbers, motionlines, blur, soft edges, glow, grey blobs, detached pixels or colored outline haze. Transparent canvas, all5rows complete, exact1024x640.
+
+HAIR EDIT PROMPTS
+SPIKY
+Use case: precise-object-edit. Make a HAIR-ONLY edit of the attached soccer sprite sheet: replace the short crop in EVERY sprite with short chunky dark-brown SPIKES, including the reference standing frame, tilted and upside-down frames. Keep all poses, expressions, eyes, faces, skin, bodies, kits, limbs, positions, outline thickness, pixel scale, canvas size, row counts and empty cells IDENTICAL. Same dark-brown palette. Only hair may change. Do not redraw/rearrange/crop any sprite. No extra objects, shadows, labels or ground. Preserve genuine transparent background. Keep spikes contained in each sprite's clear space. 
+
+AFRO
+Hair-only edit of the attached soccer sprite sheet. Change the short crop in EVERY occupied sprite to a rounded dark-brown AFRO with chunky pixel-cluster edges, same original dark-brown hair palette. Include standing, tilted, lying and upside-down heads; afro follows head rotation. Preserve every face/expression, body, kit, limb, exact pose/position, pixel scale, canvas size, row order, frame count and empty cell. Do not redraw the player or rearrange/crop the sheet. Only hair changes. Preserve transparent background. No new objects, shadow, ground, text, marks or labels. Keep neighbouring sprites separated. 
+
+LONG
+Hair-only edit of the attached soccer sprite sheet. Change ONLY the short hair in EVERY occupied frame to dark-brown hair swept back into a chunky tied PONYTAIL behind the head. Keep the original front hairline and face. Ponytail follows tilted, lying and upside-down head orientations naturally. Use same original brown shades, pixel scale and dark contour. Preserve EXACT existing body/face/expression/skin/kit/limbs, all poses, positions, canvas size, rows, frame counts and transparent empty cells. No redraw or rearrangement; hair edit only. Ponytail stays within clear space and must not touch neighbouring sprites. Preserve genuine transparent background, no shadows/ground/text/labels/extra objects. 
+
+Hair prompts additionally specified the target sheet's row counts:
+celebration 1/8/6/8/8/6/4; sad 1/6/4/4/6/4, preserving white tears and
+the two back-lying poses.
+

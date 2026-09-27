@@ -1,0 +1,62 @@
+{
+ "cell": [
+  23,
+  21
+ ],
+ "anchor": [
+  11,
+  19
+ ],
+ "cols": 4,
+ "anims": {
+  "stand": {
+   "row": 0,
+   "frames": 1,
+   "t": 1,
+   "loop": true
+  },
+  "sit": {
+   "row": 1,
+   "frames": 2,
+   "t": 0.5,
+   "loop": true
+  },
+  "clap": {
+   "row": 2,
+   "frames": 2,
+   "t": 0.14,
+   "loop": true
+  },
+  "cheer": {
+   "row": 3,
+   "frames": 4,
+   "t": 0.1,
+   "loop": false,
+   "tail": 2
+  },
+  "scarf": {
+   "row": 4,
+   "frames": 4,
+   "t": 0.16,
+   "loop": true
+  },
+  "flag": {
+   "row": 5,
+   "frames": 4,
+   "t": 0.14,
+   "loop": true
+  },
+  "groan": {
+   "row": 6,
+   "frames": 2,
+   "t": 0.4,
+   "loop": true
+  },
+  "standclap": {
+   "row": 7,
+   "frames": 2,
+   "t": 0.14,
+   "loop": true
+  }
+ }
+}
